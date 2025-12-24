@@ -1,0 +1,99 @@
+@page "{id:int?}"
+@model LuxeSalon.Web.Pages.Admin.SiteImages.EditModel
+@{
+    ViewData["Title"] = (Model.SiteImage?.Id > 0 ? "Görsel Düzenle" : "Yeni Görsel Ekle") + " — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-2xl">
+    <div class="mb-8">
+        <a asp-page="Index" class="text-luxe-gold hover:underline text-sm mb-4 inline-block">← Geri</a>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal">
+            @(Model.SiteImage?.Id > 0 ? "Görsel Düzenle" : "Yeni Görsel Ekle")
+        </h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white p-8 shadow-sm space-y-6">
+        <input type="hidden" asp-for="SiteImage.Id" />
+        
+        @* Section *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Bölüm *</label>
+            <select asp-for="SiteImage.Section" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none">
+                <option value="">Bölüm Seçin</option>
+                <option value="Hero">Hero (Ana Görsel)</option>
+                <option value="About">Hakkımızda</option>
+                <option value="Marquee">Kayan Yazı Arka Planı</option>
+                <option value="Pricing">Fiyat Listesi</option>
+                <option value="Loader1">Yükleme Ekranı 1</option>
+                <option value="Loader2">Yükleme Ekranı 2</option>
+                <option value="Loader3">Yükleme Ekranı 3</option>
+                <option value="Loader4">Yükleme Ekranı 4</option>
+                <option value="Service1">Hizmet 1 - Saç Kesimi</option>
+                <option value="Service2">Hizmet 2 - Renklendirme</option>
+                <option value="Service3">Hizmet 3 - Bakım</option>
+                <option value="Service4">Hizmet 4 - Makyaj</option>
+            </select>
+        </div>
+
+        @* Current Image Preview *@
+        @if (!string.IsNullOrEmpty(Model.SiteImage?.ImageUrl))
+        {
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Mevcut Görsel</label>
+                <img src="@Model.SiteImage.ImageUrl" alt="Preview" class="w-full max-w-md aspect-video object-cover border" />
+            </div>
+        }
+
+        @* Image Upload *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Görsel Yükle</label>
+            <input type="file" name="ImageFile" accept="image/*" class="w-full border border-luxe-charcoal/20 px-4 py-3" />
+        </div>
+
+        @* Or Image URL *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Veya Görsel URL</label>
+            <input type="url" asp-for="SiteImage.ImageUrl" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="https://..." />
+        </div>
+
+        @* Title (for services) *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Başlık</label>
+            <input type="text" asp-for="SiteImage.Title" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Saç Kesimi" />
+        </div>
+
+        @* Description *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Açıklama</label>
+            <input type="text" asp-for="SiteImage.Description" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Kısa açıklama" />
+        </div>
+
+        @* Alt Text *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Alt Metin (SEO)</label>
+            <input type="text" asp-for="SiteImage.AltText" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Görsel açıklaması" />
+        </div>
+
+        @* Display Order *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Sıralama</label>
+            <input type="number" asp-for="SiteImage.DisplayOrder" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+
+        @* Active *@
+        <div class="flex items-center gap-3">
+            <input type="checkbox" asp-for="SiteImage.IsActive" class="w-5 h-5" />
+            <label asp-for="SiteImage.IsActive" class="text-sm font-medium">Aktif</label>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+            <button type="submit" class="bg-luxe-gold text-white px-8 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">
+                KAYDET
+            </button>
+            <a asp-page="Index" class="border border-luxe-charcoal/20 px-8 py-3 font-medium hover:bg-luxe-charcoal/5 transition-colors">
+                İPTAL
+            </a>
+        </div>
+    </form>
+</div>

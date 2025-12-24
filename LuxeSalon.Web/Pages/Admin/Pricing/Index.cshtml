@@ -1,0 +1,67 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Pricing.IndexModel
+@{
+    ViewData["Title"] = "Fiyat Listesi — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Fiyat Listesi</h1>
+        <p class="text-luxe-charcoal/60">Hizmet fiyatlarını yönetin.</p>
+    </div>
+    <a asp-page="Create" class="bg-luxe-gold text-white px-6 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">
+        + Yeni Fiyat Ekle
+    </a>
+</div>
+
+@foreach (var category in Model.Categories)
+{
+    <div class="bg-white shadow-sm overflow-hidden mb-8">
+        <div class="bg-luxe-charcoal px-6 py-4">
+            <h2 class="text-lg font-serif font-semibold text-luxe-gold">@category</h2>
+        </div>
+        <table class="w-full">
+            <thead class="bg-luxe-charcoal/5">
+                <tr>
+                    <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Hizmet</th>
+                    <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Açıklama</th>
+                    <th class="text-right px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Fiyat</th>
+                    <th class="text-center px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Durum</th>
+                    <th class="text-right px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-luxe-charcoal/10">
+                @foreach (var item in Model.PriceItems.Where(p => p.Category == category))
+                {
+                    <tr class="hover:bg-luxe-charcoal/5 transition-colors">
+                        <td class="px-6 py-4 font-medium">@item.ServiceName</td>
+                        <td class="px-6 py-4 text-luxe-charcoal/60 text-sm">@item.Description</td>
+                        <td class="px-6 py-4 text-right font-serif text-xl font-semibold text-luxe-gold">₺@item.Price.ToString("N0")</td>
+                        <td class="px-6 py-4 text-center">
+                            @if (item.IsActive)
+                            {
+                                <span class="bg-green-100 text-green-800 px-3 py-1 text-xs font-medium">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="bg-gray-100 text-gray-600 px-3 py-1 text-xs font-medium">Pasif</span>
+                            }
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a asp-page="Edit" asp-route-id="@item.Id" class="text-luxe-gold hover:underline text-sm font-medium mr-4">Düzenle</a>
+                            <a asp-page="Delete" asp-route-id="@item.Id" class="text-red-500 hover:underline text-sm font-medium">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (!Model.PriceItems.Any())
+{
+    <div class="bg-white p-12 text-center text-luxe-charcoal/40 shadow-sm">
+        Henüz fiyat eklenmemiş.
+    </div>
+}

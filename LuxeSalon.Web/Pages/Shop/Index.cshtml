@@ -1,0 +1,99 @@
+@page
+@model LuxeSalon.Web.Pages.Shop.IndexModel
+@{
+    ViewData["Title"] = "Mağaza — Celil Kuaför";
+}
+
+@* Hero Banner *@
+<section class="relative h-[50vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1920&auto=format&fit=crop" 
+             alt="Shop" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-luxe-charcoal/60"></div>
+    </div>
+    <div class="relative z-10 text-center text-white">
+        <p class="section-subtitle text-luxe-gold mb-4">Profesyonel Ürünler</p>
+        <h1 class="section-title text-white">Mağaza</h1>
+    </div>
+</section>
+
+<section class="section-padding bg-luxe-ivory">
+    <div class="container mx-auto">
+        @if (!Model.Products.Any())
+        {
+            <div class="text-center py-20">
+                <p class="text-4xl font-serif italic text-luxe-charcoal/30 mb-8">Koleksiyonumuz hazırlanıyor...</p>
+                <p class="text-lg text-luxe-charcoal/50">Çok yakında premium saç bakım ürünlerimizle burada olacağız.</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="group reveal">
+                        <a asp-page="./Details" asp-route-id="@product.Id" class="block">
+                            <div class="aspect-square bg-luxe-cream mb-6 overflow-hidden">
+                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
+                                    <img src="@product.ImageUrl" alt="@product.Name" 
+                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                }
+                                else
+                                {
+                                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-luxe-cream to-luxe-ivory">
+                                        <span class="text-6xl font-serif italic text-luxe-charcoal/10">C</span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="text-center">
+                                <p class="text-[10px] uppercase tracking-[0.4em] text-luxe-gold font-bold mb-2">@product.Category</p>
+                                <h3 class="text-xl font-serif mb-3 group-hover:text-luxe-gold transition-colors">@product.Name</h3>
+                                <p class="text-lg font-light text-luxe-charcoal/60">@product.Price.ToString("C0")</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@* Featured Section *@
+<section class="bg-luxe-charcoal text-white py-32">
+    <div class="container mx-auto px-6 text-center">
+        <p class="section-subtitle text-luxe-gold">Neden Biz?</p>
+        <h2 class="section-title text-white mb-12">Profesyonel Ürünler</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto">
+            <div class="reveal">
+                <div class="text-5xl font-serif text-luxe-gold mb-4">01</div>
+                <h3 class="text-xl font-serif mb-4">Salon Kalitesi</h3>
+                <p class="text-white/60 font-light">Salonumuzda kullandığımız aynı premium ürünler.</p>
+            </div>
+            <div class="reveal">
+                <div class="text-5xl font-serif text-luxe-gold mb-4">02</div>
+                <h3 class="text-xl font-serif mb-4">Uzman Seçimi</h3>
+                <p class="text-white/60 font-light">Stilistlerimiz tarafından özenle seçilmiş markalar.</p>
+            </div>
+            <div class="reveal">
+                <div class="text-5xl font-serif text-luxe-gold mb-4">03</div>
+                <h3 class="text-xl font-serif mb-4">Hızlı Teslimat</h3>
+                <p class="text-white/60 font-light">İstanbul içi aynı gün teslimat imkanı.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+}

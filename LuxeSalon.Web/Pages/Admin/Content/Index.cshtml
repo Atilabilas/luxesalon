@@ -1,0 +1,36 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Content.IndexModel
+@{
+    ViewData["Title"] = "Site İçerikleri — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8">
+    <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Site İçerikleri</h1>
+    <p class="text-luxe-charcoal/60">Sitedeki tüm metin içeriklerini düzenleyin.</p>
+</div>
+
+@foreach (var sectionName in Model.Sections)
+{
+    <div class="bg-white shadow-sm overflow-hidden mb-8">
+        <div class="bg-luxe-charcoal px-6 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-serif font-semibold text-luxe-gold">@sectionName</h2>
+            <span class="text-white/40 text-sm">@Model.Contents.Count(c => c.Section == sectionName) içerik</span>
+        </div>
+        <div class="divide-y divide-luxe-charcoal/10">
+            @foreach (var content in Model.Contents.Where(c => c.Section == sectionName).OrderBy(c => c.DisplayOrder))
+            {
+                <div class="px-6 py-4 flex items-center justify-between hover:bg-luxe-charcoal/5 transition-colors">
+                    <div class="flex-1">
+                        <p class="text-xs text-luxe-gold font-mono mb-1">@content.Key</p>
+                        <p class="text-luxe-charcoal font-medium truncate max-w-2xl">@content.Value</p>
+                    </div>
+                    <a asp-page="Edit" asp-route-id="@content.Id" 
+                       class="bg-luxe-charcoal text-white px-4 py-2 text-sm font-medium hover:bg-luxe-gold transition-colors">
+                        Düzenle
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+}

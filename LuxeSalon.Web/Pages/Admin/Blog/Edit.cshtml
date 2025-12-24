@@ -1,0 +1,102 @@
+@page "{id:int}"
+@model LuxeSalon.Web.Pages.Admin.Blog.EditModel
+@{
+    ViewData["Title"] = "Blog Yazısını Düzenle";
+}
+
+<div class="min-h-screen bg-luxe-ivory py-12">
+    <div class="container mx-auto px-6 max-w-4xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-12">
+            <div>
+                <a href="/Admin/Blog" class="text-sm text-luxe-charcoal/60 hover:text-luxe-gold transition-colors mb-2 inline-block">
+                    ← Blog Listesi
+                </a>
+                <h1 class="text-4xl font-serif">Blog Yazısını Düzenle</h1>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form method="post" enctype="multipart/form-data" class="bg-white p-8 md:p-12 shadow-sm">
+            <input type="hidden" asp-for="BlogPost.Id" />
+            
+            <div class="space-y-8">
+                <!-- Title -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Başlık *
+                    </label>
+                    <input type="text" asp-for="BlogPost.Title" required
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 text-lg focus:border-luxe-gold focus:outline-none transition-colors" />
+                </div>
+
+                <!-- Author -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Yazar *
+                    </label>
+                    <input type="text" asp-for="BlogPost.Author" required
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors" />
+                </div>
+
+                <!-- Current Image Preview -->
+                @if (!string.IsNullOrEmpty(Model.BlogPost.HeaderImageUrl))
+                {
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                            Mevcut Kapak Görseli
+                        </label>
+                        <img src="@Model.BlogPost.HeaderImageUrl" alt="Current" class="max-w-md h-48 object-cover border border-luxe-charcoal/10" />
+                    </div>
+                }
+
+                <!-- Header Image -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Yeni Kapak Görseli
+                    </label>
+                    <input type="file" name="HeaderImage" accept="image/*"
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors" />
+                    <p class="text-xs text-luxe-charcoal/40 mt-2">veya URL girin:</p>
+                    <input type="text" asp-for="BlogPost.HeaderImageUrl"
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 mt-2 focus:border-luxe-gold focus:outline-none transition-colors" />
+                </div>
+
+                <!-- Summary -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Özet *
+                    </label>
+                    <textarea asp-for="BlogPost.Summary" required rows="3"
+                              class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors resize-none"></textarea>
+                </div>
+
+                <!-- Content -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        İçerik *
+                    </label>
+                    <textarea asp-for="BlogPost.Content" required rows="15"
+                              class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors"></textarea>
+                </div>
+
+                <!-- Published -->
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" asp-for="BlogPost.IsPublished" id="isPublished"
+                           class="w-5 h-5 accent-luxe-gold" />
+                    <label for="isPublished" class="text-luxe-charcoal">Yayınla</label>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-4 pt-8 border-t border-luxe-charcoal/10">
+                    <button type="submit" class="btn-primary">
+                        GÜNCELLE
+                    </button>
+                    <a href="/Admin/Blog" class="btn-outline">
+                        İPTAL
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

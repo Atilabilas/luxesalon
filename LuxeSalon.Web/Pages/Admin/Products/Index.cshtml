@@ -1,0 +1,101 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Products.IndexModel
+@{
+    ViewData["Title"] = "Ürün Yönetimi";
+}
+
+<div class="min-h-screen bg-luxe-ivory py-12">
+    <div class="container mx-auto px-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-12">
+            <div>
+                <a href="/Admin" class="text-sm text-luxe-charcoal/60 hover:text-luxe-gold transition-colors mb-2 inline-block">
+                    ← Admin Panel
+                </a>
+                <h1 class="text-4xl font-serif">Ürün Yönetimi</h1>
+                <p class="text-luxe-charcoal/60 mt-2">@Model.Products.Count() ürün</p>
+            </div>
+            <a href="/Admin/Products/Create" class="btn-primary">
+                + YENİ ÜRÜN
+            </a>
+        </div>
+
+        <!-- Products Table -->
+        <div class="bg-white shadow-sm overflow-hidden">
+            @if (!Model.Products.Any())
+            {
+                <div class="p-12 text-center">
+                    <p class="text-2xl font-serif text-luxe-charcoal/30 mb-4">Henüz ürün yok</p>
+                    <a href="/Admin/Products/Create" class="btn-primary">İlk Ürünü Ekle</a>
+                </div>
+            }
+            else
+            {
+                <table class="w-full">
+                    <thead class="bg-luxe-charcoal text-white">
+                        <tr>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Görsel</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Ürün</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Kategori</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Fiyat</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Stok</th>
+                            <th class="text-right px-6 py-4 text-[11px] uppercase tracking-widest font-bold">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model.Products)
+                        {
+                            <tr class="border-b border-luxe-charcoal/10 hover:bg-luxe-cream/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                    {
+                                        <img src="@product.ImageUrl" alt="@product.Name" class="w-16 h-16 object-cover" />
+                                    }
+                                    else
+                                    {
+                                        <div class="w-16 h-16 bg-luxe-cream flex items-center justify-center">
+                                            <span class="text-luxe-charcoal/20 text-xs">Yok</span>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="font-serif text-lg">@product.Name</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-xs uppercase tracking-wider px-3 py-1 bg-luxe-cream">@product.Category</span>
+                                </td>
+                                <td class="px-6 py-4 text-luxe-gold font-bold">@product.Price.ToString("C0")</td>
+                                <td class="px-6 py-4">
+                                    @if (product.StockQuantity > 0)
+                                    {
+                                        <span class="text-green-600">@product.StockQuantity adet</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-red-500">Stokta yok</span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex gap-2 justify-end">
+                                        <a href="/Shop/@product.Id" target="_blank" 
+                                           class="px-3 py-2 text-xs uppercase tracking-wider border border-luxe-charcoal/20 hover:bg-luxe-charcoal hover:text-white transition-colors">
+                                            Görüntüle
+                                        </a>
+                                        <a href="/Admin/Products/Edit/@product.Id" 
+                                           class="px-3 py-2 text-xs uppercase tracking-wider bg-luxe-gold text-white hover:bg-luxe-charcoal transition-colors">
+                                            Düzenle
+                                        </a>
+                                        <a href="/Admin/Products/Delete/@product.Id" 
+                                           class="px-3 py-2 text-xs uppercase tracking-wider bg-red-600 text-white hover:bg-red-700 transition-colors">
+                                            Sil
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

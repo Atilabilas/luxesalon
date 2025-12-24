@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  
+  <!-- Navigation - Default (Turkish) -->
+  <data name="Nav_Home" xml:space="preserve"><value>Anasayfa</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>Hakkımızda</value></data>
+  <data name="Nav_Services" xml:space="preserve"><value>Hizmetler</value></data>
+  <data name="Nav_Blog" xml:space="preserve"><value>Blog</value></data>
+  <data name="Nav_Shop" xml:space="preserve"><value>Mağaza</value></data>
+  <data name="Nav_Appointment" xml:space="preserve"><value>RANDEVU AL</value></data>
+  
+  <!-- Footer -->
+  <data name="Footer_Description" xml:space="preserve"><value>2010'dan bu yana İzmir'in kalbinde premium saç tasarım hizmetleri sunuyoruz.</value></data>
+  <data name="Footer_QuickLinks" xml:space="preserve"><value>HIZLI LİNKLER</value></data>
+  <data name="Footer_Contact" xml:space="preserve"><value>İLETİŞİM</value></data>
+  <data name="Footer_Follow" xml:space="preserve"><value>TAKİP EDİN</value></data>
+  <data name="Footer_Copyright" xml:space="preserve"><value>Tüm hakları saklıdır.</value></data>
+  <data name="Footer_Design" xml:space="preserve"><value>Tasarım &amp; Geliştirme</value></data>
+  
+  <!-- Common -->
+  <data name="Loading" xml:space="preserve"><value>yükleniyor</value></data>
+</root>

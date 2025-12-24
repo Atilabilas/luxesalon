@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  
+  <!-- Navigation -->
+  <data name="Nav_Home" xml:space="preserve"><value>Startseite</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>Über Uns</value></data>
+  <data name="Nav_Services" xml:space="preserve"><value>Dienstleistungen</value></data>
+  <data name="Nav_Blog" xml:space="preserve"><value>Blog</value></data>
+  <data name="Nav_Shop" xml:space="preserve"><value>Shop</value></data>
+  <data name="Nav_Appointment" xml:space="preserve"><value>TERMIN BUCHEN</value></data>
+  
+  <!-- Hero Section -->
+  <data name="Hero_Subtitle" xml:space="preserve"><value>PREMIUM HAIR DESIGN STUDIO</value></data>
+  <data name="Hero_Title1" xml:space="preserve"><value>Celil</value></data>
+  <data name="Hero_Title2" xml:space="preserve"><value>Friseur</value></data>
+  <data name="Hero_CTA_Appointment" xml:space="preserve"><value>TERMIN BUCHEN</value></data>
+  <data name="Hero_CTA_Services" xml:space="preserve"><value>UNSERE DIENSTE</value></data>
+  <data name="Hero_Scroll" xml:space="preserve"><value>ENTDECKEN</value></data>
+  
+  <!-- About Section -->
+  <data name="About_Subtitle" xml:space="preserve"><value>ÜBER UNS</value></data>
+  <data name="About_Title1" xml:space="preserve"><value>Die Kunst des</value></data>
+  <data name="About_Title2" xml:space="preserve"><value>Haardesigns</value></data>
+  <data name="About_Description1" xml:space="preserve"><value>Bei Celil Friseur betrachten wir jeden Kunden als einzigartiges Kunstwerk. Seit 2010 vereinen wir moderne Techniken mit zeitloser Ästhetik im Herzen der Stadt.</value></data>
+  <data name="About_Description2" xml:space="preserve"><value>Unser Team besteht aus Stylisten mit internationaler Erfahrung. Jeder Schnitt, jede Farbe trägt eine Signatur, die Ihre Persönlichkeit widerspiegelt.</value></data>
+  <data name="About_CTA" xml:space="preserve"><value>MEHR ERFAHREN</value></data>
+  <data name="About_Experience" xml:space="preserve"><value>JAHRE ERFAHRUNG</value></data>
+  
+  <!-- Services Section -->
+  <data name="Services_Subtitle" xml:space="preserve"><value>UNSERE DIENSTE</value></data>
+  <data name="Services_Title" xml:space="preserve"><value>Was Wir Anbieten</value></data>
+  <data name="Service_Haircut" xml:space="preserve"><value>Haarschnitt</value></data>
+  <data name="Service_Color" xml:space="preserve"><value>Färbung</value></data>
+  <data name="Service_Care" xml:space="preserve"><value>Haarpflege</value></data>
+  <data name="Service_Makeup" xml:space="preserve"><value>Make-up</value></data>
+  <data name="Service_Details" xml:space="preserve"><value>DETAILS</value></data>
+  
+  <!-- Pricing Section -->
+  <data name="Pricing_Subtitle" xml:space="preserve"><value>PREISLISTE</value></data>
+  <data name="Pricing_Title1" xml:space="preserve"><value>Transparente</value></data>
+  <data name="Pricing_Title2" xml:space="preserve"><value>Preise</value></data>
+  
+  <!-- Team Section -->
+  <data name="Team_Subtitle" xml:space="preserve"><value>UNSER TEAM</value></data>
+  <data name="Team_Title" xml:space="preserve"><value>Experten Stylisten</value></data>
+  
+  <!-- Testimonials Section -->
+  <data name="Testimonials_Subtitle" xml:space="preserve"><value>KUNDENSTIMMEN</value></data>
+  <data name="Testimonials_Customer" xml:space="preserve"><value>Stammkunde</value></data>
+  
+  <!-- Contact Section -->
+  <data name="Contact_Subtitle" xml:space="preserve"><value>KONTAKT</value></data>
+  <data name="Contact_Title" xml:space="preserve"><value>Kontaktieren Sie Uns</value></data>
+  <data name="Contact_Address" xml:space="preserve"><value>Adresse</value></data>
+  <data name="Contact_Hours" xml:space="preserve"><value>Öffnungszeiten</value></data>
+  <data name="Contact_Phone" xml:space="preserve"><value>Telefon</value></data>
+  <data name="Contact_Email" xml:space="preserve"><value>E-Mail</value></data>
+  <data name="Contact_Send" xml:space="preserve"><value>SENDEN</value></data>
+  <data name="Contact_Name" xml:space="preserve"><value>Ihr Name</value></data>
+  <data name="Contact_EmailPlaceholder" xml:space="preserve"><value>Ihre E-Mail</value></data>
+  <data name="Contact_PhonePlaceholder" xml:space="preserve"><value>Ihre Telefonnummer</value></data>
+  <data name="Contact_Message" xml:space="preserve"><value>Ihre Nachricht</value></data>
+  
+  <!-- Footer -->
+  <data name="Footer_Description" xml:space="preserve"><value>Premium Haardesign-Dienstleistungen im Herzen von Izmir seit 2010.</value></data>
+  <data name="Footer_QuickLinks" xml:space="preserve"><value>SCHNELLLINKS</value></data>
+  <data name="Footer_Contact" xml:space="preserve"><value>KONTAKT</value></data>
+  <data name="Footer_Follow" xml:space="preserve"><value>FOLGEN SIE UNS</value></data>
+  <data name="Footer_Copyright" xml:space="preserve"><value>Alle Rechte vorbehalten.</value></data>
+  <data name="Footer_Design" xml:space="preserve"><value>Design &amp; Entwicklung</value></data>
+  
+  <!-- Appointment Page -->
+  <data name="Appointment_Subtitle" xml:space="preserve"><value>Online Reservierung</value></data>
+  <data name="Appointment_Title" xml:space="preserve"><value>Termin Buchen</value></data>
+  <data name="Appointment_Journey1" xml:space="preserve"><value>Ihre Schönheits</value></data>
+  <data name="Appointment_Journey2" xml:space="preserve"><value>reise</value></data>
+  <data name="Appointment_Journey3" xml:space="preserve"><value>Beginnt</value></data>
+  <data name="Appointment_Description" xml:space="preserve"><value>Unser Expertenteam arbeitet mit Ihnen zusammen, um Ihren Traumlook mit den neuesten Trends und Techniken zu kreieren.</value></data>
+  <data name="Appointment_FirstName" xml:space="preserve"><value>Vorname</value></data>
+  <data name="Appointment_LastName" xml:space="preserve"><value>Nachname</value></data>
+  <data name="Appointment_Phone" xml:space="preserve"><value>Telefon</value></data>
+  <data name="Appointment_Date" xml:space="preserve"><value>Datum</value></data>
+  <data name="Appointment_Time" xml:space="preserve"><value>Uhrzeit</value></data>
+  <data name="Appointment_SelectTime" xml:space="preserve"><value>Zeit Auswählen</value></data>
+  <data name="Appointment_Service" xml:space="preserve"><value>Dienstleistung</value></data>
+  <data name="Appointment_SelectService" xml:space="preserve"><value>Dienst Auswählen</value></data>
+  <data name="Appointment_Notes" xml:space="preserve"><value>Notizen</value></data>
+  <data name="Appointment_Submit" xml:space="preserve"><value>TERMIN BUCHEN</value></data>
+  <data name="Appointment_Confirmation" xml:space="preserve"><value>Sie erhalten eine SMS-Bestätigung, sobald Ihr Termin genehmigt wurde.</value></data>
+  <data name="Appointment_Success" xml:space="preserve"><value>Termin Erhalten!</value></data>
+  
+  <!-- CTA Section -->
+  <data name="CTA_Subtitle" xml:space="preserve"><value>Termin</value></data>
+  <data name="CTA_Title1" xml:space="preserve"><value>Bereit für</value></data>
+  <data name="CTA_Title2" xml:space="preserve"><value>eine Veränderung?</value></data>
+  <data name="CTA_Description" xml:space="preserve"><value>Lernen Sie unsere Stylisten kennen und buchen Sie Ihren Termin für ein personalisiertes Erlebnis.</value></data>
+  
+  <!-- Common -->
+  <data name="Required" xml:space="preserve"><value>*</value></data>
+  <data name="Loading" xml:space="preserve"><value>lädt</value></data>
+  <data name="Days_Monday" xml:space="preserve"><value>Montag</value></data>
+  <data name="Days_Saturday" xml:space="preserve"><value>Samstag</value></data>
+  <data name="Days_Sunday" xml:space="preserve"><value>Sonntag</value></data>
+  <data name="Closed" xml:space="preserve"><value>Geschlossen</value></data>
+</root>

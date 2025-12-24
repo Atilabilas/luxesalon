@@ -1,0 +1,107 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Header -->
+<div class="mb-12">
+    <h1 class="text-3xl font-serif font-semibold mb-2">Dashboard</h1>
+    <p class="text-luxe-charcoal/60">İçerik yönetimi ve istatistikler</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div class="bg-white p-6 shadow-sm">
+        <p class="text-[10px] uppercase tracking-widest font-bold text-luxe-gold mb-2">Site Görselleri</p>
+        <p class="text-4xl font-serif">@Model.SiteImageCount</p>
+    </div>
+    <div class="bg-white p-6 shadow-sm">
+        <p class="text-[10px] uppercase tracking-widest font-bold text-luxe-gold mb-2">Ekip Üyeleri</p>
+        <p class="text-4xl font-serif">@Model.TeamMemberCount</p>
+    </div>
+    <div class="bg-white p-6 shadow-sm">
+        <p class="text-[10px] uppercase tracking-widest font-bold text-luxe-gold mb-2">Fiyat Kalemleri</p>
+        <p class="text-4xl font-serif">@Model.PriceItemCount</p>
+    </div>
+    <div class="bg-white p-6 shadow-sm">
+        <p class="text-[10px] uppercase tracking-widest font-bold text-luxe-gold mb-2">Randevular</p>
+        <p class="text-4xl font-serif">@Model.AppointmentCount</p>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Site Görselleri -->
+    <a href="/Admin/SiteImages" class="bg-white p-8 shadow-sm group hover:bg-luxe-charcoal transition-all duration-500">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-4xl">🖼️</span>
+            <span class="text-luxe-charcoal/20 group-hover:text-white/20 transition-colors">→</span>
+        </div>
+        <h3 class="text-2xl font-serif mb-2 group-hover:text-white transition-colors">Site Görselleri</h3>
+        <p class="text-luxe-charcoal/60 group-hover:text-white/60 transition-colors">
+            Hero, servis ve loader görsellerini yönet
+        </p>
+    </a>
+
+    <!-- Ekip Yönetimi -->
+    <a href="/Admin/Team" class="bg-white p-8 shadow-sm group hover:bg-luxe-charcoal transition-all duration-500">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-4xl">👥</span>
+            <span class="text-luxe-charcoal/20 group-hover:text-white/20 transition-colors">→</span>
+        </div>
+        <h3 class="text-2xl font-serif mb-2 group-hover:text-white transition-colors">Ekip Yönetimi</h3>
+        <p class="text-luxe-charcoal/60 group-hover:text-white/60 transition-colors">
+            Stilistleri ve ekip üyelerini düzenle
+        </p>
+    </a>
+
+    <!-- Fiyat Listesi -->
+    <a href="/Admin/Pricing" class="bg-white p-8 shadow-sm group hover:bg-luxe-charcoal transition-all duration-500">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-4xl">💰</span>
+            <span class="text-luxe-charcoal/20 group-hover:text-white/20 transition-colors">→</span>
+        </div>
+        <h3 class="text-2xl font-serif mb-2 group-hover:text-white transition-colors">Fiyat Listesi</h3>
+        <p class="text-luxe-charcoal/60 group-hover:text-white/60 transition-colors">
+            Hizmet fiyatlarını ekle ve düzenle
+        </p>
+    </a>
+
+    <!-- Blog Yönetimi -->
+    <a href="/Admin/Blog" class="bg-white p-8 shadow-sm group hover:bg-luxe-charcoal transition-all duration-500">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-4xl">📝</span>
+            <span class="text-luxe-charcoal/20 group-hover:text-white/20 transition-colors">→</span>
+        </div>
+        <h3 class="text-2xl font-serif mb-2 group-hover:text-white transition-colors">Blog Yönetimi</h3>
+        <p class="text-luxe-charcoal/60 group-hover:text-white/60 transition-colors">
+            Blog yazılarını ekle ve düzenle
+        </p>
+    </a>
+
+    <!-- Ürün Yönetimi -->
+    <a href="/Admin/Products" class="bg-white p-8 shadow-sm group hover:bg-luxe-charcoal transition-all duration-500">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-4xl">🛍️</span>
+            <span class="text-luxe-charcoal/20 group-hover:text-white/20 transition-colors">→</span>
+        </div>
+        <h3 class="text-2xl font-serif mb-2 group-hover:text-white transition-colors">Ürün Yönetimi</h3>
+        <p class="text-luxe-charcoal/60 group-hover:text-white/60 transition-colors">
+            Mağaza ürünlerini yönet
+        </p>
+    </a>
+
+    <!-- Siteyi Görüntüle -->
+    <a href="/" target="_blank" class="bg-luxe-gold text-white p-8 shadow-sm group hover:bg-luxe-charcoal transition-all duration-500">
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-4xl">🌐</span>
+            <span class="text-white/40">↗</span>
+        </div>
+        <h3 class="text-2xl font-serif mb-2">Siteyi Görüntüle</h3>
+        <p class="text-white/70">
+            Yeni sekmede siteyi aç
+        </p>
+    </a>
+</div>

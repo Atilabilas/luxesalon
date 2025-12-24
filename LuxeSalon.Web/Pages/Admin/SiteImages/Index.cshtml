@@ -1,0 +1,151 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.SiteImages.IndexModel
+@{
+    ViewData["Title"] = "Site Görselleri — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8">
+    <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Site Görselleri</h1>
+    <p class="text-luxe-charcoal/60">Sitedeki tüm görselleri buradan yönetebilirsiniz.</p>
+</div>
+
+@* Loader Images *@
+<div class="bg-white p-6 shadow-sm mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-serif font-semibold">Yükleme Ekranı Görselleri</h2>
+        <a asp-page="Edit" asp-route-section="Loader" class="text-luxe-gold hover:underline text-sm font-medium">+ Yeni Ekle</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        @foreach(var img in Model.LoaderImages)
+        {
+            <div class="relative group">
+                <img src="@img.ImageUrl" alt="@img.AltText" class="w-full aspect-video object-cover" />
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <a asp-page="Edit" asp-route-id="@img.Id" class="bg-white text-luxe-charcoal px-3 py-1 text-sm font-medium">Düzenle</a>
+                    <a asp-page="Delete" asp-route-id="@img.Id" class="bg-red-500 text-white px-3 py-1 text-sm font-medium">Sil</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* Hero Image *@
+<div class="bg-white p-6 shadow-sm mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-serif font-semibold">Hero Görseli</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @if(Model.HeroImage != null)
+        {
+            <div class="relative group">
+                <img src="@Model.HeroImage.ImageUrl" alt="Hero" class="w-full aspect-video object-cover" />
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <a asp-page="Edit" asp-route-id="@Model.HeroImage.Id" class="bg-white text-luxe-charcoal px-4 py-2 font-medium">Düzenle</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <a asp-page="Edit" asp-route-section="Hero" class="aspect-video border-2 border-dashed border-luxe-charcoal/20 flex items-center justify-center hover:border-luxe-gold transition-colors">
+                <span class="text-luxe-charcoal/40">+ Hero Görseli Ekle</span>
+            </a>
+        }
+    </div>
+</div>
+
+@* About Image *@
+<div class="bg-white p-6 shadow-sm mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-serif font-semibold">Hakkımızda Görseli</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @if(Model.AboutImage != null)
+        {
+            <div class="relative group">
+                <img src="@Model.AboutImage.ImageUrl" alt="About" class="w-full aspect-[3/4] object-cover" />
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <a asp-page="Edit" asp-route-id="@Model.AboutImage.Id" class="bg-white text-luxe-charcoal px-4 py-2 font-medium">Düzenle</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <a asp-page="Edit" asp-route-section="About" class="aspect-[3/4] border-2 border-dashed border-luxe-charcoal/20 flex items-center justify-center hover:border-luxe-gold transition-colors">
+                <span class="text-luxe-charcoal/40">+ Hakkımızda Görseli Ekle</span>
+            </a>
+        }
+    </div>
+</div>
+
+@* Service Images *@
+<div class="bg-white p-6 shadow-sm mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-serif font-semibold">Hizmet Görselleri</h2>
+        <a asp-page="Edit" asp-route-section="Service" class="text-luxe-gold hover:underline text-sm font-medium">+ Yeni Ekle</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        @foreach(var img in Model.ServiceImages)
+        {
+            <div class="relative group">
+                <img src="@img.ImageUrl" alt="@img.AltText" class="w-full aspect-[3/4] object-cover" />
+                <div class="absolute bottom-0 left-0 right-0 bg-black/70 p-3">
+                    <p class="text-white font-medium text-sm">@img.Title</p>
+                    <p class="text-white/60 text-xs">@img.Description</p>
+                </div>
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <a asp-page="Edit" asp-route-id="@img.Id" class="bg-white text-luxe-charcoal px-3 py-1 text-sm font-medium">Düzenle</a>
+                    <a asp-page="Delete" asp-route-id="@img.Id" class="bg-red-500 text-white px-3 py-1 text-sm font-medium">Sil</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* Pricing Section Image *@
+<div class="bg-white p-6 shadow-sm mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-serif font-semibold">Fiyat Listesi Görseli</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @if(Model.PricingImage != null)
+        {
+            <div class="relative group">
+                <img src="@Model.PricingImage.ImageUrl" alt="Pricing" class="w-full aspect-[4/3] object-cover" />
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <a asp-page="Edit" asp-route-id="@Model.PricingImage.Id" class="bg-white text-luxe-charcoal px-4 py-2 font-medium">Düzenle</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <a asp-page="Edit" asp-route-section="Pricing" class="aspect-[4/3] border-2 border-dashed border-luxe-charcoal/20 flex items-center justify-center hover:border-luxe-gold transition-colors">
+                <span class="text-luxe-charcoal/40">+ Fiyat Görseli Ekle</span>
+            </a>
+        }
+    </div>
+</div>
+
+@* Marquee Background *@
+<div class="bg-white p-6 shadow-sm mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-serif font-semibold">Kayan Yazı Arka Planı</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @if(Model.MarqueeImage != null)
+        {
+            <div class="relative group">
+                <img src="@Model.MarqueeImage.ImageUrl" alt="Marquee" class="w-full aspect-video object-cover" />
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <a asp-page="Edit" asp-route-id="@Model.MarqueeImage.Id" class="bg-white text-luxe-charcoal px-4 py-2 font-medium">Düzenle</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <a asp-page="Edit" asp-route-section="Marquee" class="aspect-video border-2 border-dashed border-luxe-charcoal/20 flex items-center justify-center hover:border-luxe-gold transition-colors">
+                <span class="text-luxe-charcoal/40">+ Marquee Görseli Ekle</span>
+            </a>
+        }
+    </div>
+</div>

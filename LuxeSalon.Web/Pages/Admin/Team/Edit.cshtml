@@ -1,0 +1,79 @@
+@page "{id:int?}"
+@model LuxeSalon.Web.Pages.Admin.Team.EditModel
+@{
+    ViewData["Title"] = (Model.TeamMember?.Id > 0 ? "Ekip Üyesi Düzenle" : "Yeni Ekip Üyesi") + " — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-2xl">
+    <div class="mb-8">
+        <a asp-page="Index" class="text-luxe-gold hover:underline text-sm mb-4 inline-block">← Geri</a>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal">
+            @(Model.TeamMember?.Id > 0 ? "Ekip Üyesi Düzenle" : "Yeni Ekip Üyesi")
+        </h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white p-8 shadow-sm space-y-6">
+        <input type="hidden" asp-for="TeamMember.Id" />
+        
+        @* Name *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">İsim *</label>
+            <input type="text" asp-for="TeamMember.Name" required class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Ayşe Yılmaz" />
+        </div>
+
+        @* Role *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Ünvan *</label>
+            <input type="text" asp-for="TeamMember.Role" required class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Renk Uzmanı" />
+        </div>
+
+        @* Current Image Preview *@
+        @if (!string.IsNullOrEmpty(Model.TeamMember?.ImageUrl))
+        {
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Mevcut Fotoğraf</label>
+                <img src="@Model.TeamMember.ImageUrl" alt="Preview" class="w-32 h-32 object-cover rounded-full border" />
+            </div>
+        }
+
+        @* Image Upload *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Fotoğraf Yükle</label>
+            <input type="file" name="ImageFile" accept="image/*" class="w-full border border-luxe-charcoal/20 px-4 py-3" />
+        </div>
+
+        @* Or Image URL *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Veya Fotoğraf URL</label>
+            <input type="url" asp-for="TeamMember.ImageUrl" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="https://..." />
+        </div>
+
+        @* Bio *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Biyografi</label>
+            <textarea asp-for="TeamMember.Bio" rows="3" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none resize-none" placeholder="Kısa biyografi..."></textarea>
+        </div>
+
+        @* Display Order *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Sıralama</label>
+            <input type="number" asp-for="TeamMember.DisplayOrder" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+
+        @* Active *@
+        <div class="flex items-center gap-3">
+            <input type="checkbox" asp-for="TeamMember.IsActive" class="w-5 h-5" />
+            <label asp-for="TeamMember.IsActive" class="text-sm font-medium">Aktif</label>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+            <button type="submit" class="bg-luxe-gold text-white px-8 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">
+                KAYDET
+            </button>
+            <a asp-page="Index" class="border border-luxe-charcoal/20 px-8 py-3 font-medium hover:bg-luxe-charcoal/5 transition-colors">
+                İPTAL
+            </a>
+        </div>
+    </form>
+</div>

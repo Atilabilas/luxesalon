@@ -1,0 +1,32 @@
+@page "{id:int}"
+@model LuxeSalon.Web.Pages.Admin.Blog.DeleteModel
+@{
+    ViewData["Title"] = "Blog Yazısını Sil";
+}
+
+<div class="min-h-screen bg-luxe-ivory py-12">
+    <div class="container mx-auto px-6 max-w-2xl">
+        <div class="bg-white p-8 md:p-12 shadow-sm text-center">
+            <div class="text-6xl text-red-500 mb-6">⚠️</div>
+            <h1 class="text-3xl font-serif mb-4">Silmek İstediğinize Emin Misiniz?</h1>
+            <p class="text-luxe-charcoal/60 mb-8">
+                "<strong>@Model.BlogPost.Title</strong>" başlıklı blog yazısı kalıcı olarak silinecektir.
+            </p>
+            
+            <div class="bg-luxe-cream p-6 mb-8 text-left">
+                <p class="text-sm"><strong>Başlık:</strong> @Model.BlogPost.Title</p>
+                <p class="text-sm"><strong>Yazar:</strong> @Model.BlogPost.Author</p>
+                <p class="text-sm"><strong>Tarih:</strong> @Model.BlogPost.PublishedAt.ToString("dd MMMM yyyy")</p>
+            </div>
+
+            <form method="post" class="flex gap-4 justify-center">
+                <button type="submit" class="bg-red-600 text-white px-8 py-4 text-[11px] uppercase font-bold tracking-widest hover:bg-red-700 transition-colors">
+                    EVET, SİL
+                </button>
+                <a href="/Admin/Blog" class="btn-outline">
+                    İPTAL
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

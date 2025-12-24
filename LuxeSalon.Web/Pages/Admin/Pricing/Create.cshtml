@@ -1,0 +1,67 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Pricing.CreateModel
+@{
+    ViewData["Title"] = "Yeni Fiyat Ekle — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-2xl">
+    <div class="mb-8">
+        <a asp-page="Index" class="text-luxe-gold hover:underline text-sm mb-4 inline-block">← Geri</a>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal">Yeni Fiyat Ekle</h1>
+    </div>
+
+    <form method="post" class="bg-white p-8 shadow-sm space-y-6">
+        @* Category *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Kategori *</label>
+            <select asp-for="PriceItem.Category" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none">
+                <option value="">Kategori Seçin</option>
+                <option value="Saç Hizmetleri">Saç Hizmetleri</option>
+                <option value="Renk Hizmetleri">Renk Hizmetleri</option>
+                <option value="Bakım">Bakım</option>
+                <option value="Makyaj">Makyaj</option>
+                <option value="Gelin Paketi">Gelin Paketi</option>
+            </select>
+        </div>
+
+        @* Service Name *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Hizmet Adı *</label>
+            <input type="text" asp-for="PriceItem.ServiceName" required class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Kadın Saç Kesimi" />
+        </div>
+
+        @* Price *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Fiyat (₺) *</label>
+            <input type="number" asp-for="PriceItem.Price" required step="1" min="0" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="800" />
+        </div>
+
+        @* Description *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Açıklama</label>
+            <input type="text" asp-for="PriceItem.Description" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Kısa açıklama" />
+        </div>
+
+        @* Display Order *@
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Sıralama</label>
+            <input type="number" asp-for="PriceItem.DisplayOrder" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" value="0" />
+        </div>
+
+        @* Active *@
+        <div class="flex items-center gap-3">
+            <input type="checkbox" asp-for="PriceItem.IsActive" class="w-5 h-5" checked />
+            <label asp-for="PriceItem.IsActive" class="text-sm font-medium">Aktif</label>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+            <button type="submit" class="bg-luxe-gold text-white px-8 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">
+                KAYDET
+            </button>
+            <a asp-page="Index" class="border border-luxe-charcoal/20 px-8 py-3 font-medium hover:bg-luxe-charcoal/5 transition-colors">
+                İPTAL
+            </a>
+        </div>
+    </form>
+</div>

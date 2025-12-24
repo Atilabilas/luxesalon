@@ -1,0 +1,104 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Products.CreateModel
+@{
+    ViewData["Title"] = "Yeni Ürün";
+}
+
+<div class="min-h-screen bg-luxe-ivory py-12">
+    <div class="container mx-auto px-6 max-w-4xl">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-12">
+            <div>
+                <a href="/Admin/Products" class="text-sm text-luxe-charcoal/60 hover:text-luxe-gold transition-colors mb-2 inline-block">
+                    ← Ürün Listesi
+                </a>
+                <h1 class="text-4xl font-serif">Yeni Ürün</h1>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form method="post" enctype="multipart/form-data" class="bg-white p-8 md:p-12 shadow-sm">
+            <div class="space-y-8">
+                <!-- Name -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Ürün Adı *
+                    </label>
+                    <input type="text" asp-for="Product.Name" required
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 text-lg focus:border-luxe-gold focus:outline-none transition-colors"
+                           placeholder="Ürün adını girin..." />
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Kategori *
+                    </label>
+                    <select asp-for="Product.Category" required
+                            class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors bg-white">
+                        <option value="">Kategori Seçin</option>
+                        <option value="Saç Bakım">Saç Bakım</option>
+                        <option value="Şampuan">Şampuan</option>
+                        <option value="Saç Kremi">Saç Kremi</option>
+                        <option value="Saç Boyası">Saç Boyası</option>
+                        <option value="Şekillendirici">Şekillendirici</option>
+                        <option value="Aksesuar">Aksesuar</option>
+                    </select>
+                </div>
+
+                <!-- Price & Stock -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                            Fiyat (₺) *
+                        </label>
+                        <input type="number" asp-for="Product.Price" required step="0.01" min="0"
+                               class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors"
+                               placeholder="0.00" />
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                            Stok Adedi
+                        </label>
+                        <input type="number" asp-for="Product.StockQuantity" min="0"
+                               class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors"
+                               placeholder="0" />
+                    </div>
+                </div>
+
+                <!-- Product Image -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Ürün Görseli
+                    </label>
+                    <input type="file" name="ProductImage" accept="image/*"
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors" />
+                    <p class="text-xs text-luxe-charcoal/40 mt-2">veya URL girin:</p>
+                    <input type="text" asp-for="Product.ImageUrl"
+                           class="w-full border border-luxe-charcoal/20 px-5 py-4 mt-2 focus:border-luxe-gold focus:outline-none transition-colors"
+                           placeholder="https://..." />
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-[11px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-3">
+                        Açıklama
+                    </label>
+                    <textarea asp-for="Product.Description" rows="5"
+                              class="w-full border border-luxe-charcoal/20 px-5 py-4 focus:border-luxe-gold focus:outline-none transition-colors resize-none"
+                              placeholder="Ürün açıklaması..."></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex gap-4 pt-8 border-t border-luxe-charcoal/10">
+                    <button type="submit" class="btn-primary">
+                        KAYDET
+                    </button>
+                    <a href="/Admin/Products" class="btn-outline">
+                        İPTAL
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

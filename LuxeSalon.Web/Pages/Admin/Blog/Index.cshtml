@@ -1,0 +1,99 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Blog.IndexModel
+@{
+    ViewData["Title"] = "Blog Yönetimi";
+}
+
+<div class="min-h-screen bg-luxe-ivory py-12">
+    <div class="container mx-auto px-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-12">
+            <div>
+                <a href="/Admin" class="text-sm text-luxe-charcoal/60 hover:text-luxe-gold transition-colors mb-2 inline-block">
+                    ← Admin Panel
+                </a>
+                <h1 class="text-4xl font-serif">Blog Yönetimi</h1>
+                <p class="text-luxe-charcoal/60 mt-2">@Model.BlogPosts.Count() yazı</p>
+            </div>
+            <a href="/Admin/Blog/Create" class="btn-primary">
+                + YENİ YAZI
+            </a>
+        </div>
+
+        <!-- Blog Posts Table -->
+        <div class="bg-white shadow-sm overflow-hidden">
+            @if (!Model.BlogPosts.Any())
+            {
+                <div class="p-12 text-center">
+                    <p class="text-2xl font-serif text-luxe-charcoal/30 mb-4">Henüz blog yazısı yok</p>
+                    <a href="/Admin/Blog/Create" class="btn-primary">İlk Yazıyı Ekle</a>
+                </div>
+            }
+            else
+            {
+                <table class="w-full">
+                    <thead class="bg-luxe-charcoal text-white">
+                        <tr>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Görsel</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Başlık</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Yazar</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Tarih</th>
+                            <th class="text-left px-6 py-4 text-[11px] uppercase tracking-widest font-bold">Durum</th>
+                            <th class="text-right px-6 py-4 text-[11px] uppercase tracking-widest font-bold">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var post in Model.BlogPosts)
+                        {
+                            <tr class="border-b border-luxe-charcoal/10 hover:bg-luxe-cream/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    @if (!string.IsNullOrEmpty(post.HeaderImageUrl))
+                                    {
+                                        <img src="@post.HeaderImageUrl" alt="@post.Title" class="w-16 h-12 object-cover" />
+                                    }
+                                    else
+                                    {
+                                        <div class="w-16 h-12 bg-luxe-cream flex items-center justify-center">
+                                            <span class="text-luxe-charcoal/20 text-xs">Yok</span>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="font-serif text-lg">@post.Title</span>
+                                </td>
+                                <td class="px-6 py-4 text-luxe-charcoal/60">@post.Author</td>
+                                <td class="px-6 py-4 text-luxe-charcoal/60 text-sm">@post.PublishedAt.ToString("dd MMM yyyy")</td>
+                                <td class="px-6 py-4">
+                                    @if (post.IsPublished)
+                                    {
+                                        <span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs uppercase tracking-wider">Yayında</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="inline-block px-3 py-1 bg-gray-100 text-gray-600 text-xs uppercase tracking-wider">Taslak</span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex gap-2 justify-end">
+                                        <a href="/Blog/@post.Id" target="_blank" 
+                                           class="px-3 py-2 text-xs uppercase tracking-wider border border-luxe-charcoal/20 hover:bg-luxe-charcoal hover:text-white transition-colors">
+                                            Görüntüle
+                                        </a>
+                                        <a href="/Admin/Blog/Edit/@post.Id" 
+                                           class="px-3 py-2 text-xs uppercase tracking-wider bg-luxe-gold text-white hover:bg-luxe-charcoal transition-colors">
+                                            Düzenle
+                                        </a>
+                                        <a href="/Admin/Blog/Delete/@post.Id" 
+                                           class="px-3 py-2 text-xs uppercase tracking-wider bg-red-600 text-white hover:bg-red-700 transition-colors">
+                                            Sil
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

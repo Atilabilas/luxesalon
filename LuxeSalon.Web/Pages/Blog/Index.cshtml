@@ -1,0 +1,134 @@
+@page
+@model LuxeSalon.Web.Pages.Blog.IndexModel
+@{
+    ViewData["Title"] = "Blog — Celil Kuaför";
+}
+
+@* Hero Banner *@
+<section class="relative h-[50vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1920&auto=format&fit=crop" 
+             alt="Blog" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-luxe-charcoal/60"></div>
+    </div>
+    <div class="relative z-10 text-center text-white">
+        <p class="section-subtitle text-luxe-gold mb-4">Haberler & İpuçları</p>
+        <h1 class="section-title text-white">Blog</h1>
+    </div>
+</section>
+
+<section class="section-padding bg-luxe-ivory">
+    <div class="container mx-auto">
+        @if (!Model.BlogPosts.Any())
+        {
+            <div class="text-center py-20">
+                <p class="text-4xl font-serif italic text-luxe-charcoal/30 mb-8">İçeriklerimiz hazırlanıyor...</p>
+                <p class="text-lg text-luxe-charcoal/50">Çok yakında saç bakımı, trendler ve ipuçları hakkında yazılarımızla burada olacağız.</p>
+            </div>
+        }
+        else
+        {
+            @* Featured Post *@
+            @if (Model.BlogPosts.Any())
+            {
+                var featured = Model.BlogPosts.First();
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24 reveal">
+                    <div class="aspect-[4/3] overflow-hidden bg-luxe-cream">
+                        @if (!string.IsNullOrEmpty(featured.HeaderImageUrl))
+                        {
+                            <a asp-page="./Details" asp-route-id="@featured.Id">
+                                <img src="@featured.HeaderImageUrl" alt="@featured.Title" 
+                                     class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-luxe-cream to-luxe-ivory">
+                                <span class="text-8xl font-serif italic text-luxe-charcoal/10">C</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-[0.4em] text-luxe-gold font-bold mb-4">
+                            @featured.PublishedAt.ToString("dd MMMM yyyy") — @featured.Author
+                        </p>
+                        <h2 class="text-4xl md:text-5xl font-serif mb-6 leading-tight">
+                            <a asp-page="./Details" asp-route-id="@featured.Id" class="hover:text-luxe-gold transition-colors">
+                                @featured.Title
+                            </a>
+                        </h2>
+                        <p class="text-lg font-light text-luxe-charcoal/60 mb-8 line-clamp-3">@featured.Summary</p>
+                        <a asp-page="./Details" asp-route-id="@featured.Id" class="btn-primary inline-block w-fit">DEVAMINI OKU</a>
+                    </div>
+                </div>
+            }
+
+            @* Other Posts Grid *@
+            @if (Model.BlogPosts.Count() > 1)
+            {
+                <div class="border-t border-luxe-charcoal/10 pt-16">
+                    <h3 class="text-3xl font-serif mb-12">Diğer Yazılar</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                        @foreach (var post in Model.BlogPosts.Skip(1))
+                        {
+                            <article class="group reveal">
+                                <a asp-page="./Details" asp-route-id="@post.Id" class="block">
+                                    <div class="aspect-[16/10] overflow-hidden bg-luxe-cream mb-6">
+                                        @if (!string.IsNullOrEmpty(post.HeaderImageUrl))
+                                        {
+                                            <img src="@post.HeaderImageUrl" alt="@post.Title" 
+                                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        }
+                                        else
+                                        {
+                                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-luxe-cream to-luxe-ivory">
+                                                <span class="text-6xl font-serif italic text-luxe-charcoal/10">C</span>
+                                            </div>
+                                        }
+                                    </div>
+                                    <p class="text-[10px] uppercase tracking-[0.3em] text-luxe-gold font-bold mb-3">
+                                        @post.PublishedAt.ToString("dd MMM yyyy")
+                                    </p>
+                                    <h4 class="text-xl font-serif mb-3 group-hover:text-luxe-gold transition-colors leading-tight">
+                                        @post.Title
+                                    </h4>
+                                    <p class="text-sm font-light text-luxe-charcoal/60 line-clamp-2">@post.Summary</p>
+                                </a>
+                            </article>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+@* Newsletter CTA *@
+<section class="bg-luxe-charcoal text-white py-24">
+    <div class="container mx-auto px-6 text-center max-w-2xl">
+        <p class="section-subtitle text-luxe-gold">Bülten</p>
+        <h2 class="text-4xl font-serif mb-6">Güncel Kalın</h2>
+        <p class="text-white/60 font-light mb-8">
+            Saç bakımı ipuçları, yeni trendler ve özel tekliflerden haberdar olun.
+        </p>
+        <form class="flex flex-col md:flex-row gap-4 justify-center">
+            <input type="email" placeholder="E-posta adresiniz" 
+                   class="bg-transparent border-2 border-white/20 text-white px-6 py-4 w-full md:w-96 focus:border-luxe-gold focus:outline-none transition-colors" />
+            <button type="submit" class="btn-white">ABONE OL</button>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+}

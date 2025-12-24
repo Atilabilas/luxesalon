@@ -1,0 +1,45 @@
+@using Microsoft.AspNetCore.Localization
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "tr";
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    
+    var languages = new Dictionary<string, (string Name, string Flag)>
+    {
+        { "tr", ("Türkçe", "🇹🇷") },
+        { "en", ("English", "🇬🇧") },
+        { "de", ("Deutsch", "🇩🇪") },
+        { "fr", ("Français", "🇫🇷") },
+        { "ru", ("Русский", "🇷🇺") },
+        { "ar", ("العربية", "🇸🇦") }
+    };
+}
+
+<div class="language-switcher relative" x-data="{ open: false }">
+    <button @@click="open = !open" class="flex items-center gap-2 text-sm font-medium hover:text-luxe-gold transition-colors">
+        <span class="text-lg">@languages[currentCulture].Flag</span>
+        <span class="hidden md:inline uppercase">@currentCulture</span>
+        <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+    
+    <div x-show="open" @@click.away="open = false" x-transition
+         class="absolute right-0 top-full mt-2 bg-white shadow-lg border border-luxe-charcoal/10 min-w-[160px] z-50">
+        @foreach (var lang in languages)
+        {
+            var isActive = lang.Key == currentCulture;
+            <a href="/SetLanguage?culture=@lang.Key&returnUrl=@Uri.EscapeDataString(returnUrl)" 
+               class="flex items-center gap-3 px-4 py-3 text-sm hover:bg-luxe-charcoal/5 transition-colors @(isActive ? "bg-luxe-gold/10 text-luxe-gold font-medium" : "text-luxe-charcoal")">
+                <span class="text-lg">@lang.Value.Flag</span>
+                <span>@lang.Value.Name</span>
+                @if (isActive)
+                {
+                    <svg class="w-4 h-4 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                }
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,22 @@
+@* Inline edit button for admin users *@
+@{
+    var contentId = ViewData["ContentId"] as int?;
+    var sectionName = ViewData["Section"] as string;
+}
+
+@if (contentId.HasValue)
+{
+    <a href="/Admin/Content/Edit/@contentId" 
+       class="inline-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-2 right-2 z-10 bg-luxe-gold text-white text-xs px-3 py-1 font-medium hover:bg-luxe-charcoal shadow-lg"
+       title="Bu içeriği düzenle">
+        <i class="fas fa-edit mr-1"></i> Düzenle
+    </a>
+}
+else if (!string.IsNullOrEmpty(sectionName))
+{
+    <a href="/Admin/Content?section=@sectionName" 
+       class="inline-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-2 right-2 z-10 bg-luxe-gold text-white text-xs px-3 py-1 font-medium hover:bg-luxe-charcoal shadow-lg"
+       title="Bu bölümü düzenle">
+        <i class="fas fa-edit mr-1"></i> Düzenle
+    </a>
+}
