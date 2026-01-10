@@ -1,72 +1,68 @@
-# 👑 LuxeSalon: Premium Editoryal Kuaför Çözümü
-## Satış Sunumu ve Pitch Deck
+# 🌟 AURA - The Editorial Beauty CMS Ecosystem
+## *Where High-End Fashion Meets Enterprise Technology*
 
 ---
 
-### Slayt 1: Vizyon
-**Başlık:** LuxeSalon - Dijital Salon Deneyimini Yeniden Tanımlamak
-**Alt Başlık:** Seçkin Güzellik Stüdyoları İçin "Premium Editoryal" Platform.
-**Görsel Notu:** Web sitesindeki Fildişi ve Kömür Karası estetiğini vurgulayın.
+## 💎 The Value Proposition
+Aura is not just a hair salon website; it is a **premium digital experience engine** designed for top-tier beauty studios, editorial stylists, and wellness clinics. Built on **ASP.NET 8** and **Clean Architecture**, it offers a level of stability and performance that standard WordPress themes simply cannot match.
 
 ---
 
-### Slayt 2: Sorun
-**Pazardaki Güncel Durum:**
-*   Karmaşık ve estetikten uzak kuaför siteleri.
-*   Zayıf mobil deneyimler.
-*   Parçalanmış randevu yönetimi.
-*   Tasarım eksikliği nedeniyle marka otoritesinin kurulamaması.
+## 🚀 Key Differentiators (Why Buy Aura?)
+
+### 1. **"Editorial First" Aesthetics**
+Inspired by high-fashion magazines like Vogue and Harper's Bazaar. 
+- **Typography:** Modern Serif & Sans-Serif pairings.
+- **Contrast:** High-contrast Ivory (#F9F8F6) and Charcoal (#1A1A1A).
+- **Whitespace:** Masterful use of 1px minimalist dividers.
+
+### 2. **Bulletproof Architecture (ASP.NET 8)**
+Unlike PHP-based solutions, Aura is built on .NET 8, offering:
+- **Scalability:** Easily handles thousands of appointments.
+- **Security:** Built-in protection against SQLi, XSS, and CSRF.
+- **Performance:** Blazing fast page loads with In-Memory Caching.
+
+### 3. **The "Quick-Book" Engine**
+A conversion-optimized appointment bar located right under the Hero section. 
+- **User Flow:** 3 steps to booking (Date -> Time -> Contact).
+- **Admin Flow:** Real-time dashboard for managing stylists and schedules.
+
+### 4. **Multilingual by Default**
+Aura speaks to the world. Ready-to-use resources for:
+- 🇹🇷 Turkish
+- 🇺🇸 English
+- 🇩🇪 German
+- 🇫🇷 French
+- 🇷🇺 Russian
+- 🇸🇦 Arabic
 
 ---
 
-### Slayt 3: Çözüm (LuxeSalon)
-**Temel Değer Önerileri:**
-1.  **Editoryal Estetik:** Lüks moda dergilerinden ilham alan tasarım.
-2.  **Dönüşüm Odaklı:** Hero bölümünün hemen altında hızlı randevu barı.
-3.  **Modern Teknoloji:** ASP.NET Core 8 ve Tailwind CSS ile inşa edildi.
-4.  **Küresel Ölçek:** 6 dil desteği ile dünyaya açılmaya hazır.
+## 🛠 Tech Stack for Professionals
+- **Backend:** C# / ASP.NET 8 (LTS)
+- **Database:** Entity Framework Core (SQLite for Dev / SQL Server for Prod)
+- **Frontend:** Modern Tailwind CSS Configuration
+- **Patterns:** SOLID, Repository (via DbSet), DI, Clean Architecture
+- **DevOps:** Docker Ready, CI/CD Friendly architectures
 
 ---
 
-### Slayt 4: Öne Çıkan Özellikler (Kullanıcı Arayüzü)
-*   **Dinamik Hero Alanları:** Etkileyici görsel girişler.
-*   **Hızlı Randevu Barı:** Saniyeler içinde tarih, saat ve e-posta kaydı.
-*   **Dinamik Portföy ve Blog:** Hikaye anlatımı için dergi tarzı düzenler.
-*   **Markalamaya Hazır:** Logo, renk ve fontlar kolayca değiştirilebilir.
+## 📈 Revenue Potential for Freelancers & Agencies
+If you are a web agency, Aura is your **gold mine**:
+1. **White-Labeling:** Buy once, customize for $2k-$5k per client.
+2. **Maintenance:** Offer high-security hosting on Azure/AWS.
+3. **SEO Optimized:** Semantic HTML5 and high Core Web Vitals scores out of the box.
 
 ---
 
-### Slayt 5: Yönetim Paneli (Admin)
-*   **Tam İçerik Kontrolü:** Site metinlerini ve görsellerini gerçek zamanlı düzenleyin.
-*   **Randevu Yönetimi:** Bekleyen ve onaylanan randevular için dashboard.
-*   **Hizmet ve Ekip Yönetimi:** Menüyü ve personel bilgilerini dinamik olarak güncelleyin.
-*   **Mağaza/Ürün Kataloğu:** Satış ürünlerini yüksek moda düzeniyle sergileyin.
+## 📁 Repository Contents
+- **`LuxeSalon.Core`**: Domain entities & logic.
+- **`LuxeSalon.Infrastructure`**: Data access & migrations.
+- **`LuxeSalon.Web`**: The premium UI & Admin dashboard.
+- **`ARCHITECTURE.md`**: Detailed technical manual for developers.
+- **`DEPLOYMENT.md`**: One-click deployment guide.
 
 ---
 
-### Slayt 6: Teknik Mükemmeliyet
-*   **Temiz Mimari (Clean Architecture):** Sürdürülebilirlik için SOLID prensipleri.
-*   **Performans:** Optimize edilmiş SQLite/SQL Server entegrasyonu ile ultra hızlı açılış.
-*   **SEO Uyumu:** Semantik HTML ve meta-etiket yönetimi.
-*   **Responsive:** Mobil, tablet ve masaüstünde yüksek kaliteli görünüm.
-
----
-
-### Slayt 7: Küresel Hazırlık
-*   **6 Hazır Yerelleştirme:** TR, EN, DE, FR, RU, AR dilleri hazır.
-*   **WhatsApp Entegrasyonu:** Müşterilerle doğrudan iletişim.
-*   **Yayına Hazır:** Üretim (production) ortamı konfigürasyonları dahil.
-
----
-
-### Slayt 8: İş Potansiyeli
-*   **Hedef Pazar:** Üst segment kuaförler, güzellik klinikleri, lüks spa merkezleri.
-*   **Gelir Modelleri:** 
-    *   SaaS Modeli (Hizmet olarak yazılım).
-    *   Doğrudan Proje Satışı.
-    *   Bakım ve Barındırma Paketleri.
-
----
-
-### Slayt 9: İletişim ve Sonraki Adımlar
-**Eylem Çağrısı:** Demoyu deneyimleyin. Dijital amiral geminiz sizi bekliyor.
+### "Elevate your business. Command the aesthetic."
+**© 2025 Aura CMS - The Premium Standard.**

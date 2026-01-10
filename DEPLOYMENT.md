@@ -102,6 +102,27 @@ ASPNETCORE_ENVIRONMENT=Production
 
 ---
 
+## ☁️ Adım 4: Azure App Service ile Deploy (Profesyonel)
+
+Microsoft'un resmi bulut platformu olan Azure, .NET projeleri için en yüksek performansı sunar.
+
+### 4.1 Azure Portalı Üzerinden Kurulum
+1. [portal.azure.com](https://portal.azure.com) adresine gidin.
+2. **Create a Resource > Web App** yolunu izleyin.
+3. Ayarlar:
+   - **Runtime Stack:** .NET 9 (Linux)
+   - **Region:** West Europe
+   - **Plan:** Free F1 (veya Basic B1)
+4. **Deployment** sekmesinden GitHub hesabınızı bağlayın.
+5. Azure otomatik olarak bir GitHub Action dosyası oluşturacak ve projeyi derleyip yayına alacaktır.
+
+### 4.2 Veritabanı (Azure SQL)
+Prodüksiyon için Azure SQL Veritabanı kullanmanız önerilir:
+1. **Create a Resource > SQL Database**
+2. Connection string'i Azure portalındaki "Configuration" kısmına `ConnectionStrings__DefaultConnection` adıyla ekleyin.
+
+---
+
 ## 🗄️ Veritabanı Notları
 
 ### SQLite (Varsayılan - Geliştirme için)
