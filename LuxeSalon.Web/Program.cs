@@ -64,7 +64,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=App_Data/LuxeSalon.db";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlite(connectionString)
+           .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<LuxeSalon.Web.Services.SiteSettingsService>();
