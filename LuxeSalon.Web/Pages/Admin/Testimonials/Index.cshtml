@@ -1,0 +1,68 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Testimonials.IndexModel
+@{
+    ViewData["Title"] = "Müşteri Yorumları — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Müşteri Yorumları</h1>
+        <p class="text-luxe-charcoal/60">@Model.Testimonials.Count yorum</p>
+    </div>
+    <a asp-page="Create" class="bg-luxe-gold text-white px-6 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">+ Yeni Yorum</a>
+</div>
+
+<div class="bg-white shadow-sm overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-luxe-charcoal/5">
+            <tr>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Görsel</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Yazar</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Yorum</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Durum</th>
+                <th class="text-right px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-luxe-charcoal/10">
+            @foreach (var item in Model.Testimonials)
+            {
+                <tr class="hover:bg-luxe-charcoal/5 transition-colors">
+                    <td class="px-6 py-4">
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="@item.AuthorName" class="w-12 h-12 object-cover rounded-full" />
+                        }
+                        else
+                        {
+                            <div class="w-12 h-12 bg-luxe-cream rounded-full flex items-center justify-center text-xs text-luxe-charcoal/30">—</div>
+                        }
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-serif font-medium">@item.AuthorName</div>
+                        <div class="text-xs text-luxe-charcoal/50">@item.AuthorTitle</div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-luxe-charcoal/70 max-w-md truncate">@item.Quote</td>
+                    <td class="px-6 py-4">
+                        @if (item.IsActive)
+                        {
+                            <span class="bg-green-100 text-green-800 px-3 py-1 text-xs font-medium">Aktif</span>
+                        }
+                        else
+                        {
+                            <span class="bg-gray-100 text-gray-600 px-3 py-1 text-xs font-medium">Pasif</span>
+                        }
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <a asp-page="Edit" asp-route-id="@item.Id" class="text-luxe-gold hover:underline text-sm font-medium mr-4">Düzenle</a>
+                        <a asp-page="Delete" asp-route-id="@item.Id" class="text-red-500 hover:underline text-sm font-medium">Sil</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Testimonials.Any())
+            {
+                <tr><td colspan="5" class="px-6 py-12 text-center text-luxe-charcoal/40">Henüz yorum eklenmemiş.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

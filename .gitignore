@@ -62,3 +62,12 @@ nlog-*.log
 # Temp files
 *.tmp
 *.temp
+
+# Local preview, isolated database, research and screenshots
+.preview/
+output/playwright/
+
+# Local approved-design deployment packages
+/Publish-Onayli-Tasarim-*/
+/CelilAtilla-*-publish-*.zip
+/CelilAtilla-*-publish-*.manifest.json

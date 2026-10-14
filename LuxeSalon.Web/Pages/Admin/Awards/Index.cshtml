@@ -1,0 +1,47 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Awards.IndexModel
+@{
+    ViewData["Title"] = "Ödüller — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Ödüller</h1>
+        <p class="text-luxe-charcoal/60">@Model.Items.Count ödül</p>
+    </div>
+    <a asp-page="Create" class="bg-luxe-gold text-white px-6 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">+ Yeni Ödül</a>
+</div>
+
+<div class="bg-white shadow-sm overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-luxe-charcoal/5">
+            <tr>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">İkon</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Başlık</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Alt Başlık</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Yıl</th>
+                <th class="text-right px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-luxe-charcoal/10">
+            @foreach (var item in Model.Items)
+            {
+                <tr class="hover:bg-luxe-charcoal/5 transition-colors">
+                    <td class="px-6 py-4 text-2xl">@item.Icon</td>
+                    <td class="px-6 py-4 font-serif font-medium">@item.Title</td>
+                    <td class="px-6 py-4 text-luxe-charcoal/60">@item.Subtitle</td>
+                    <td class="px-6 py-4 text-luxe-gold">@(item.Year ?? "—")</td>
+                    <td class="px-6 py-4 text-right">
+                        <a asp-page="Edit" asp-route-id="@item.Id" class="text-luxe-gold hover:underline text-sm font-medium mr-4">Düzenle</a>
+                        <a asp-page="Delete" asp-route-id="@item.Id" class="text-red-500 hover:underline text-sm font-medium">Sil</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Items.Any())
+            {
+                <tr><td colspan="5" class="px-6 py-12 text-center text-luxe-charcoal/40">Henüz ödül eklenmemiş.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

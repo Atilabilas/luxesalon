@@ -1,19 +1,26 @@
-@page
+@page "/magaza"
 @model LuxeSalon.Web.Pages.Shop.IndexModel
 @{
-    ViewData["Title"] = "Mağaza — Celil Kuaför";
+    ViewData["Title"] = Model.GetContent("shop_page_title");
+    ViewData["Robots"] = "noindex, follow";
+    ViewData["MetaDescription"] = Model.GetContent("shop_empty_desc", "Salon ürün seçkisi hazırlanıyor.");
+    ViewData["Canonical"] = (Model.Setting("Site_Url", "https://celilatilla.com").TrimEnd('/')) + (Model.CurrentCulture == "en" ? "/en/shop" : "/magaza");
 }
 
 @* Hero Banner *@
 <section class="relative h-[50vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1920&auto=format&fit=crop" 
-             alt="Shop" class="w-full h-full object-cover" />
+        @if (Model.HeroImage != null)
+        {
+            <img src="@Model.HeroImage.ImageUrl"
+                 alt="@(Model.HeroImage.AltText ?? Model.HeroImage.Title ?? Model.GetContent("shop_hero_title"))"
+                 class="w-full h-full object-cover" />
+        }
         <div class="absolute inset-0 bg-luxe-charcoal/60"></div>
     </div>
     <div class="relative z-10 text-center text-white">
-        <p class="section-subtitle text-luxe-gold mb-4">Profesyonel Ürünler</p>
-        <h1 class="section-title text-white">Mağaza</h1>
+        <p class="section-subtitle text-luxe-gold mb-4">@Model.GetContent("shop_hero_subtitle")</p>
+        <h1 class="section-title text-white">@Model.GetContent("shop_hero_title")</h1>
     </div>
 </section>
 
@@ -22,8 +29,8 @@
         @if (!Model.Products.Any())
         {
             <div class="text-center py-20">
-                <p class="text-4xl font-serif italic text-luxe-charcoal/30 mb-8">Koleksiyonumuz hazırlanıyor...</p>
-                <p class="text-lg text-luxe-charcoal/50">Çok yakında premium saç bakım ürünlerimizle burada olacağız.</p>
+                <p class="text-4xl font-serif italic text-luxe-charcoal/30 mb-8">@Model.GetContent("shop_empty_title")</p>
+                <p class="text-lg text-luxe-charcoal/50">@Model.GetContent("shop_empty_desc")</p>
             </div>
         }
         else
@@ -36,13 +43,13 @@
                             <div class="aspect-square bg-luxe-cream mb-6 overflow-hidden">
                                 @if (!string.IsNullOrEmpty(product.ImageUrl))
                                 {
-                                    <img src="@product.ImageUrl" alt="@product.Name" 
+                                    <img src="@product.ImageUrl" alt="@product.Name"
                                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                 }
                                 else
                                 {
                                     <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-luxe-cream to-luxe-ivory">
-                                        <span class="text-6xl font-serif italic text-luxe-charcoal/10">C</span>
+                                        <span class="text-6xl font-serif italic text-luxe-charcoal/10">@Model.Setting("Site_Name", "L")[0]</span>
                                     </div>
                                 }
                             </div>
@@ -60,25 +67,25 @@
 </section>
 
 @* Featured Section *@
-<section class="bg-luxe-charcoal text-white py-32">
+<section class="bg-luxe-charcoal text-white py-20 md:py-24">
     <div class="container mx-auto px-6 text-center">
-        <p class="section-subtitle text-luxe-gold">Neden Biz?</p>
-        <h2 class="section-title text-white mb-12">Profesyonel Ürünler</h2>
+        <p class="section-subtitle text-luxe-gold">@Model.GetContent("shop_why_subtitle")</p>
+        <h2 class="section-title text-white mb-12">@Model.GetContent("shop_why_title")</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto">
             <div class="reveal">
                 <div class="text-5xl font-serif text-luxe-gold mb-4">01</div>
-                <h3 class="text-xl font-serif mb-4">Salon Kalitesi</h3>
-                <p class="text-white/60 font-light">Salonumuzda kullandığımız aynı premium ürünler.</p>
+                <h3 class="text-xl font-serif mb-4">@Model.GetContent("shop_why_1_title")</h3>
+                <p class="text-white/60 font-light">@Model.GetContent("shop_why_1_desc")</p>
             </div>
             <div class="reveal">
                 <div class="text-5xl font-serif text-luxe-gold mb-4">02</div>
-                <h3 class="text-xl font-serif mb-4">Uzman Seçimi</h3>
-                <p class="text-white/60 font-light">Stilistlerimiz tarafından özenle seçilmiş markalar.</p>
+                <h3 class="text-xl font-serif mb-4">@Model.GetContent("shop_why_2_title")</h3>
+                <p class="text-white/60 font-light">@Model.GetContent("shop_why_2_desc")</p>
             </div>
             <div class="reveal">
                 <div class="text-5xl font-serif text-luxe-gold mb-4">03</div>
-                <h3 class="text-xl font-serif mb-4">Hızlı Teslimat</h3>
-                <p class="text-white/60 font-light">İstanbul içi aynı gün teslimat imkanı.</p>
+                <h3 class="text-xl font-serif mb-4">@Model.GetContent("shop_why_3_title")</h3>
+                <p class="text-white/60 font-light">@Model.GetContent("shop_why_3_desc")</p>
             </div>
         </div>
     </div>

@@ -1,13 +1,12 @@
 @page "{id:int}"
 @model LuxeSalon.Web.Pages.Shop.DetailsModel
 @{
-    ViewData["Title"] = Model.Product.Name + " — Celil Kuaför Mağaza";
+    ViewData["Title"] = Model.Product.Name + Model.Setting("Shop_Title_Suffix");
 }
 
 <section class="section-light pt-40 pb-32">
     <div class="container mx-auto px-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-24 items-start">
-            @* Product Image *@
             <div class="bg-white aspect-square flex items-center justify-center p-20 reveal-left">
                 @if (!string.IsNullOrEmpty(Model.Product.ImageUrl))
                 {
@@ -15,14 +14,13 @@
                 }
                 else
                 {
-                    <div class="text-[10px] uppercase tracking-[0.5em] text-gray-300 font-bold italic">Editoryal Nesne</div>
+                    <div class="text-[10px] uppercase tracking-[0.5em] text-gray-300 font-bold italic">@Model.GetContent("shop_details_no_image")</div>
                 }
             </div>
 
-            @* Product Info *@
             <div class="pt-8 reveal-right">
                 <nav class="flex items-center space-x-4 mb-12 text-[9px] uppercase tracking-widest font-bold text-gray-400">
-                    <a asp-page="./Index" class="hover:text-luxe-charcoal transition-colors">Mağaza</a>
+                    <a asp-page="./Index" class="hover:text-luxe-charcoal transition-colors">@Model.GetContent("shop_hero_title")</a>
                     <span>/</span>
                     <span class="text-luxe-gold">@Model.Product.Category</span>
                 </nav>
@@ -38,31 +36,31 @@
 
                 <div class="flex flex-col space-y-4 mb-16">
                     <button class="w-full bg-luxe-charcoal text-luxe-ivory py-5 text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-luxe-gold transition-all duration-700">
-                        SEPETE EKLE
+                        @Model.GetContent("shop_add_cart")
                     </button>
                     <div class="flex justify-between items-center text-[9px] uppercase tracking-widest font-bold text-gray-400 px-2">
-                        <span>2500 TL Üzeri Ücretsiz Kargo</span>
-                        <span>Stok: @Model.Product.StockQuantity</span>
+                        <span>@Model.GetContent("shop_details_shipping")</span>
+                        <span>@Model.GetContent("shop_stock_label") @Model.Product.StockQuantity</span>
                     </div>
                 </div>
 
                 <div class="space-y-6">
                     <details class="group border-b border-luxe-charcoal/5 pb-4 cursor-pointer">
                         <summary class="list-none flex justify-between items-center text-[10px] uppercase tracking-widest font-bold">
-                            Product Details
+                            @Model.GetContent("shop_details_accordion_title")
                             <span class="transform group-open:rotate-45 transition-transform">+</span>
                         </summary>
                         <p class="mt-4 text-xs font-light text-gray-500 leading-relaxed">
-                            Crafted with clinical-grade ingredients and editorial-tested formulas. Dermatologically tested and cruelty-free.
+                            @Model.GetContent("shop_details_placeholder")
                         </p>
                     </details>
                     <details class="group border-b border-luxe-charcoal/5 pb-4 cursor-pointer">
                         <summary class="list-none flex justify-between items-center text-[10px] uppercase tracking-widest font-bold">
-                            Shipping & Returns
+                            @Model.GetContent("shop_details_shipping_title")
                             <span class="transform group-open:rotate-45 transition-transform">+</span>
                         </summary>
                         <p class="mt-4 text-xs font-light text-gray-500 leading-relaxed">
-                            Complimentary shipping within 2-3 business days. Refined returns accepted within 14 days of purchase.
+                            @Model.GetContent("shop_details_shipping_desc")
                         </p>
                     </details>
                 </div>

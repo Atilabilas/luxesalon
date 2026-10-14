@@ -1,0 +1,19 @@
+@page "{id:int}"
+@model LuxeSalon.Web.Pages.Admin.Testimonials.DeleteModel
+@{
+    ViewData["Title"] = "Yorum Sil — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-lg mx-auto">
+    <div class="bg-white p-8 shadow-sm text-center">
+        <div class="text-5xl text-red-500 mb-4">⚠️</div>
+        <h1 class="text-2xl font-serif font-semibold mb-2">Silmek İstediğinize Emin Misiniz?</h1>
+        <p class="text-luxe-charcoal/60 mb-4">@Model.Testimonial.AuthorName yorumu silinecektir.</p>
+        <p class="text-sm italic text-luxe-charcoal/70 mb-6">"@Model.Testimonial.Quote"</p>
+        <form method="post" class="flex gap-4 justify-center">
+            <button type="submit" class="bg-red-600 text-white px-6 py-3 font-medium hover:bg-red-700 transition-colors">EVET, SİL</button>
+            <a asp-page="Index" class="border border-luxe-charcoal/20 px-6 py-3 font-medium hover:bg-luxe-charcoal/5 transition-colors">İPTAL</a>
+        </form>
+    </div>
+</div>

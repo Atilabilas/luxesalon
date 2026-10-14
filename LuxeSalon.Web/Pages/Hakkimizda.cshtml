@@ -1,209 +1,96 @@
-@page
+@page "/hakkimizda"
 @model LuxeSalon.Web.Pages.HakkimizdaModel
+@using LuxeSalon.Web.Services
 @{
-    ViewData["Title"] = "Celil Kuaför Hakkında — İzmir'in Önde Gelen Kuaförü";
+    var en = Model.CurrentCulture == "en";
+    var culture = Model.CurrentCulture;
+    var celil = Model.TeamMembers.FirstOrDefault(m => m.Name.Equals("Celil", StringComparison.OrdinalIgnoreCase));
+    Model.SetSeo(en ? "About the salon | Celil & Atilla" : "Salon ve ekip | Celil & Atilla",
+        en ? "Meet Celil and the team at Celil & Atilla, a Bornova hair salon founded in 2000. Cut, colour and care in Kazımdirik, İzmir."
+           : "2000’de Bornova’da kurulan Celil & Atilla’yı, kurucu Celil’i ve ekibi tanıyın. Kazımdirik’te saç kesimi, renklendirme ve bakım.",
+        SitePaths.About(culture), Model.AboutImage?.ImageUrl, "website", null, SitePaths.About("tr"), SitePaths.About("en"));
+}
+<section class="atelier-page-intro">
+    <div class="atelier-container">
+        <p class="eyebrow">@(en ? "The salon / 01" : "Salon / 01")</p>
+        <h1>@(en ? "A place for your hair." : "Saçınız için bir yer.")<br /><em>@(en ? "And a familiar face." : "Tanıdık bir yüz.")</em></h1>
+        <p>@(en ? "Celil & Atilla began in Bornova in 2000. Today, we welcome you for cut, colour and care at our salon in Kazımdirik." : "Celil & Atilla’nın hikâyesi 2000’de Bornova’da başladı. Bugün Kazımdirik’teki salonumuzda kesim, renk ve bakım için sizi ağırlıyoruz.")</p>
+    </div>
+</section>
+
+<section class="atelier-section">
+    <div class="atelier-container story-grid">
+        <div class="story-photo">
+            @if (Model.AboutImage != null)
+            {
+                <img src="@Model.AboutImage.ImageUrl" alt="@(en ? "Illustrative salon interior with styling chairs and mirrors" : "Kesim koltukları ve aynalar bulunan temsili salon iç mekânı")" loading="eager" fetchpriority="high" sizes="(max-width: 767px) 100vw, 46vw" />
+                @if (Model.AboutImage.ImageUrl.Contains("unsplash.com")) { <span class="atelier-image-caption">@(en ? "Illustrative image" : "Temsili görsel")</span> }
+            }
+        </div>
+        <div class="story-copy">
+            <p class="eyebrow">@(en ? "Our story / 02" : "Hikâyemiz / 02")</p>
+            <h2>@Model.GetContent("hakkimizda_story_title", en ? "Hair, with attention." : "Saça özenle.")</h2>
+            <p>@Model.GetContent("hakkimizda_story_p1")</p>
+            <p>@Model.GetContent("hakkimizda_story_p2")</p>
+            <p>@Model.GetContent("hakkimizda_story_p3")</p>
+            <a class="editorial-link" href="@SitePaths.Services(culture)">@(en ? "Explore the services" : "Hizmetleri inceleyin") <span aria-hidden="true">↗</span></a>
+        </div>
+    </div>
+</section>
+
+@if (celil != null)
+{
+    <section class="atelier-founder" id="celil" aria-labelledby="celil-title">
+        <div class="atelier-container atelier-founder-grid">
+            <div>
+                <p class="eyebrow">@(en ? "The founder / 03" : "Kurucu / 03")</p>
+                <h2 id="celil-title">Celil</h2>
+                <p class="atelier-founder-role">@(en ? "Founder · Cut & colour" : "Kurucu · Kesim ve renk")</p>
+            </div>
+            <div>
+                <p>@(en ? "Celil is the founder of Celil & Atilla. He runs the salon and works on hair cutting and colouring. You can speak to him about your hair history, the shape you want and your next appointment." : "Celil, Celil & Atilla’nın kurucusudur. Salonu yürütür; saç kesimi ve renklendirme üzerine çalışır. Saçınızın geçmişini, istediğiniz formu ve randevunuzu kendisiyle konuşabilirsiniz.")</p>
+                <a class="editorial-link" href="@SitePaths.Appointment(culture)">@(en ? "Arrange a visit" : "Randevu için iletişime geçin") <span aria-hidden="true">↗</span></a>
+            </div>
+        </div>
+    </section>
 }
 
-@* Hero Section *@
-<section class="relative h-screen flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=1920&auto=format&fit=crop" 
-             alt="Celil Kuaför" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-luxe-charcoal/70"></div>
-    </div>
-    <div class="relative z-10 text-center text-white px-6 max-w-4xl">
-        <p class="text-sm uppercase tracking-[0.5em] text-luxe-gold font-bold mb-6 reveal">Kurucu & Sanat Yönetmeni</p>
-        <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif mb-8 reveal">
-            Celil<br/><span class="italic font-light">Kuaför</span>
-        </h1>
-        <p class="text-xl md:text-2xl font-light text-white/80 reveal">
-            "Saç, bir kadının taç'ıdır. Benim işim onu parlatmak."
-        </p>
-    </div>
-</section>
-
-@* Story Section *@
-<section class="section-padding bg-luxe-ivory">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            @* Left: Image *@
-            <div class="reveal-left">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop" 
-                         alt="Celil" class="w-full aspect-[3/4] object-cover" />
-                    <div class="absolute -bottom-8 -right-8 bg-luxe-gold text-white p-8 hidden md:block">
-                        <p class="text-5xl font-serif">20+</p>
-                        <p class="text-sm uppercase tracking-widest">Yıllık Deneyim</p>
-                    </div>
-                </div>
-            </div>
-
-            @* Right: Story *@
-            <div class="reveal-right">
-                <p class="section-subtitle">Hikayemiz</p>
-                <h2 class="text-4xl md:text-5xl font-serif mb-8 leading-tight">
-                    İzmir'in Kalbinde<br/><span class="italic">Bir Tutku Hikayesi</span>
-                </h2>
-                <div class="space-y-6 text-lg font-light text-luxe-charcoal/70 leading-relaxed">
-                    <p>
-                        <strong class="text-luxe-charcoal">Celil Kuaför</strong>, 2004 yılında İzmir Alsancak'ta 
-                        küçük bir salon olarak hayata başladı. Kurucumuz Celil, henüz 18 yaşındayken 
-                        saç sanatına olan tutkusunu keşfetti ve İstanbul'un en prestijli salonlarında 
-                        yıllarını verdi.
-                    </p>
-                    <p>
-                        İzmir'e döndüğünde tek bir hedefi vardı: Ege'nin incisi olan bu şehre, 
-                        uluslararası standartlarda bir saç tasarım stüdyosu kazandırmak. Bugün, 
-                        <strong class="text-luxe-charcoal">İzmir'in en çok tercih edilen kadın kuaförlerinden biri</strong> 
-                        olarak binlerce müşteriye hizmet veriyoruz.
-                    </p>
-                    <p>
-                        Her müşterimiz bizim için özeldir. Her saç, bir tuval; her kesim, bir sanat eseridir. 
-                        Amacımız sadece saç kesmek değil, her kadının kendini en güzel hissettiği 
-                        görünümü yaratmaktır.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-3 gap-8 mt-12 pt-12 border-t border-luxe-charcoal/10">
-                    <div>
-                        <p class="text-4xl font-serif text-luxe-gold">15K+</p>
-                        <p class="text-sm text-luxe-charcoal/60 uppercase tracking-wider mt-2">Mutlu Müşteri</p>
-                    </div>
-                    <div>
-                        <p class="text-4xl font-serif text-luxe-gold">8</p>
-                        <p class="text-sm text-luxe-charcoal/60 uppercase tracking-wider mt-2">Uzman Stilist</p>
-                    </div>
-                    <div>
-                        <p class="text-4xl font-serif text-luxe-gold">50+</p>
-                        <p class="text-sm text-luxe-charcoal/60 uppercase tracking-wider mt-2">Ödül</p>
-                    </div>
-                </div>
-            </div>
+<section class="atelier-section" id="ekip" aria-labelledby="team-title">
+    <div class="atelier-container">
+        <div class="section-heading">
+            <div><p class="eyebrow">@(en ? "People / 04" : "Ekip / 04")</p><h2 id="team-title">@(en ? "Meet the team." : "Tanışalım.")</h2></div>
+            <p>@(en ? "The people who welcome you at the salon." : "Salonda sizi karşılayan isimler.")</p>
         </div>
-    </div>
-</section>
-
-@* Philosophy Section *@
-<section class="bg-luxe-charcoal text-white py-32">
-    <div class="container mx-auto px-6 text-center max-w-4xl reveal">
-        <p class="section-subtitle text-luxe-gold">Felsefemiz</p>
-        <blockquote class="text-3xl md:text-4xl lg:text-5xl font-serif italic leading-relaxed mb-12">
-            "Güzellik, kendine güvenle başlar. Biz sadece saçınızı değil, 
-            özgüveninizi de şekillendiriyoruz."
-        </blockquote>
-        <p class="text-white/60">— Celil, Kurucu</p>
-    </div>
-</section>
-
-@* Team Section *@
-<section class="section-padding bg-luxe-ivory">
-    <div class="container mx-auto">
-        <div class="text-center mb-16 reveal">
-            <p class="section-subtitle">Ekibimiz</p>
-            <h2 class="section-title">Uzman Stilistler</h2>
+        <div class="atelier-team-grid">
+            @foreach (var member in Model.TeamMembers)
+            {
+                var role = en ? member.Name switch { "Celil" => "Founder · Cut & colour", "Bülent" => "Stylist", "Tuğba" => "Stylist · Manicure", "Sevgül" => "Manicure", _ => "Salon assistant" } : member.Role;
+                <article class="atelier-team-card">
+                    @if (!string.IsNullOrWhiteSpace(member.ImageUrl) && !member.ImageUrl.Contains("unsplash.com") && !member.ImageUrl.Contains("pravatar"))
+                    {
+                        <img src="@member.ImageUrl" alt="@member.Name" loading="lazy" sizes="(max-width: 767px) 45vw, 30vw" />
+                    }
+                    else
+                    {
+                        <div class="atelier-team-initial" aria-hidden="true">@(member.Name.Length > 0 ? member.Name[..1] : "")</div>
+                    }
+                    <h3>@member.Name</h3><p>@role</p>
+                    @if (!en && !string.IsNullOrWhiteSpace(member.Bio)) { <p class="atelier-team-bio">@member.Bio</p> }
+                </article>
+            }
         </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            @* Team Member 1 *@
-            <div class="group reveal">
-                <div class="aspect-[3/4] overflow-hidden mb-4">
-                    <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=400&auto=format&fit=crop" 
-                         alt="Stilist" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                </div>
-                <h4 class="font-serif text-lg">Ayşe Yılmaz</h4>
-                <p class="text-sm text-luxe-charcoal/60">Renk Uzmanı</p>
-            </div>
-
-            @* Team Member 2 *@
-            <div class="group reveal">
-                <div class="aspect-[3/4] overflow-hidden mb-4">
-                    <img src="https://images.unsplash.com/photo-1595959183082-7b570b7e1dfa?q=80&w=400&auto=format&fit=crop" 
-                         alt="Stilist" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                </div>
-                <h4 class="font-serif text-lg">Zeynep Kaya</h4>
-                <p class="text-sm text-luxe-charcoal/60">Kesim Uzmanı</p>
-            </div>
-
-            @* Team Member 3 *@
-            <div class="group reveal">
-                <div class="aspect-[3/4] overflow-hidden mb-4">
-                    <img src="https://images.unsplash.com/photo-1559599101-f09722fb4948?q=80&w=400&auto=format&fit=crop" 
-                         alt="Stilist" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                </div>
-                <h4 class="font-serif text-lg">Elif Demir</h4>
-                <p class="text-sm text-luxe-charcoal/60">Gelin Saçı Uzmanı</p>
-            </div>
-
-            @* Team Member 4 *@
-            <div class="group reveal">
-                <div class="aspect-[3/4] overflow-hidden mb-4">
-                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400&auto=format&fit=crop" 
-                         alt="Stilist" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                </div>
-                <h4 class="font-serif text-lg">Selin Öztürk</h4>
-                <p class="text-sm text-luxe-charcoal/60">Makyaj Artisti</p>
-            </div>
-        </div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            ViewData["EditUrl"] = "/Admin/Team";
+            <partial name="_EditButton" />
+        }
     </div>
 </section>
 
-@* Awards & Recognition *@
-<section class="section-padding bg-luxe-cream">
-    <div class="container mx-auto text-center">
-        <div class="reveal mb-16">
-            <p class="section-subtitle">Başarılarımız</p>
-            <h2 class="section-title">Ödüller & Takdirler</h2>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            <div class="reveal p-6">
-                <p class="text-3xl font-serif text-luxe-gold mb-2">🏆</p>
-                <p class="font-serif text-lg mb-1">En İyi Salon</p>
-                <p class="text-sm text-luxe-charcoal/60">İzmir 2023</p>
-            </div>
-            <div class="reveal p-6">
-                <p class="text-3xl font-serif text-luxe-gold mb-2">⭐</p>
-                <p class="font-serif text-lg mb-1">5 Yıldız</p>
-                <p class="text-sm text-luxe-charcoal/60">Google Reviews</p>
-            </div>
-            <div class="reveal p-6">
-                <p class="text-3xl font-serif text-luxe-gold mb-2">🎨</p>
-                <p class="font-serif text-lg mb-1">Renk Ustası</p>
-                <p class="text-sm text-luxe-charcoal/60">L'Oréal 2022</p>
-            </div>
-            <div class="reveal p-6">
-                <p class="text-3xl font-serif text-luxe-gold mb-2">💎</p>
-                <p class="font-serif text-lg mb-1">Premium Salon</p>
-                <p class="text-sm text-luxe-charcoal/60">Wella Partner</p>
-            </div>
-        </div>
+<section class="atelier-invitation">
+    <div class="atelier-container">
+        <p class="eyebrow">@(en ? "Your next visit" : "Bir sonraki ziyaretiniz")</p>
+        <h2>@(en ? "Let's talk about your hair." : "Saçınız üzerine konuşalım.")</h2>
+        <a href="@SitePaths.Appointment(culture)" class="atelier-button">@(en ? "Request an appointment" : "Randevu talebi oluştur") <span aria-hidden="true">↗</span></a>
     </div>
 </section>
-
-@* CTA Section *@
-<section class="relative py-32 overflow-hidden">
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1920&auto=format&fit=crop" 
-             alt="Salon" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-luxe-charcoal/80"></div>
-    </div>
-    <div class="relative z-10 container mx-auto px-6 text-center text-white">
-        <p class="section-subtitle text-luxe-gold reveal">Sizi Bekliyoruz</p>
-        <h2 class="text-4xl md:text-6xl font-serif mb-8 reveal">Güzellik Yolculuğunuza<br/><span class="italic">Başlayın</span></h2>
-        <a href="/Randevu" class="btn-white reveal">RANDEVU AL</a>
-    </div>
-</section>
-
-@section Scripts {
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
-    </script>
-}

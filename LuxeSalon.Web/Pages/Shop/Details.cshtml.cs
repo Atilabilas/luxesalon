@@ -1,38 +1,31 @@
 using LuxeSalon.Core.Entities;
 using LuxeSalon.Infrastructure.Data;
+using LuxeSalon.Web.Pages;
+using LuxeSalon.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace LuxeSalon.Web.Pages.Shop;
 
-public class DetailsModel : PageModel
+public class DetailsModel : PageContentModel
 {
-    private readonly ApplicationDbContext _context;
-
-    public DetailsModel(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+    public DetailsModel(ApplicationDbContext context, ContentService content, SiteSettingsService settings)
+        : base(context, content, settings) { }
 
     public Product Product { get; set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
 
-        var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
+        await LoadContentAsync("Shop");
+
+        var product = await Context.Products.FirstOrDefaultAsync(m => m.Id == id);
         if (product == null)
-        {
             return NotFound();
-        }
-        else
-        {
-            Product = product;
-        }
+
+        Product = product;
         return Page();
     }
 }

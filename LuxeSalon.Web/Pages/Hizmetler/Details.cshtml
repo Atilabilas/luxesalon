@@ -1,0 +1,106 @@
+@page "/hizmetler/{slug}"
+@model LuxeSalon.Web.Pages.Hizmetler.DetailsModel
+@using LuxeSalon.Web.Services
+@{
+    var culture = Model.CurrentCulture;
+    var name = Model.Service.LocalizedName(culture);
+    var path = LuxeSalon.Web.Services.SitePaths.Service(culture, Model.Service.LocalizedSlug(culture));
+    Model.SetSeo(
+        ServiceSearchCopy.Title(Model.Service, culture),
+        ServiceSearchCopy.Meta(Model.Service, culture),
+        path,
+        Model.Service.ImageUrl,
+        "website",
+        null,
+        Model.Service.Slug is { Length: > 0 } ? LuxeSalon.Web.Services.SitePaths.Service("tr", Model.Service.Slug) : null,
+        Model.Service.HasEnglish ? LuxeSalon.Web.Services.SitePaths.Service("en", Model.Service.SlugEn!) : null);
+}
+
+@section Scripts {
+    <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.ServiceSchema(Model.Service, culture, Model.SiteSettings))</script>
+    <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.Breadcrumb(
+        new[] {
+            (culture == "en" ? "Services" : "Hizmetler", LuxeSalon.Web.Services.SitePaths.Services(culture)),
+            (name, path)
+        }, Model.SiteSettings))</script>
+}
+
+<section class="pt-36 md:pt-40 pb-16 md:pb-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+        <nav class="text-[10px] uppercase tracking-widest text-luxe-charcoal/40 mb-8" aria-label="Breadcrumb">
+            <a href="@LuxeSalon.Web.Services.SitePaths.Home(culture)" class="hover:text-luxe-gold">@(culture == "en" ? "Home" : "Ana sayfa")</a>
+            <span class="mx-2">/</span>
+            <a href="@LuxeSalon.Web.Services.SitePaths.Services(culture)" class="hover:text-luxe-gold">@(culture == "en" ? "Services" : "Hizmetler")</a>
+            <span class="mx-2">/</span>
+            <span class="text-luxe-charcoal/60">@name</span>
+        </nav>
+
+        <p class="text-[10px] uppercase tracking-[0.4em] text-luxe-gold mb-4">Bornova / İzmir</p>
+        <h1 class="text-4xl md:text-5xl font-serif mb-6">@ServiceSearchCopy.VisibleName(Model.Service, culture)</h1>
+        <p class="text-xl font-light text-luxe-charcoal/70 mb-6 max-w-2xl">@(culture == "en" ? ServiceSearchCopy.ServiceLeadEn : ServiceSearchCopy.ServiceLeadTr)</p>
+        <p class="text-xl font-light text-luxe-charcoal/70 mb-10 max-w-2xl">@Model.Service.LocalizedDescription(culture)</p>
+        <p class="local-salon-context text-lg font-light leading-relaxed text-luxe-charcoal/70 mb-8 max-w-2xl">@LuxeSalon.Web.Services.LocalSalonCopy.ServiceContext(Model.Service.Slug, culture)</p>
+
+        <div class="service-booking-actions">
+            <a href="@(LuxeSalon.Web.Services.SitePaths.Appointment(culture) + "?serviceId=" + Model.Service.Id)" class="atelier-button">@(culture == "en" ? "Request an appointment" : "Bu hizmet için randevu al") <span aria-hidden="true">↗</span></a>
+            <a href="@LuxeSalon.Web.Services.WhatsAppLink.Chat(Model.Setting("Whatsapp_Number"), culture == "en" ? $"Hello, I'd like to ask about {name}." : $"Merhaba, {name} hakkında bilgi almak istiyorum.")" class="atelier-button outline" target="_blank" rel="noopener">@(culture == "en" ? "Ask on WhatsApp" : "WhatsApp’tan sor") <span aria-hidden="true">↗</span></a>
+        </div>
+        <dl class="service-visit-facts">
+            <div><dt>@(culture == "en" ? "Visit us" : "Salon")</dt><dd>@Model.Setting("Contact_Address") · Bornova / İzmir</dd></div>
+            <div><dt>@(culture == "en" ? "Other districts" : "Diğer ilçeler")</dt><dd>@(culture == "en" ? "No branch outside Bornova." : "Bornova dışında şube yoktur.") <a href="@LuxeSalon.Web.Services.SitePaths.Districts(culture)">@(culture == "en" ? "İzmir districts" : "İzmir ilçeleri")</a></dd></div>
+            <div><dt>@(culture == "en" ? "Pricing" : "Ücret bilgisi")</dt><dd>@(culture == "en" ? "Ask us before your visit; the service and your hair determine the plan." : "İşleme ve saçınıza göre netleşir. Randevu öncesi bize sorun.")</dd></div>
+        </dl>
+
+        @if (!string.IsNullOrEmpty(Model.Service.ImageUrl))
+        {
+            <div class="aspect-[16/9] overflow-hidden bg-luxe-cream mb-12">
+                <img src="@Model.Service.ImageUrl" alt="@ServiceSearchCopy.VisibleName(Model.Service, culture) — Celil & Atilla"
+                     class="w-full h-full object-cover"
+                     loading="eager" fetchpriority="high" decoding="async" width="1200" height="675" />
+            </div>
+        }
+
+        <div class="prose prose-lg max-w-none font-light text-luxe-charcoal/80 space-y-5 service-body">
+            @Html.Raw(ServiceSearchCopy.WithQueryHeadings(Model.Service.LocalizedLongDescription(culture), Model.Service.Slug, culture))
+        </div>
+
+        @if (Model.OtherLandings.Count > 0)
+        {
+            <section class="mt-14 pt-10 border-t border-luxe-charcoal/10">
+                <h2 class="text-2xl font-serif mb-6">@(culture == "en" ? "Other Bornova services" : "Diğer Bornova kuaför işlemleri")</h2>
+                <ul class="grid sm:grid-cols-2 gap-3">
+                    @foreach (var other in Model.OtherLandings)
+                    {
+                        <li><a class="underline underline-offset-4" href="@SitePaths.Service(culture, other.LocalizedSlug(culture))">@ServiceSearchCopy.VisibleName(other, culture)</a></li>
+                    }
+                </ul>
+            </section>
+        }
+
+        <div class="mt-14 flex flex-wrap gap-4">
+            <a href="@(LuxeSalon.Web.Services.SitePaths.Appointment(culture) + "?serviceId=" + Model.Service.Id)" class="btn-primary">@(culture == "en" ? "Request an appointment" : "Randevu talebi oluştur")</a>
+            <a href="@LuxeSalon.Web.Services.SitePaths.Services(culture)" class="btn-outline">@(culture == "en" ? "All services" : "Tüm hizmetler")</a>
+        </div>
+
+        @if (Model.RelatedPosts.Any())
+        {
+            <section class="mt-20 pt-12 border-t border-luxe-charcoal/10">
+                <h2 class="text-2xl font-serif mb-8">@(culture == "en" ? "Bornova hair guides" : "Bornova kuaför yazıları")</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    @foreach (var post in Model.RelatedPosts)
+                    {
+                        <a href="@LuxeSalon.Web.Services.SitePaths.BlogPost(culture, post.LocalizedSlug(culture))" class="group block">
+                            @if (!string.IsNullOrEmpty(post.HeaderImageUrl))
+                            {
+                                <div class="aspect-[4/3] overflow-hidden bg-luxe-cream mb-4">
+                                    <img src="@post.HeaderImageUrl" alt="@post.LocalizedTitle(culture)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async" width="600" height="450" />
+                                </div>
+                            }
+                            <h3 class="font-serif text-lg group-hover:text-luxe-gold transition-colors">@post.LocalizedTitle(culture)</h3>
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+    </div>
+</section>

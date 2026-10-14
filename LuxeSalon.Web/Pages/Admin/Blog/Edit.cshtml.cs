@@ -56,13 +56,22 @@ public class EditModel : PageModel
             BlogPost.HeaderImageUrl = $"/uploads/blog/{uniqueFileName}";
         }
 
-        // Update fields
+        var imageUrl = BlogPost.HeaderImageUrl;
+        var contentChanged =
+            existingPost.Title != BlogPost.Title ||
+            existingPost.Summary != BlogPost.Summary ||
+            existingPost.Content != BlogPost.Content ||
+            existingPost.HeaderImageUrl != imageUrl ||
+            existingPost.IsPublished != BlogPost.IsPublished;
+
         existingPost.Title = BlogPost.Title;
         existingPost.Author = BlogPost.Author;
         existingPost.Summary = BlogPost.Summary;
         existingPost.Content = BlogPost.Content;
-        existingPost.HeaderImageUrl = BlogPost.HeaderImageUrl;
+        existingPost.HeaderImageUrl = imageUrl;
         existingPost.IsPublished = BlogPost.IsPublished;
+        if (contentChanged)
+            existingPost.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 

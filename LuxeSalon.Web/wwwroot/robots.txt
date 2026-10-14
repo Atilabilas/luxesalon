@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /Admin
+Disallow: /Admin/
+
+Sitemap: https://celilatilla.com/sitemap.xml

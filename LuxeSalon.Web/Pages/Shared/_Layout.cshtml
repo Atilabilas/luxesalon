@@ -1,318 +1,188 @@
-﻿@using Microsoft.AspNetCore.Localization
+@using Microsoft.EntityFrameworkCore
 @using LuxeSalon.Infrastructure.Data
+@using LuxeSalon.Web.Services
 @inject ApplicationDbContext DbContext
-@inject LuxeSalon.Web.Services.SiteSettingsService SettingsService
+@inject SiteSettingsService SettingsService
 @{
-    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "tr";
+    var culture = SitePaths.DetectCulture(Context.Request.Path);
+    var en = culture == "en";
     var settings = await SettingsService.GetSettingsAsync();
-    
-    // Loading text için veritabanından değer al
-    var loadingText = DbContext.SiteContents.FirstOrDefault(c => c.Key == "loading_text")?.Value ?? settings.GetValueOrDefault("Site_Name", "LuxeSalon");
+    var siteName = settings.GetValueOrDefault("Site_Name", "Celil & Atilla");
+    var siteUrl = settings.GetValueOrDefault("Site_Url", "https://celilatilla.com").TrimEnd('/');
+    var pageTitle = ViewData["Title"] as string;
+    var fullTitle = string.IsNullOrWhiteSpace(pageTitle)
+        ? settings.GetValueOrDefault("Site_Title", siteName)
+        : pageTitle.Contains(siteName, StringComparison.OrdinalIgnoreCase) || pageTitle.Contains('|')
+            ? pageTitle : $"{pageTitle} | {siteName}";
+    var metaDescription = ViewData["MetaDescription"] as string ?? settings.GetValueOrDefault("SEO_Description", "");
+    var canonical = ViewData["Canonical"] as string ?? siteUrl + Context.Request.Path;
+    var pagePath = new Uri(canonical).AbsolutePath;
+    var home = SitePaths.Home(culture);
+    var isHome = pagePath == home;
+    var about = SitePaths.About(culture);
+    var services = SitePaths.Services(culture);
+    var blog = SitePaths.Blog(culture);
+    var appointment = SitePaths.Appointment(culture);
+    var privacy = SitePaths.Privacy(culture);
+    var footerRows = await DbContext.SiteContents.AsNoTracking().Where(c => c.Key == "footer_desc").ToListAsync();
+    var footerDesc = footerRows.FirstOrDefault(c => c.Culture == culture)?.Value ?? footerRows.FirstOrDefault(c => c.Culture == "tr")?.Value;
+    var instagram = settings.GetValueOrDefault("Social_Instagram", "");
+    var phone = settings.GetValueOrDefault("Contact_Phone", "0534 794 43 93");
+    var phoneDigits = WhatsAppLink.Digits(phone);
+    var phoneHref = "tel:" + (phoneDigits.StartsWith("0") ? "+90" + phoneDigits[1..] : phoneDigits.StartsWith("90") ? "+" + phoneDigits : phoneDigits);
+    var whatsapp = WhatsAppLink.Chat(settings.GetValueOrDefault("Whatsapp_Number", "905347944393"), settings.GetValueOrDefault("Whatsapp_Message", en ? "Hello" : "Merhaba"));
+    var mapUrl = settings.GetValueOrDefault("Map_Google_Url", "");
+    var ga4 = settings.GetValueOrDefault("Analytics_GA4_Id", "");
+    var ogImage = ViewData["OgImage"] as string ?? settings.GetValueOrDefault("SEO_Default_Og_Image", "/images/services/kadin-kesim.jpg");
+    if (!ogImage.StartsWith("http", StringComparison.OrdinalIgnoreCase)) ogImage = siteUrl + ogImage;
+    var hreflangTr = ViewData["HreflangTr"] as string;
+    var hreflangEn = ViewData["HreflangEn"] as string;
+    var isBasicPage = pagePath != "/" && pagePath != "/en" && !pagePath.StartsWith("/blog/") && !pagePath.StartsWith("/en/blog/") && !pagePath.StartsWith("/hizmetler/") && !pagePath.StartsWith("/en/services/");
+    var breadcrumbTitle = (pageTitle ?? (en ? "Page" : "Sayfa")).Split('|')[0].Trim();
 }
 <!DOCTYPE html>
-<html lang="@currentCulture">
+<html lang="@culture">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - @settings.GetValueOrDefault("Site_Name", "LuxeSalon")</title>
-    <meta name="description" content="Celil Kuaför - İstanbul Nişantaşı'nda premium saç tasarım stüdyosu. Uzman stilistler, modern teknikler.">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-    
-    <!-- Icons & Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- Alpine.js for interactive components -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <!-- Styles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="google-site-verification" content="zPHA1BoEF77AtTsoScqTyoA89V5rJWFm6rCm1m7BRiU" />
+    <title>@fullTitle</title>
+    <meta name="description" content="@metaDescription" />
+    <meta name="robots" content="@(ViewData["Robots"] as string ?? "index, follow, max-image-preview:large")" />
+    <link rel="canonical" href="@canonical" />
+    @if (!string.IsNullOrWhiteSpace(hreflangTr)) { <link rel="alternate" hreflang="tr" href="@hreflangTr" /> }
+    @if (!string.IsNullOrWhiteSpace(hreflangEn)) { <link rel="alternate" hreflang="en" href="@hreflangEn" /> }
+    @if (hreflangTr != null || hreflangEn != null) { <link rel="alternate" hreflang="x-default" href="@(hreflangTr ?? canonical)" /> }
+    <link rel="icon" href="~/favicon.ico" asp-append-version="true" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png" asp-append-version="true" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png" asp-append-version="true" />
+    <link rel="manifest" href="~/site.webmanifest" />
+    <meta name="theme-color" content="#FAF9F7" />
+    <meta property="og:type" content="@(ViewData["OgType"] as string ?? "website")" />
+    <meta property="og:locale" content="@(en ? "en_US" : "tr_TR")" />
+    <meta property="og:title" content="@fullTitle" />
+    <meta property="og:description" content="@metaDescription" />
+    <meta property="og:url" content="@canonical" />
+    <meta property="og:site_name" content="@siteName" />
+    <meta property="og:image" content="@ogImage" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@fullTitle" />
+    <meta name="twitter:description" content="@metaDescription" />
+    <meta name="twitter:image" content="@ogImage" />
+    <script type="application/ld+json">@Html.Raw(JsonLdService.HairSalon(settings))</script>
+    @if (isBasicPage) { <script type="application/ld+json">@Html.Raw(JsonLdService.Breadcrumb(breadcrumbTitle, pagePath, settings))</script> }
+    @if (!string.IsNullOrWhiteSpace(ga4))
+    {
+        <script async src="https://www.googletagmanager.com/gtag/js?id=@ga4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ga4)));
+        </script>
+    }
     <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/fonts/fonts.css" asp-append-version="true" />
+    @if (isHome) { <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" /> }
+    <link rel="preload" href="/fonts/atelier-1.woff2" as="font" type="font/woff2" crossorigin />
+    @if (pagePath == appointment)
+    {
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'" />
+        <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
+    }
+    <script defer src="~/js/site.js" asp-append-version="true"></script>
 </head>
-<body class="bg-luxe-ivory text-luxe-charcoal font-sans antialiased overflow-hidden">
-    
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         LOADING SCREEN - Text Fill Effect with Background Slideshow
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <div id="loading-overlay">
-        <!-- Background Images Slideshow -->
-        <div class="loading-bg-slideshow">
-            <div class="loading-bg-slide active" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1920&auto=format&fit=crop')"></div>
-            <div class="loading-bg-slide" style="background-image: url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1920&auto=format&fit=crop')"></div>
-            <div class="loading-bg-slide" style="background-image: url('https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=1920&auto=format&fit=crop')"></div>
-            <div class="loading-bg-slide" style="background-image: url('https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=1920&auto=format&fit=crop')"></div>
-        </div>
-        <div class="loading-bg-overlay"></div>
-        
-        <!-- Loading Text -->
-        <div class="loading-text-container">
-            <h1 class="loading-text-outline">@loadingText</h1>
-            <h1 class="loading-text-fill" id="loading-text-fill">@loadingText</h1>
-        </div>
-        <p class="loading-subtext">@(currentCulture == "en" ? "loading" : currentCulture == "de" ? "lädt" : "yükleniyor")</p>
-        <p id="loading-percent" class="text-white/40 text-xs mt-4 tracking-[0.5em] uppercase">0%</p>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         HEADER / NAVIGATION
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <header class="fixed w-full z-[100] transition-all duration-500 bg-white/95 backdrop-blur-md shadow-sm" id="main-header">
-        <nav class="container mx-auto px-6 py-5 flex items-center justify-between">
-            <!-- Logo -->
-            <a href="/" class="text-2xl font-serif tracking-tight group text-luxe-charcoal">
-                <span class="group-hover:text-luxe-gold transition-colors">@settings.GetValueOrDefault("Site_Name", "LuxeSalon")</span>
-            </a>
-            
-            <!-- Desktop Menu -->
-            @{
-                var navItems = currentCulture switch {
-                    "en" => new Dictionary<string, string> {
-                        {"home", "Home"}, {"about", "About"}, {"services", "Services"}, 
-                        {"blog", "Blog"}, {"shop", "Shop"}, {"appointment", "BOOK NOW"}
-                    },
-                    "de" => new Dictionary<string, string> {
-                        {"home", "Startseite"}, {"about", "Über Uns"}, {"services", "Dienste"}, 
-                        {"blog", "Blog"}, {"shop", "Shop"}, {"appointment", "TERMIN"}
-                    },
-                    _ => new Dictionary<string, string> {
-                        {"home", "Anasayfa"}, {"about", "Hakkımızda"}, {"services", "Hizmetler"}, 
-                        {"blog", "Blog"}, {"shop", "Mağaza"}, {"appointment", "RANDEVU AL"}
-                    }
-                };
-            }
-            <div class="hidden lg:flex items-center">
-                <a href="/" style="margin-right: 2rem;" class="nav-link text-[11px] uppercase tracking-[0.2em] font-semibold text-luxe-charcoal hover:text-luxe-gold transition-colors">@navItems["home"]</a>
-                <a href="/Hakkimizda" style="margin-right: 2rem;" class="nav-link text-[11px] uppercase tracking-[0.2em] font-semibold text-luxe-charcoal hover:text-luxe-gold transition-colors">@navItems["about"]</a>
-                <a href="/Hizmetler" style="margin-right: 2rem;" class="nav-link text-[11px] uppercase tracking-[0.2em] font-semibold text-luxe-charcoal hover:text-luxe-gold transition-colors">@navItems["services"]</a>
-                <a href="/Blog" style="margin-right: 2rem;" class="nav-link text-[11px] uppercase tracking-[0.2em] font-semibold text-luxe-charcoal hover:text-luxe-gold transition-colors">@navItems["blog"]</a>
-                <a href="/Shop" style="margin-right: 2rem;" class="nav-link text-[11px] uppercase tracking-[0.2em] font-semibold text-luxe-charcoal hover:text-luxe-gold transition-colors">@navItems["shop"]</a>
-                
-                <!-- Language Switcher (with spacing) -->
-                <div style="margin-right: 2rem;">
-                    <partial name="_LanguageSwitcher" />
-                </div>
-                
-                <a href="/Randevu" class="btn-primary py-4">@navItems["appointment"]</a>
+<body class="bg-luxe-ivory text-luxe-charcoal font-sans antialiased salon-site @(isHome ? "salon-home" : "")">
+    <a class="skip-link" href="#main-content">@(en ? "Skip to content" : "İçeriğe geç")</a>
+    <header class="site-header" id="main-header">
+        <div class="atelier-container header-row">
+            <a href="@home" class="site-wordmark" aria-label="@(siteName + (en ? " home" : " ana sayfa"))">@siteName<span>@(en ? "CUT · COLOUR · CARE" : "KESİM · RENK · BAKIM")</span></a>
+            <nav class="desktop-nav" aria-label="@(en ? "Main navigation" : "Ana menü")">
+                <a href="@home" aria-current="@(isHome ? "page" : null)">@(en ? "Home" : "Ana sayfa")</a>
+                <a href="@services" aria-current="@(pagePath.StartsWith(services) ? "page" : null)">@(en ? "Services" : "Hizmetler")</a>
+                <a href="@about" aria-current="@(pagePath == about ? "page" : null)">@(en ? "The salon" : "Salon")</a>
+                <a href="@blog" aria-current="@(pagePath.StartsWith(blog) ? "page" : null)">@(en ? "Hair journal" : "Saç rehberi")</a>
+                <a href="@(home + "#iletisim")">@(en ? "Contact" : "İletişim")</a>
+            </nav>
+            <div class="header-actions">
+                <partial name="_LanguageSwitcher" />
+                <a href="@appointment" class="atelier-button header-book">@(en ? "Book a visit" : "Randevu al")</a>
+                <details class="mobile-nav" id="mobile-menu">
+                    <summary aria-label="@(en ? "Open navigation" : "Menüyü aç")">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+                    </summary>
+                    <nav aria-label="@(en ? "Mobile navigation" : "Mobil menü")">
+                        <a href="@home">@(en ? "Home" : "Ana sayfa")</a>
+                        <a href="@services">@(en ? "Services" : "Hizmetler")</a>
+                        <a href="@about">@(en ? "The salon" : "Salon")</a>
+                        <a href="@blog">@(en ? "Hair journal" : "Saç rehberi")</a>
+                        <a href="@(home + "#iletisim")">@(en ? "Contact" : "İletişim")</a>
+                        <a href="@appointment" class="atelier-button">@(en ? "Book a visit" : "Randevu al") ↗</a>
+                    </nav>
+                </details>
             </div>
-            
-            <!-- Mobile Menu Button -->
-            <button class="lg:hidden text-2xl" id="mobile-menu-btn" aria-label="Menü">
-                <i class="fas fa-bars"></i>
-            </button>
-        </nav>
-    </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-[99] bg-luxe-charcoal transform translate-x-full transition-transform duration-500 lg:hidden">
-        <div class="flex flex-col items-center justify-center h-full space-y-8 text-white">
-            <a href="/" class="text-3xl font-serif hover:text-luxe-gold transition-colors">Anasayfa</a>
-            <a href="/Hakkimizda" class="text-3xl font-serif hover:text-luxe-gold transition-colors">Hakkımızda</a>
-            <a href="/Hizmetler" class="text-3xl font-serif hover:text-luxe-gold transition-colors">Hizmetler</a>
-            <a href="/Blog" class="text-3xl font-serif hover:text-luxe-gold transition-colors">Blog</a>
-            <a href="/Shop" class="text-3xl font-serif hover:text-luxe-gold transition-colors">Mağaza</a>
-            <a href="/Randevu" class="btn-white mt-8">RANDEVU AL</a>
         </div>
-        <button class="absolute top-8 right-8 text-white text-3xl" id="mobile-menu-close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         MAIN CONTENT
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <main>
+    </header>
+    <main id="main-content">
+        @if (isBasicPage)
+        {
+            <nav class="page-breadcrumb" aria-label="@(en ? "Breadcrumb" : "Sayfa yolu")">
+                <a href="@home">@(en ? "Home" : "Ana sayfa")</a><span aria-hidden="true">/</span><span aria-current="page">@breadcrumbTitle</span>
+            </nav>
+        }
         @RenderBody()
     </main>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         FOOTER
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <footer class="bg-luxe-charcoal text-white">
-        @{
-            var footerItems = currentCulture switch {
-                "en" => new Dictionary<string, string> {
-                    {"desc", "Providing premium hair design services in the heart of Izmir since 2010."},
-                    {"links", "QUICK LINKS"}, {"contact", "CONTACT"}, {"follow", "FOLLOW US"},
-                    {"copyright", "All rights reserved."}, {"design", "Design & Development"}
-                },
-                "de" => new Dictionary<string, string> {
-                    {"desc", "Premium Haardesign-Dienstleistungen im Herzen von Izmir seit 2010."},
-                    {"links", "SCHNELLLINKS"}, {"contact", "KONTAKT"}, {"follow", "FOLGEN SIE UNS"},
-                    {"copyright", "Alle Rechte vorbehalten."}, {"design", "Design & Entwicklung"}
-                },
-                _ => new Dictionary<string, string> {
-                    {"desc", "2010'dan bu yana İzmir'in kalbinde premium saç tasarım hizmetleri sunuyoruz."},
-                    {"links", "HIZLI LİNKLER"}, {"contact", "İLETİŞİM"}, {"follow", "TAKİP EDİN"},
-                    {"copyright", "Tüm hakları saklıdır."}, {"design", "Tasarım & Geliştirme"}
-                }
-            };
+    <footer class="site-footer">
+        @if (isHome)
+        {
+            <div class="home-container home-footer">
+                <div><a href="@home">@siteName</a><address>@settings.GetValueOrDefault("Contact_Address") · @settings.GetValueOrDefault("Contact_City")</address><a href="@phoneHref">@phone</a></div>
+                <nav aria-label="@(en ? "Footer navigation" : "Alt menü")">
+                    <a href="@blog">@(en ? "Hair journal" : "Saç rehberi") ↗</a>
+                    <a href="@SitePaths.Districts(culture)">@(en ? "İzmir districts" : "İzmir ilçeleri") ↗</a>
+                    @if (!string.IsNullOrWhiteSpace(instagram)) { <a href="@instagram" target="_blank" rel="noopener">Instagram ↗</a> }
+                    <a href="@privacy">@(en ? "Privacy" : "Gizlilik")</a>
+                    <a href="/sitemap.xml">@(en ? "Sitemap" : "Site haritası")</a>
+                </nav>
+            </div>
         }
-        <div class="container mx-auto px-6 py-20">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-                <!-- Brand -->
-                <div>
-                    <a href="/" class="text-3xl font-serif font-semibold block mb-6">
-                        @settings.GetValueOrDefault("Site_Name", "LuxeSalon")
-                    </a>
-                    <p class="text-white/80 font-normal text-base leading-relaxed">
-                        @footerItems["desc"]
-                    </p>
+        else
+        {
+        <div class="atelier-container">
+            <div class="footer-top">
+                <div class="footer-brand"><a href="@home">@siteName</a><p>@footerDesc</p></div>
+                <nav aria-label="@(en ? "Footer navigation" : "Alt menü")">
+                    <p class="eyebrow">@(en ? "Explore" : "Keşfedin")</p>
+                    <a href="@about">@(en ? "The salon & team" : "Salon ve ekip")</a>
+                    <a href="@services">@(en ? "All services" : "Tüm hizmetler")</a>
+                    <a href="@SitePaths.Districts(culture)">@(en ? "İzmir districts" : "İzmir ilçeleri")</a>
+                    <a href="@blog">@(en ? "Hair journal" : "Saç rehberi")</a>
+                    <a href="@appointment">@(en ? "Appointments" : "Randevu")</a>
+                </nav>
+                <div class="footer-contact">
+                    <p class="eyebrow">@(en ? "Visit us" : "Bize gelin")</p>
+                    <address>@settings.GetValueOrDefault("Contact_Address")<br />@settings.GetValueOrDefault("Contact_City")</address>
+                    <a href="@phoneHref">@phone</a>
+                    @if (!string.IsNullOrWhiteSpace(mapUrl)) { <a href="@mapUrl" target="_blank" rel="noopener">@(en ? "Get directions" : "Yol tarifi alın") ↗</a> }
                 </div>
-                
-                <!-- Quick Links -->
                 <div>
-                    <h4 class="text-sm uppercase tracking-[0.2em] text-luxe-gold font-bold mb-6">@footerItems["links"]</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/" class="text-white/80 hover:text-white transition-colors font-medium">@navItems["home"]</a></li>
-                        <li><a href="/Hakkimizda" class="text-white/80 hover:text-white transition-colors font-medium">@navItems["about"]</a></li>
-                        <li><a href="/Blog" class="text-white/80 hover:text-white transition-colors font-medium">@navItems["blog"]</a></li>
-                        <li><a href="/Shop" class="text-white/80 hover:text-white transition-colors font-medium">@navItems["shop"]</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Contact -->
-                <div>
-                    <h4 class="text-sm uppercase tracking-[0.2em] text-luxe-gold font-bold mb-6">@footerItems["contact"]</h4>
-                    <ul class="space-y-3 text-white/80 font-medium text-base">
-                        <li>@settings.GetValueOrDefault("Contact_Address", "Address")</li>
-                        <li>@settings.GetValueOrDefault("Contact_City", "City")</li>
-                        <li class="pt-2">@settings.GetValueOrDefault("Contact_Phone", "Phone")</li>
-                        <li>@settings.GetValueOrDefault("Contact_Email", "Email")</li>
-                    </ul>
-                </div>
-                
-                <!-- Social -->
-                <div>
-                    <h4 class="text-sm uppercase tracking-[0.2em] text-luxe-gold font-bold mb-6">@footerItems["follow"]</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-12 h-12 border border-white/30 flex items-center justify-center hover:bg-luxe-gold hover:border-luxe-gold transition-all">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-12 h-12 border border-white/30 flex items-center justify-center hover:bg-luxe-gold hover:border-luxe-gold transition-all">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="w-12 h-12 border border-white/30 flex items-center justify-center hover:bg-luxe-gold hover:border-luxe-gold transition-all">
-                            <i class="fab fa-pinterest-p"></i>
-                        </a>
-                    </div>
+                    <p class="eyebrow">@(en ? "Stay in touch" : "İletişimde kalın")</p>
+                    <a href="@whatsapp" target="_blank" rel="noopener">WhatsApp ↗</a>
+                    @if (!string.IsNullOrWhiteSpace(instagram)) { <a href="@instagram" target="_blank" rel="noopener">Instagram ↗</a> }
+                    <p class="footer-hours">@settings.GetValueOrDefault("Contact_Hours")</p>
                 </div>
             </div>
-            
-            <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center text-white/70 text-base font-medium">
-                <p>&copy; @DateTime.Now.Year @settings.GetValueOrDefault("Site_Name", "LuxeSalon"). @footerItems["copyright"]</p>
-                <p class="mt-4 md:mt-0">@footerItems["design"]</p>
-            </div>
+            <div class="footer-bottom"><p>© @DateTime.Now.Year @siteName</p><a href="@privacy">@(en ? "Privacy" : "Gizlilik")</a><a href="/sitemap.xml">@(en ? "Sitemap" : "Site haritası")</a></div>
         </div>
+        }
     </footer>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         WHATSAPP FLOATING BUTTON
-    ═══════════════════════════════════════════════════════════════════════ -->
-    @if(!string.IsNullOrEmpty(settings.GetValueOrDefault("Whatsapp_Number")))
+    @if (!isHome)
     {
-        <a href="https://wa.me/@settings["Whatsapp_Number"]?text=Merhaba" 
-           target="_blank"
-           class="fixed bottom-8 right-8 z-[90] w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 hover:shadow-green-500/40"
-           aria-label="WhatsApp">
-            <i class="fab fa-whatsapp text-white text-3xl"></i>
-        </a>
+    <a class="contact-shortcut" href="@whatsapp" target="_blank" rel="noopener" aria-label="@(en ? "Contact the salon on WhatsApp" : "WhatsApp ile salona ulaşın")">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3H13a8.5 8.5 0 0 1 8 8v.5Z"/><path d="m8 8 2 3 2 2 3 2"/></svg>
+        <span>WhatsApp</span><span aria-hidden="true">↗</span>
+    </a>
     }
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         SCRIPTS
-    ═══════════════════════════════════════════════════════════════════════ -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // ═════════════════════════════════════════════════════════════
-            // LOADING SCREEN - Text Fill Animation with Background Slideshow
-            // ═════════════════════════════════════════════════════════════
-            let progress = 0;
-            const loadingTextFill = document.getElementById('loading-text-fill');
-            const loadingPercent = document.getElementById('loading-percent');
-            const loadingOverlay = document.getElementById('loading-overlay');
-            const bgSlides = document.querySelectorAll('.loading-bg-slide');
-            let currentSlide = 0;
-
-            // Background slideshow rotation
-            const slideInterval = setInterval(() => {
-                bgSlides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % bgSlides.length;
-                bgSlides[currentSlide].classList.add('active');
-            }, 1500);
-
-            const loadingInterval = setInterval(() => {
-                progress += Math.random() * 6 + 2;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(loadingInterval);
-                    clearInterval(slideInterval);
-                    setTimeout(() => {
-                        loadingOverlay.style.opacity = '0';
-                        document.body.classList.remove('overflow-hidden');
-                        setTimeout(() => {
-                            loadingOverlay.style.display = 'none';
-                        }, 800);
-                    }, 500);
-                }
-                loadingTextFill.style.width = progress + '%';
-                loadingPercent.textContent = Math.round(progress) + '%';
-            }, 80);
-
-            // ═════════════════════════════════════════════════════════════
-            // HEADER SCROLL EFFECT (Simplified - dark text by default)
-            // ═════════════════════════════════════════════════════════════
-            const header = document.getElementById('main-header');
-            // Header is now always visible with dark background - no scroll logic needed for visibility
-
-            // ═════════════════════════════════════════════════════════════
-            // MOBILE MENU
-            // ═════════════════════════════════════════════════════════════
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenuClose = document.getElementById('mobile-menu-close');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.remove('translate-x-full');
-                });
-            }
-
-            if (mobileMenuClose && mobileMenu) {
-                mobileMenuClose.addEventListener('click', () => {
-                    mobileMenu.classList.add('translate-x-full');
-                });
-            }
-
-            // Close mobile menu when clicking a link
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('translate-x-full');
-                });
-            });
-
-            // ═════════════════════════════════════════════════════════════
-            // SMOOTH SCROLL
-            // ═════════════════════════════════════════════════════════════
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

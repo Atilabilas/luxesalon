@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using LuxeSalon.Infrastructure.Data;
 using LuxeSalon.Core.Entities;
+using LuxeSalon.Core.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuxeSalon.Web.Pages.Admin.Blog;
 
@@ -22,7 +24,7 @@ public class CreateModel : PageModel
     public void OnGet()
     {
         BlogPost.PublishedAt = DateTime.Now;
-        BlogPost.Author = "Celil Kuaför";
+        BlogPost.Author = "Celil & Atilla";
     }
 
     public async Task<IActionResult> OnPostAsync(IFormFile? HeaderImage)
@@ -44,8 +46,25 @@ public class CreateModel : PageModel
             BlogPost.HeaderImageUrl = $"/uploads/blog/{uniqueFileName}";
         }
 
+        if (string.IsNullOrWhiteSpace(BlogPost.Title) || string.IsNullOrWhiteSpace(BlogPost.Content))
+        {
+            ModelState.AddModelError(string.Empty, "Başlık ve içerik olmadan yazı kaydedilemez.");
+            if (string.IsNullOrWhiteSpace(BlogPost.Author))
+                BlogPost.Author = "Celil & Atilla";
+            return Page();
+        }
+
+        var taken = await _context.BlogPosts.AsNoTracking()
+            .Select(p => new { p.Slug, p.SlugEn })
+            .ToListAsync();
+        BlogPost.Slug = SlugHelper.EnsureUnique(
+            SlugHelper.FromTitle(BlogPost.Title),
+            taken.SelectMany(p => new[] { p.Slug, p.SlugEn }).OfType<string>());
+        if (string.IsNullOrWhiteSpace(BlogPost.Author))
+            BlogPost.Author = "Celil & Atilla";
         BlogPost.PublishedAt = DateTime.Now;
-        
+        BlogPost.UpdatedAt = DateTime.UtcNow;
+
         _context.BlogPosts.Add(BlogPost);
         await _context.SaveChangesAsync();
 

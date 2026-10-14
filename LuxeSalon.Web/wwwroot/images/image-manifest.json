@@ -1,0 +1,326 @@
+{
+  "/images/celil-logo.png": {
+    "src": "/images/celil-logo.webp",
+    "srcset": "/images/celil-logo.480.webp 480w, /images/celil-logo.webp 512w",
+    "width": 512,
+    "height": 512
+  },
+  "/images/celil-logo.webp": {
+    "src": "/images/celil-logo.webp",
+    "srcset": "/images/celil-logo.480.webp 480w, /images/celil-logo.webp 512w",
+    "width": 512,
+    "height": 512
+  },
+  "/images/hero-salon.png": {
+    "src": "/images/hero-salon.webp",
+    "srcset": "/images/hero-salon.480.webp 480w, /images/hero-salon.800.webp 800w, /images/hero-salon.webp 1024w",
+    "width": 1024,
+    "height": 1024
+  },
+  "/images/hero-salon.webp": {
+    "src": "/images/hero-salon.webp",
+    "srcset": "/images/hero-salon.480.webp 480w, /images/hero-salon.800.webp 800w, /images/hero-salon.webp 1024w",
+    "width": 1024,
+    "height": 1024
+  },
+  "/images/logo.png": {
+    "src": "/images/logo.webp",
+    "srcset": "/images/logo.480.webp 480w, /images/logo.webp 512w",
+    "width": 512,
+    "height": 512
+  },
+  "/images/logo.webp": {
+    "src": "/images/logo.webp",
+    "srcset": "/images/logo.480.webp 480w, /images/logo.webp 512w",
+    "width": 512,
+    "height": 512
+  },
+  "/images/services/agda.jpg": {
+    "src": "/images/services/agda.webp",
+    "srcset": "/images/services/agda.480.webp 480w, /images/services/agda.800.webp 800w, /images/services/agda.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/agda.webp": {
+    "src": "/images/services/agda.webp",
+    "srcset": "/images/services/agda.480.webp 480w, /images/services/agda.800.webp 800w, /images/services/agda.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/balyaj.jpg": {
+    "src": "/images/services/balyaj.webp",
+    "srcset": "/images/services/balyaj.480.webp 480w, /images/services/balyaj.800.webp 800w, /images/services/balyaj.webp 1200w",
+    "width": 1200,
+    "height": 1800
+  },
+  "/images/services/balyaj.webp": {
+    "src": "/images/services/balyaj.webp",
+    "srcset": "/images/services/balyaj.480.webp 480w, /images/services/balyaj.800.webp 800w, /images/services/balyaj.webp 1200w",
+    "width": 1200,
+    "height": 1800
+  },
+  "/images/services/beach-waves.jpg": {
+    "src": "/images/services/beach-waves.webp",
+    "srcset": "/images/services/beach-waves.480.webp 480w, /images/services/beach-waves.800.webp 800w, /images/services/beach-waves.webp 1200w",
+    "width": 1200,
+    "height": 1200
+  },
+  "/images/services/beach-waves.webp": {
+    "src": "/images/services/beach-waves.webp",
+    "srcset": "/images/services/beach-waves.480.webp 480w, /images/services/beach-waves.800.webp 800w, /images/services/beach-waves.webp 1200w",
+    "width": 1200,
+    "height": 1200
+  },
+  "/images/services/cocuk.jpg": {
+    "src": "/images/services/cocuk.webp",
+    "srcset": "/images/services/cocuk.480.webp 480w, /images/services/cocuk.800.webp 800w, /images/services/cocuk.webp 1200w",
+    "width": 1200,
+    "height": 1807
+  },
+  "/images/services/cocuk.webp": {
+    "src": "/images/services/cocuk.webp",
+    "srcset": "/images/services/cocuk.480.webp 480w, /images/services/cocuk.800.webp 800w, /images/services/cocuk.webp 1200w",
+    "width": 1200,
+    "height": 1807
+  },
+  "/images/services/erkek-boya.jpg": {
+    "src": "/images/services/erkek-boya.webp",
+    "srcset": "/images/services/erkek-boya.480.webp 480w, /images/services/erkek-boya.800.webp 800w, /images/services/erkek-boya.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/erkek-boya.webp": {
+    "src": "/images/services/erkek-boya.webp",
+    "srcset": "/images/services/erkek-boya.480.webp 480w, /images/services/erkek-boya.800.webp 800w, /images/services/erkek-boya.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/erkek-kesim.jpg": {
+    "src": "/images/services/erkek-kesim.webp",
+    "srcset": "/images/services/erkek-kesim.480.webp 480w, /images/services/erkek-kesim.800.webp 800w, /images/services/erkek-kesim.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/erkek-kesim.webp": {
+    "src": "/images/services/erkek-kesim.webp",
+    "srcset": "/images/services/erkek-kesim.480.webp 480w, /images/services/erkek-kesim.800.webp 800w, /images/services/erkek-kesim.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/fon.jpg": {
+    "src": "/images/services/fon.webp",
+    "srcset": "/images/services/fon.480.webp 480w, /images/services/fon.800.webp 800w, /images/services/fon.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/fon.webp": {
+    "src": "/images/services/fon.webp",
+    "srcset": "/images/services/fon.480.webp 480w, /images/services/fon.800.webp 800w, /images/services/fon.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/form.jpg": {
+    "src": "/images/services/form.webp",
+    "srcset": "/images/services/form.480.webp 480w, /images/services/form.800.webp 800w, /images/services/form.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/form.webp": {
+    "src": "/images/services/form.webp",
+    "srcset": "/images/services/form.480.webp 480w, /images/services/form.800.webp 800w, /images/services/form.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/gelin-sac.jpg": {
+    "src": "/images/services/gelin-sac.webp",
+    "srcset": "/images/services/gelin-sac.480.webp 480w, /images/services/gelin-sac.800.webp 800w, /images/services/gelin-sac.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/gelin-sac.webp": {
+    "src": "/images/services/gelin-sac.webp",
+    "srcset": "/images/services/gelin-sac.480.webp 480w, /images/services/gelin-sac.800.webp 800w, /images/services/gelin-sac.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/kadin-kesim.jpg": {
+    "src": "/images/services/kadin-kesim.webp",
+    "srcset": "/images/services/kadin-kesim.480.webp 480w, /images/services/kadin-kesim.800.webp 800w, /images/services/kadin-kesim.webp 1200w",
+    "width": 1200,
+    "height": 900
+  },
+  "/images/services/kadin-kesim.webp": {
+    "src": "/images/services/kadin-kesim.webp",
+    "srcset": "/images/services/kadin-kesim.480.webp 480w, /images/services/kadin-kesim.800.webp 800w, /images/services/kadin-kesim.webp 1200w",
+    "width": 1200,
+    "height": 900
+  },
+  "/images/services/kahkul.jpg": {
+    "src": "/images/services/kahkul.webp",
+    "srcset": "/images/services/kahkul.480.webp 480w, /images/services/kahkul.800.webp 800w, /images/services/kahkul.webp 1200w",
+    "width": 1200,
+    "height": 1797
+  },
+  "/images/services/kahkul.webp": {
+    "src": "/images/services/kahkul.webp",
+    "srcset": "/images/services/kahkul.480.webp 480w, /images/services/kahkul.800.webp 800w, /images/services/kahkul.webp 1200w",
+    "width": 1200,
+    "height": 1797
+  },
+  "/images/services/kas.jpg": {
+    "src": "/images/services/kas.webp",
+    "srcset": "/images/services/kas.480.webp 480w, /images/services/kas.800.webp 800w, /images/services/kas.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/kas.webp": {
+    "src": "/images/services/kas.webp",
+    "srcset": "/images/services/kas.480.webp 480w, /images/services/kas.800.webp 800w, /images/services/kas.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/kaynak.jpg": {
+    "src": "/images/services/kaynak.webp",
+    "srcset": "/images/services/kaynak.480.webp 480w, /images/services/kaynak.800.webp 800w, /images/services/kaynak.webp 1200w",
+    "width": 1200,
+    "height": 785
+  },
+  "/images/services/kaynak.webp": {
+    "src": "/images/services/kaynak.webp",
+    "srcset": "/images/services/kaynak.480.webp 480w, /images/services/kaynak.800.webp 800w, /images/services/kaynak.webp 1200w",
+    "width": 1200,
+    "height": 785
+  },
+  "/images/services/keratin.jpg": {
+    "src": "/images/services/keratin.webp",
+    "srcset": "/images/services/keratin.480.webp 480w, /images/services/keratin.800.webp 800w, /images/services/keratin.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/keratin.webp": {
+    "src": "/images/services/keratin.webp",
+    "srcset": "/images/services/keratin.480.webp 480w, /images/services/keratin.800.webp 800w, /images/services/keratin.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/kirpik.jpg": {
+    "src": "/images/services/kirpik.webp",
+    "srcset": "/images/services/kirpik.480.webp 480w, /images/services/kirpik.800.webp 800w, /images/services/kirpik.webp 1200w",
+    "width": 1200,
+    "height": 675
+  },
+  "/images/services/kirpik.webp": {
+    "src": "/images/services/kirpik.webp",
+    "srcset": "/images/services/kirpik.480.webp 480w, /images/services/kirpik.800.webp 800w, /images/services/kirpik.webp 1200w",
+    "width": 1200,
+    "height": 675
+  },
+  "/images/services/makyaj.jpg": {
+    "src": "/images/services/makyaj.webp",
+    "srcset": "/images/services/makyaj.480.webp 480w, /images/services/makyaj.800.webp 800w, /images/services/makyaj.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/makyaj.webp": {
+    "src": "/images/services/makyaj.webp",
+    "srcset": "/images/services/makyaj.480.webp 480w, /images/services/makyaj.800.webp 800w, /images/services/makyaj.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/manikur.jpg": {
+    "src": "/images/services/manikur.webp",
+    "srcset": "/images/services/manikur.480.webp 480w, /images/services/manikur.800.webp 800w, /images/services/manikur.webp 1200w",
+    "width": 1200,
+    "height": 1800
+  },
+  "/images/services/manikur.webp": {
+    "src": "/images/services/manikur.webp",
+    "srcset": "/images/services/manikur.480.webp 480w, /images/services/manikur.800.webp 800w, /images/services/manikur.webp 1200w",
+    "width": 1200,
+    "height": 1800
+  },
+  "/images/services/pastel.jpg": {
+    "src": "/images/services/pastel.webp",
+    "srcset": "/images/services/pastel.480.webp 480w, /images/services/pastel.800.webp 800w, /images/services/pastel.webp 1200w",
+    "width": 1200,
+    "height": 785
+  },
+  "/images/services/pastel.webp": {
+    "src": "/images/services/pastel.webp",
+    "srcset": "/images/services/pastel.480.webp 480w, /images/services/pastel.800.webp 800w, /images/services/pastel.webp 1200w",
+    "width": 1200,
+    "height": 785
+  },
+  "/images/services/pedikur.jpg": {
+    "src": "/images/services/pedikur.webp",
+    "srcset": "/images/services/pedikur.480.webp 480w, /images/services/pedikur.800.webp 800w, /images/services/pedikur.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/pedikur.webp": {
+    "src": "/images/services/pedikur.webp",
+    "srcset": "/images/services/pedikur.480.webp 480w, /images/services/pedikur.800.webp 800w, /images/services/pedikur.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/protein.jpg": {
+    "src": "/images/services/protein.webp",
+    "srcset": "/images/services/protein.480.webp 480w, /images/services/protein.800.webp 800w, /images/services/protein.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/protein.webp": {
+    "src": "/images/services/protein.webp",
+    "srcset": "/images/services/protein.480.webp 480w, /images/services/protein.800.webp 800w, /images/services/protein.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/rofle.jpg": {
+    "src": "/images/services/rofle.webp",
+    "srcset": "/images/services/rofle.480.webp 480w, /images/services/rofle.800.webp 800w, /images/services/rofle.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/rofle.webp": {
+    "src": "/images/services/rofle.webp",
+    "srcset": "/images/services/rofle.480.webp 480w, /images/services/rofle.800.webp 800w, /images/services/rofle.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/sac-botoks.jpg": {
+    "src": "/images/services/sac-botoks.webp",
+    "srcset": "/images/services/sac-botoks.480.webp 480w, /images/services/sac-botoks.800.webp 800w, /images/services/sac-botoks.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/sac-botoks.webp": {
+    "src": "/images/services/sac-botoks.webp",
+    "srcset": "/images/services/sac-botoks.480.webp 480w, /images/services/sac-botoks.800.webp 800w, /images/services/sac-botoks.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/sakal.jpg": {
+    "src": "/images/services/sakal.webp",
+    "srcset": "/images/services/sakal.480.webp 480w, /images/services/sakal.800.webp 800w, /images/services/sakal.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/sakal.webp": {
+    "src": "/images/services/sakal.webp",
+    "srcset": "/images/services/sakal.480.webp 480w, /images/services/sakal.800.webp 800w, /images/services/sakal.webp 1200w",
+    "width": 1200,
+    "height": 800
+  },
+  "/images/services/tek-renk.jpg": {
+    "src": "/images/services/tek-renk.webp",
+    "srcset": "/images/services/tek-renk.480.webp 480w, /images/services/tek-renk.800.webp 800w, /images/services/tek-renk.webp 1200w",
+    "width": 1200,
+    "height": 801
+  },
+  "/images/services/tek-renk.webp": {
+    "src": "/images/services/tek-renk.webp",
+    "srcset": "/images/services/tek-renk.480.webp 480w, /images/services/tek-renk.800.webp 800w, /images/services/tek-renk.webp 1200w",
+    "width": 1200,
+    "height": 801
+  }
+}

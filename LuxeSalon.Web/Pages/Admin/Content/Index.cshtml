@@ -5,9 +5,12 @@
     Layout = "~/Pages/Shared/_AdminLayout.cshtml";
 }
 
-<div class="mb-8">
-    <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Site İçerikleri</h1>
-    <p class="text-luxe-charcoal/60">Sitedeki tüm metin içeriklerini düzenleyin.</p>
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Site İçerikleri</h1>
+        <p class="text-luxe-charcoal/60">Sitedeki tüm metin içeriklerini düzenleyin.</p>
+    </div>
+    <a asp-page="Create" class="bg-luxe-gold text-white px-6 py-3 text-sm font-medium hover:bg-luxe-charcoal transition-colors">+ Yeni İçerik</a>
 </div>
 
 @foreach (var sectionName in Model.Sections)
@@ -22,8 +25,9 @@
             {
                 <div class="px-6 py-4 flex items-center justify-between hover:bg-luxe-charcoal/5 transition-colors">
                     <div class="flex-1">
-                        <p class="text-xs text-luxe-gold font-mono mb-1">@content.Key</p>
-                        <p class="text-luxe-charcoal font-medium truncate max-w-2xl">@content.Value</p>
+                        <p class="text-sm font-medium text-luxe-charcoal mb-1">@(content.Label ?? content.Key)</p>
+                        <p class="text-xs text-luxe-gold/70 font-mono mb-1">@content.Key</p>
+                        <p class="text-luxe-charcoal/80 truncate max-w-2xl text-sm">@content.Value</p>
                     </div>
                     <a asp-page="Edit" asp-route-id="@content.Id" 
                        class="bg-luxe-charcoal text-white px-4 py-2 text-sm font-medium hover:bg-luxe-gold transition-colors">

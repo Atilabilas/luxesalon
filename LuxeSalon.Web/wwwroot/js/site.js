@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+'use strict';
+const menu = document.getElementById('mobile-menu');
+if (menu) {
+    menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { menu.open = false; }));
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && menu.open) {
+            menu.open = false;
+            menu.querySelector('summary').focus();
+        }
+    });
+    document.addEventListener('click', event => { if (!menu.contains(event.target)) menu.open = false; });
+}

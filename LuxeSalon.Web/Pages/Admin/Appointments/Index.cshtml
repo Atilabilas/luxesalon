@@ -1,0 +1,63 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Appointments.IndexModel
+@{
+    ViewData["Title"] = "Randevular — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8">
+    <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Randevular</h1>
+    <p class="text-luxe-charcoal/60">@Model.Appointments.Count randevu kaydı</p>
+</div>
+
+<div class="bg-white shadow-sm overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-luxe-charcoal/5">
+            <tr>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Müşteri</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">İletişim</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Hizmet</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Tarih</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Durum</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-luxe-charcoal/10">
+            @foreach (var appt in Model.Appointments)
+            {
+                <tr class="hover:bg-luxe-charcoal/5 transition-colors">
+                    <td class="px-6 py-4 font-serif font-medium">@appt.CustomerName</td>
+                    <td class="px-6 py-4 text-sm text-luxe-charcoal/60">
+                        <div>@appt.CustomerEmail</div>
+                        <div>@appt.CustomerPhone</div>
+                    </td>
+                    <td class="px-6 py-4 text-luxe-charcoal/70">@(appt.Service?.Name ?? "—")</td>
+                    <td class="px-6 py-4 text-sm">@appt.AppointmentDate.ToString("dd MMM yyyy HH:mm")</td>
+                    <td class="px-6 py-4">
+                        <form method="post" asp-page-handler="UpdateStatus" class="flex items-center gap-2">
+                            <input type="hidden" name="id" value="@appt.Id" />
+                            <select name="status" onchange="this.form.submit()" class="border border-luxe-charcoal/20 px-3 py-2 text-sm focus:border-luxe-gold focus:outline-none bg-white">
+                                @foreach (var status in IndexModel.StatusOptions)
+                                {
+                                    if (appt.Status == status)
+                                    {
+                                        <option value="@status" selected>@status</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@status">@status</option>
+                                    }
+                                }
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Appointments.Any())
+            {
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-luxe-charcoal/40">Henüz randevu yok.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

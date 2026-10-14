@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Celil Kuaför Admin</title>
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="~/apple-touch-icon.png" />
     <link rel="stylesheet" href="~/css/output.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -19,21 +22,45 @@
                 <p class="text-white/40 text-xs mt-1">Yönetim Paneli</p>
             </div>
             
-            <nav class="p-4 space-y-2">
+            <nav class="p-4 space-y-2 overflow-y-auto max-h-[calc(100vh-8rem)]">
                 <a href="/Admin" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
                     <i class="fas fa-home w-5"></i> Dashboard
+                </a>
+                <a href="/Admin/Settings" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-cog w-5"></i> Site Ayarları
                 </a>
                 <a href="/Admin/SiteImages" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
                     <i class="fas fa-images w-5"></i> Site Görselleri
                 </a>
+                <a href="/Admin/Content" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-edit w-5"></i> Site İçerikleri
+                </a>
                 <a href="/Admin/Team" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
                     <i class="fas fa-users w-5"></i> Ekip Yönetimi
+                </a>
+                <a href="/Admin/Services" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-scissors w-5"></i> Hizmetler
                 </a>
                 <a href="/Admin/Pricing" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
                     <i class="fas fa-tag w-5"></i> Fiyat Listesi
                 </a>
-                <a href="/Admin/Content" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium bg-luxe-gold/20">
-                    <i class="fas fa-edit w-5"></i> Site İçerikleri
+                <a href="/Admin/Appointments" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-calendar-alt w-5"></i> Randevular
+                </a>
+                <a href="/Admin/Testimonials" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-quote-left w-5"></i> Yorumlar
+                </a>
+                <a href="/Admin/Gallery" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-photo-video w-5"></i> Galeri
+                </a>
+                <a href="/Admin/Marquee" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-stream w-5"></i> Marquee
+                </a>
+                <a href="/Admin/Stats" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-chart-bar w-5"></i> İstatistikler
+                </a>
+                <a href="/Admin/Awards" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-colors text-sm font-medium">
+                    <i class="fas fa-trophy w-5"></i> Ödüller
                 </a>
                 
                 <div class="border-t border-white/10 my-4"></div>

@@ -1,0 +1,92 @@
+@page "/izmir-ilceleri"
+@model LuxeSalon.Web.Pages.IzmirIlceleriModel
+@using LuxeSalon.Web.Services
+@{
+    var culture = Model.CurrentCulture;
+    var en = culture == "en";
+    Model.SetSeo(
+        en ? "İzmir districts, one Bornova salon | Celil & Atilla" : "İzmir İlçelerinden Bornova Kuaföre | Celil & Atilla",
+        en ? "Celil & Atilla has one salon, in Kazımdirik, Bornova. Guests from the other İzmir districts book that same address. There is no branch outside Bornova."
+           : "Celil & Atilla’nın tek salonu Bornova Kazımdirik’tedir. İzmir’in diğer ilçelerinde şube yoktur; randevu Gediz Cd. 21 A adresine alınır.",
+        SitePaths.Districts(culture),
+        "/images/services/kadin-kesim.jpg",
+        "website",
+        null,
+        SitePaths.Districts("tr"),
+        SitePaths.Districts("en"));
+    var landings = Model.Services.Where(service => service.IsLandingPage && (!en || service.HasEnglish)).ToList();
+    var others = Model.Services.Where(service => !service.IsLandingPage).ToList();
+}
+
+<section class="atelier-page-intro">
+    <div class="atelier-container">
+        <p class="eyebrow">@(en ? "Bornova / İzmir" : "Bornova / İzmir")</p>
+        <h1>@(en ? "Thirty districts." : "Otuz ilçe.")<br /><em>@(en ? "One salon, in Bornova." : "Tek salon, Bornova.")</em></h1>
+        <p>@(en ? "Celil & Atilla does not have a salon in every İzmir district. Haircuts, colour and care happen at Kazımdirik Mahallesi, Gediz Caddesi 21 A, Bornova. If you are searching from another district, the appointment is still at this address." : "Celil & Atilla’nın her ilçede salonu yoktur. Kadın kuaförü hizmetleri, kesim, renk ve bakım Kazımdirik Mahallesi, Gediz Caddesi 21 A, Bornova adresindedir. Başka ilçeden arıyorsanız randevu yine bu adrese alınır.")</p>
+        <div class="hero-actions">
+            <a href="@SitePaths.Home(culture)" class="atelier-button">@(en ? "Bornova salon" : "Bornova kadın kuaförü") <span aria-hidden="true">↗</span></a>
+            <a href="@SitePaths.Services(culture)" class="atelier-button outline">@(en ? "All services" : "Tüm hizmetler") <span aria-hidden="true">↗</span></a>
+        </div>
+    </div>
+</section>
+
+<section class="atelier-section atelier-container" aria-labelledby="district-list">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">@(en ? "Where to come / 01" : "Nereye geleceksiniz / 01")</p>
+            <h2 id="district-list">@(en ? "The districts of İzmir." : "İzmir’in ilçeleri.")</h2>
+        </div>
+        <div class="section-aside">
+            <p>@(en ? "Bornova is the only place we work. The other names are not branch locations." : "Çalıştığımız tek yer Bornova. Diğer adlar şube değildir.")</p>
+        </div>
+    </div>
+    @foreach (var group in IzmirDistricts.Groups)
+    {
+        <h3 class="font-serif text-2xl mt-10 mb-4">@(en ? group.TitleEn : group.TitleTr)</h3>
+        <ul class="additional-service-list">
+            @foreach (var name in group.Names)
+            {
+                <li>
+                    <strong>@name</strong>
+                    @if (group.ContainsSalon)
+                    {
+                        <p>@(en ? "The salon is here: Kazımdirik Mahallesi, Gediz Caddesi 21 A. Women's cuts, colour, care and the rest of the menu are at this address." : "Salon burada: Kazımdirik Mahallesi, Gediz Caddesi 21 A. Kadın kesimi, renk, bakım ve listedeki diğer işlemler bu adrestedir.")</p>
+                    }
+                    else
+                    {
+                        <p>@(en ? $"No Celil & Atilla branch in {name}. Book the Bornova salon." : $"{name} ilçesinde şubemiz yoktur. Randevu Bornova’daki salona alınır.")</p>
+                    }
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+<section class="atelier-section atelier-container" aria-labelledby="district-services">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">@(en ? "Same address / 02" : "Aynı adres / 02")</p>
+            <h2 id="district-services">@(en ? "Services at the Bornova salon." : "Bornova’daki salonda verilen hizmetler.")</h2>
+        </div>
+    </div>
+    <div class="editorial-services services-directory">
+        @foreach (var service in landings)
+        {
+            var name = service.LocalizedName(culture);
+            <article class="directory-card">
+                <a class="editorial-link" href="@SitePaths.Service(culture, service.LocalizedSlug(culture))">@name <span aria-hidden="true">↗</span></a>
+            </article>
+        }
+    </div>
+    @if (others.Count > 0)
+    {
+        <p class="local-salon-context">@(en ? "These appointments are also only at the Bornova salon:" : "Şu işlemler de yalnızca Bornova’daki salonda alınır:")</p>
+        <ul class="additional-service-list">
+            @foreach (var service in others)
+            {
+                <li>@service.LocalizedName(culture)</li>
+            }
+        </ul>
+        <a class="editorial-link" href="@SitePaths.Services(culture)">@(en ? "See the full service list" : "Hizmet listesinin tamamı") <span aria-hidden="true">↗</span></a>
+    }
+</section>

@@ -1,0 +1,87 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Settings.IndexModel
+@{
+    ViewData["Title"] = "Site Ayarları — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8">
+    <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Site Ayarları</h1>
+    <p class="text-luxe-charcoal/60">Genel, iletişim, sosyal medya, SEO ve harita ayarlarını yönetin.</p>
+    @if (TempData["Success"] != null)
+    {
+        <p class="mt-4 text-green-700 bg-green-50 px-4 py-2 text-sm">@TempData["Success"]</p>
+    }
+    <div asp-validation-summary="All" class="mt-4 text-red-700 bg-red-50 px-4 py-2 text-sm empty:hidden"></div>
+</div>
+
+@* Mevcut ayarlar özeti *@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+    @foreach (var groupName in Model.GroupOrder.Where(g => Model.GroupedSettings.ContainsKey(g)))
+    {
+        <div class="bg-white shadow-sm overflow-hidden">
+            <div class="bg-luxe-charcoal px-6 py-3">
+                <h2 class="text-sm font-serif font-semibold text-luxe-gold uppercase tracking-widest">@groupName</h2>
+            </div>
+            <div class="divide-y divide-luxe-charcoal/10">
+                @foreach (var setting in Model.GroupedSettings[groupName])
+                {
+                    <div class="px-6 py-3 flex justify-between gap-4">
+                        <span class="text-xs font-mono text-luxe-gold">@setting.Key</span>
+                        <span class="text-sm text-luxe-charcoal/70 truncate max-w-xs text-right">@setting.Value</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    @foreach (var group in Model.GroupedSettings.Where(g => !Model.GroupOrder.Contains(g.Key)))
+    {
+        <div class="bg-white shadow-sm overflow-hidden">
+            <div class="bg-luxe-charcoal px-6 py-3">
+                <h2 class="text-sm font-serif font-semibold text-luxe-gold uppercase tracking-widest">@group.Key</h2>
+            </div>
+            <div class="divide-y divide-luxe-charcoal/10">
+                @foreach (var setting in group.Value)
+                {
+                    <div class="px-6 py-3 flex justify-between gap-4">
+                        <span class="text-xs font-mono text-luxe-gold">@setting.Key</span>
+                        <span class="text-sm text-luxe-charcoal/70 truncate max-w-xs text-right">@setting.Value</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@* Düzenleme formu *@
+<form method="post" class="bg-white p-8 shadow-sm space-y-10">
+    @foreach (var groupName in Model.GroupOrder)
+    {
+        var fields = IndexModel.SettingKeys.Where(s => s.Group == groupName).ToList();
+        if (!fields.Any()) continue;
+
+        <div>
+            <h2 class="text-xl font-serif font-semibold text-luxe-charcoal mb-6 pb-2 border-b border-luxe-charcoal/10">@groupName</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach (var (_, label, key) in fields)
+                {
+                    <div class="@(key is "Contact_Address" or "Contact_Hours" or "SEO_Description" or "Whatsapp_Message" or "Map_Address" ? "md:col-span-2" : "")">
+                        <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">@label</label>
+                        @if (key is "SEO_Description" or "Contact_Hours" or "Whatsapp_Message" or "Map_Address")
+                        {
+                            <textarea name="FormValues[@key]" rows="3" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none resize-none">@Model.FormValues.GetValueOrDefault(key)</textarea>
+                        }
+                        else
+                        {
+                            <input type="text" name="FormValues[@key]" value="@Model.FormValues.GetValueOrDefault(key)" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="flex gap-4 pt-4 border-t border-luxe-charcoal/10">
+        <button type="submit" class="bg-luxe-gold text-white px-8 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">KAYDET</button>
+    </div>
+</form>

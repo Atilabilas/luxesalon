@@ -1,0 +1,38 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Stats.CreateModel
+@{
+    ViewData["Title"] = "Yeni İstatistik — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-2xl">
+    <div class="mb-8">
+        <a asp-page="Index" class="text-luxe-gold hover:underline text-sm mb-4 inline-block">← Geri</a>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal">Yeni İstatistik</h1>
+    </div>
+    <form method="post" class="bg-white p-8 shadow-sm space-y-6">
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Değer *</label>
+            <input type="text" asp-for="StatItem.Value" required class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="500+" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Etiket *</label>
+            <input type="text" asp-for="StatItem.Label" required class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" placeholder="Mutlu Müşteri" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Bölüm *</label>
+            <select asp-for="StatItem.Section" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none bg-white">
+                <option value="Hakkimizda">Hakkimizda</option>
+                <option value="About">About</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Sıralama</label>
+            <input type="number" asp-for="StatItem.DisplayOrder" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" value="0" />
+        </div>
+        <div class="flex gap-4 pt-4">
+            <button type="submit" class="bg-luxe-gold text-white px-8 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">KAYDET</button>
+            <a asp-page="Index" class="border border-luxe-charcoal/20 px-8 py-3 font-medium hover:bg-luxe-charcoal/5 transition-colors">İPTAL</a>
+        </div>
+    </form>
+</div>

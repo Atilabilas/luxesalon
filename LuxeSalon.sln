@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuxeSalon.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuxeSalon.Web", "LuxeSalon.Web\LuxeSalon.Web.csproj", "{EC960EAE-8042-4EE2-91A0-455A0A69B683}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuxeSalon.Tests", "LuxeSalon.Tests\LuxeSalon.Tests.csproj", "{DBBA7102-18B2-49D1-8389-0B3B1567D432}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{EC960EAE-8042-4EE2-91A0-455A0A69B683}.Release|x64.Build.0 = Release|Any CPU
 		{EC960EAE-8042-4EE2-91A0-455A0A69B683}.Release|x86.ActiveCfg = Release|Any CPU
 		{EC960EAE-8042-4EE2-91A0-455A0A69B683}.Release|x86.Build.0 = Release|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Debug|x64.Build.0 = Debug|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Debug|x86.Build.0 = Debug|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Release|x64.ActiveCfg = Release|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Release|x64.Build.0 = Release|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Release|x86.ActiveCfg = Release|Any CPU
+		{DBBA7102-18B2-49D1-8389-0B3B1567D432}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -75,7 +75,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex gap-2 justify-end">
-                                        <a href="/Blog/@post.Id" target="_blank" 
+                                        <a href="/blog/@(string.IsNullOrWhiteSpace(post.Slug) ? post.Id.ToString() : post.Slug)" target="_blank"
                                            class="px-3 py-2 text-xs uppercase tracking-wider border border-luxe-charcoal/20 hover:bg-luxe-charcoal hover:text-white transition-colors">
                                             Görüntüle
                                         </a>

@@ -1,42 +1,123 @@
-@page "{id:int}"
+@page "/blog/{slug}"
 @model LuxeSalon.Web.Pages.Blog.DetailsModel
 @{
-    ViewData["Title"] = Model.BlogPost.Title + " — Celil Kuaför Dergi";
+    var culture = Model.CurrentCulture;
+    var title = Model.DisplayTitle;
+    var summary = Model.DisplaySummary;
+    var content = Model.DisplayContent;
+    var slug = Model.BlogPost.LocalizedSlug(culture);
+    var path = LuxeSalon.Web.Services.SitePaths.BlogPost(culture, slug);
+    var trPath = LuxeSalon.Web.Services.SitePaths.BlogPost("tr", Model.BlogPost.Slug);
+    var enPath = Model.BlogPost.HasEnglish
+        ? LuxeSalon.Web.Services.SitePaths.BlogPost("en", Model.BlogPost.SlugEn!)
+        : null;
+    Model.SetSeo(
+        title + Model.Setting("Blog_Title_Suffix", " | Celil & Atilla"),
+        summary,
+        path,
+        Model.BlogPost.HeaderImageUrl,
+        "article",
+        null,
+        trPath,
+        enPath);
 }
 
-<article class="section-light pt-40 pb-32">
-    <div class="container mx-auto px-6 max-w-4xl reveal">
-        <div class="text-center mb-20">
-            <div class="flex items-center justify-center space-x-4 mb-8">
-                <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-luxe-gold">@Model.BlogPost.PublishedAt.ToString("MMMM dd, yyyy")</span>
+@section Scripts {
+    <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.BlogPosting(
+        title,
+        summary,
+        path,
+        Model.BlogPost.HeaderImageUrl,
+        Model.BlogPost.PublishedAt,
+        Model.DisplayUpdatedAt,
+        Model.BlogPost.Author,
+        Model.SiteSettings))</script>
+    <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.Breadcrumb(
+        new[] { ("Blog", LuxeSalon.Web.Services.SitePaths.Blog(culture)), (title, path) },
+        Model.SiteSettings))</script>
+}
+
+<article class="pt-36 md:pt-40 pb-20 md:pb-28">
+    <div class="container mx-auto px-6 max-w-3xl">
+        <nav class="text-[10px] uppercase tracking-widest text-luxe-charcoal/40 mb-8" aria-label="Breadcrumb">
+            <a href="@LuxeSalon.Web.Services.SitePaths.Home(culture)" class="hover:text-luxe-gold">@(culture == "en" ? "Home" : "Ana sayfa")</a>
+            <span class="mx-2">/</span>
+            <a href="@LuxeSalon.Web.Services.SitePaths.Blog(culture)" class="hover:text-luxe-gold">Blog</a>
+            <span class="mx-2">/</span>
+            <span class="text-luxe-charcoal/60">@title</span>
+        </nav>
+        <header class="mb-10">
+            <div class="flex flex-wrap items-center gap-4 mb-6">
+                <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-luxe-gold" itemprop="datePublished" content="@Model.BlogPost.PublishedAt.ToString("yyyy-MM-dd")">@Model.BlogPost.PublishedAt.ToString("dd MMMM yyyy")</span>
+                <meta itemprop="dateModified" content="@Model.DisplayUpdatedAt.ToString("yyyy-MM-dd")" />
                 <div class="h-[1px] w-8 bg-luxe-charcoal/20"></div>
-                <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-gray-400">@Model.BlogPost.Author</span>
+                <a class="article-byline" href="@(LuxeSalon.Web.Services.SitePaths.About(culture) + (Model.BlogPost.Author.Equals("Celil", StringComparison.OrdinalIgnoreCase) ? "#celil" : "#ekip"))">@Model.BlogPost.Author</a>
             </div>
-            <h1 class="text-5xl md:text-7xl font-serif mb-12 leading-tight tracking-tighter italic">@Model.BlogPost.Title</h1>
-        </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif leading-tight" itemprop="headline">@title</h1>
+        </header>
+
+        <aside class="article-service-bridge" aria-label="@(culture == "en" ? "Services at the salon" : "Salondaki hizmetler")">
+            <p>@(culture == "en" ? "Planning a salon visit?" : "Bu işlem için salona gelmeyi mi düşünüyorsunuz?")</p>
+            @foreach (var service in Model.RelatedServices)
+            {
+                <a class="editorial-link" href="@LuxeSalon.Web.Services.SitePaths.Service(culture, service.LocalizedSlug(culture))">@service.LocalizedName(culture) <span aria-hidden="true">↗</span></a>
+            }
+            <a class="editorial-link" href="@(LuxeSalon.Web.Services.SitePaths.Appointment(culture) + (Model.RelatedServices.Any() ? "?serviceId=" + Model.RelatedServices[0].Id : ""))">@(culture == "en" ? "Request an appointment" : "Randevu talebi oluştur") <span aria-hidden="true">↗</span></a>
+        </aside>
 
         @if (!string.IsNullOrEmpty(Model.BlogPost.HeaderImageUrl))
         {
-            <div class="aspect-[16/9] mb-20 overflow-hidden bg-gray-100 reveal">
-                <img src="@Model.BlogPost.HeaderImageUrl" alt="@Model.BlogPost.Title" class="w-full h-full object-cover" />
+            <div class="aspect-[16/9] mb-10 overflow-hidden bg-luxe-cream">
+                <img src="@Model.BlogPost.HeaderImageUrl" alt="@title — Celil & Atilla" class="w-full h-full object-cover" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="1200" height="675" />
             </div>
         }
 
-        <div class="prose prose-lg max-w-none font-light leading-relaxed text-gray-700 reveal">
-            <div class="mb-12 text-xl font-serif italic text-luxe-charcoal/80 bg-luxe-ivory p-8 border-l-2 border-luxe-gold">
-                @Model.BlogPost.Summary
-            </div>
-            
-            @Html.Raw(Model.BlogPost.Content)
+        <div class="blog-body text-lg font-light leading-relaxed text-luxe-charcoal/80 space-y-5" itemprop="articleBody">
+            @if (!string.IsNullOrWhiteSpace(summary))
+            {
+                <p class="text-xl md:text-2xl font-serif italic text-luxe-charcoal border-l-2 border-luxe-gold pl-6 py-2">
+                    @summary
+                </p>
+            }
+            @Html.Raw(content)
+            <p class="local-salon-context">@LuxeSalon.Web.Services.LocalSalonCopy.BlogContext(Model.BlogPost.Slug, culture)</p>
         </div>
 
-        <div class="mt-24 pt-12 border-t border-luxe-charcoal/5 flex justify-between items-center reveal">
-            <a asp-page="./Index" class="text-[10px] uppercase tracking-widest font-bold text-gray-400 hover:text-luxe-charcoal transition-colors">← Dergiye Dön</a>
-            <div class="flex space-x-6 text-[10px] uppercase tracking-widest font-bold">
-                <span class="text-gray-300">Share:</span>
-                <a href="#" class="hover:text-luxe-gold transition-colors">Twitter</a>
-                <a href="#" class="hover:text-luxe-gold transition-colors">Pinterest</a>
-            </div>
+        <aside class="article-publisher" aria-label="@(culture == "en" ? "About the publisher" : "Yayıncı hakkında")">
+            <p class="atelier-eyebrow">@(culture == "en" ? "About the publisher" : "Yayıncı hakkında")</p>
+            <h2>Celil &amp; Atilla</h2>
+            <p>@(culture == "en" ? "A hair salon in Kazımdirik, Bornova, İzmir since 2000. Meet Celil, the founder who works on cut and colour, and the salon team." : "2000’den beri İzmir’in Bornova ilçesinde, Kazımdirik’te bir kuaför salonu. Kurucu, kesim ve renk üzerine çalışan Celil’i ve salon ekibini tanıyın.")</p>
+            <a class="atelier-text-link" href="@(LuxeSalon.Web.Services.SitePaths.About(culture) + "#celil")">@(culture == "en" ? "Meet Celil and the team" : "Celil ve ekiple tanışın") <span aria-hidden="true">↗</span></a>
+        </aside>
+
+        @if (Model.RelatedPosts.Any())
+        {
+            <section class="mt-16 pt-10 border-t border-luxe-charcoal/10">
+                <h2 class="text-2xl font-serif mb-8">@(culture == "en" ? "Related reading" : "İlgili yazılar")</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    @foreach (var related in Model.RelatedPosts)
+                    {
+                        var rSlug = related.LocalizedSlug(culture);
+                        <a href="@LuxeSalon.Web.Services.SitePaths.BlogPost(culture, rSlug)" class="group block">
+                            @if (!string.IsNullOrEmpty(related.HeaderImageUrl))
+                            {
+                                <div class="aspect-[4/3] overflow-hidden bg-luxe-cream mb-4">
+                                    <img src="@related.HeaderImageUrl" alt="@related.LocalizedTitle(culture)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async" width="600" height="450" />
+                                </div>
+                            }
+                            <h3 class="font-serif text-lg group-hover:text-luxe-gold transition-colors">@related.LocalizedTitle(culture)</h3>
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+
+        <div class="mt-16 pt-8 border-t border-luxe-charcoal/10 flex justify-between items-center">
+            <a href="@LuxeSalon.Web.Services.SitePaths.Blog(culture)" class="text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/50 hover:text-luxe-charcoal transition-colors">@Model.GetContent("blog_back", culture == "en" ? "← Blog" : "← Blog")</a>
+            @if (!string.IsNullOrEmpty(Model.Setting("Social_Instagram")))
+            {
+                <a href="@Model.Setting("Social_Instagram")" target="_blank" rel="noopener" class="text-[10px] uppercase tracking-widest font-bold hover:text-luxe-gold transition-colors">Instagram</a>
+            }
         </div>
     </div>
 </article>

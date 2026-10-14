@@ -1,0 +1,60 @@
+@page
+@model LuxeSalon.Web.Pages.Admin.Services.IndexModel
+@{
+    ViewData["Title"] = "Hizmetler — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal mb-2">Hizmetler</h1>
+        <p class="text-luxe-charcoal/60">@Model.Services.Count hizmet kaydı</p>
+    </div>
+    <a asp-page="Create" class="bg-luxe-gold text-white px-6 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">+ Yeni Hizmet</a>
+</div>
+
+<div class="bg-white shadow-sm overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-luxe-charcoal/5">
+            <tr>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Görsel</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Ad</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Kategori</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Fiyat</th>
+                <th class="text-left px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">Süre</th>
+                <th class="text-right px-6 py-4 text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-luxe-charcoal/10">
+            @foreach (var service in Model.Services)
+            {
+                <tr class="hover:bg-luxe-charcoal/5 transition-colors">
+                    <td class="px-6 py-4">
+                        @if (!string.IsNullOrEmpty(service.ImageUrl))
+                        {
+                            <img src="@service.ImageUrl" alt="@service.Name" class="w-16 h-12 object-cover" />
+                        }
+                        else
+                        {
+                            <div class="w-16 h-12 bg-luxe-cream flex items-center justify-center text-xs text-luxe-charcoal/30">Yok</div>
+                        }
+                    </td>
+                    <td class="px-6 py-4 font-serif font-medium">@service.Name</td>
+                    <td class="px-6 py-4 text-luxe-charcoal/60">@service.Category</td>
+                    <td class="px-6 py-4 text-luxe-gold font-medium">@service.Price.ToString("C0")</td>
+                    <td class="px-6 py-4 text-luxe-charcoal/60">@service.DurationMinutes dk</td>
+                    <td class="px-6 py-4 text-right">
+                        <a asp-page="Edit" asp-route-id="@service.Id" class="text-luxe-gold hover:underline text-sm font-medium mr-4">Düzenle</a>
+                        <a asp-page="Delete" asp-route-id="@service.Id" class="text-red-500 hover:underline text-sm font-medium">Sil</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Services.Any())
+            {
+                <tr>
+                    <td colspan="6" class="px-6 py-12 text-center text-luxe-charcoal/40">Henüz hizmet eklenmemiş.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

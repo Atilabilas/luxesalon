@@ -1,0 +1,62 @@
+@page "{id:int}"
+@model LuxeSalon.Web.Pages.Admin.Gallery.EditModel
+@{
+    ViewData["Title"] = "Galeri Düzenle — Admin";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="max-w-2xl">
+    <div class="mb-8">
+        <a asp-page="Index" class="text-luxe-gold hover:underline text-sm mb-4 inline-block">← Geri</a>
+        <h1 class="text-3xl font-serif font-semibold text-luxe-charcoal">Galeri Düzenle</h1>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="bg-white p-8 shadow-sm space-y-6">
+        <input type="hidden" asp-for="GalleryItem.Id" />
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Bölüm *</label>
+            <select asp-for="GalleryItem.Section" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none bg-white">
+                <option value="Portfolio">Portfolio</option>
+                <option value="Instagram">Instagram</option>
+            </select>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.GalleryItem.ImageUrl))
+        {
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Mevcut Görsel</label>
+                <img src="@Model.GalleryItem.ImageUrl" alt="@Model.GalleryItem.Title" class="max-w-xs h-48 object-cover border border-luxe-charcoal/10" />
+            </div>
+        }
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Yeni Görsel Yükle</label>
+            <input type="file" name="ImageFile" accept="image/*" class="w-full border border-luxe-charcoal/20 px-4 py-3" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Görsel URL *</label>
+            <input type="text" asp-for="GalleryItem.ImageUrl" required class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Başlık</label>
+            <input type="text" asp-for="GalleryItem.Title" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Overlay Metni</label>
+            <input type="text" asp-for="GalleryItem.OverlayText" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Link URL</label>
+            <input type="text" asp-for="GalleryItem.LinkUrl" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest font-bold text-luxe-charcoal/60 mb-2">Sıralama</label>
+            <input type="number" asp-for="GalleryItem.DisplayOrder" class="w-full border border-luxe-charcoal/20 px-4 py-3 focus:border-luxe-gold focus:outline-none" />
+        </div>
+        <div class="flex items-center gap-3">
+            <input type="checkbox" asp-for="GalleryItem.IsActive" class="w-5 h-5" />
+            <label asp-for="GalleryItem.IsActive" class="text-sm font-medium">Aktif</label>
+        </div>
+        <div class="flex gap-4 pt-4">
+            <button type="submit" class="bg-luxe-gold text-white px-8 py-3 font-medium hover:bg-luxe-gold/90 transition-colors">GÜNCELLE</button>
+            <a asp-page="Index" class="border border-luxe-charcoal/20 px-8 py-3 font-medium hover:bg-luxe-charcoal/5 transition-colors">İPTAL</a>
+        </div>
+    </form>
+</div>

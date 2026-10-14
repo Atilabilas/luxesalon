@@ -1,199 +1,82 @@
-@page
+@page "/hizmetler"
 @model LuxeSalon.Web.Pages.HizmetlerModel
+@using LuxeSalon.Web.Services
 @{
-    ViewData["Title"] = "Hizmetlerimiz — Celil Kuaför";
+    var culture = Model.CurrentCulture;
+    var en = culture == "en";
+    var landings = Model.Services.Where(s => s.IsLandingPage && (!en || s.HasEnglish)).ToList();
+    var otherServices = Model.Services.Where(s => !s.IsLandingPage).ToList();
+    Model.SetSeo(en ? ServiceSearchCopy.DirectoryTitleEn : ServiceSearchCopy.DirectoryTitleTr,
+        en ? ServiceSearchCopy.DirectoryMetaEn : ServiceSearchCopy.DirectoryMetaTr,
+        SitePaths.Services(culture), "/images/services/tek-renk.jpg", "website", null, SitePaths.Services("tr"), SitePaths.Services("en"));
 }
-
-@* Hero Banner *@
-<section class="relative h-[60vh] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1920&auto=format&fit=crop" 
-             alt="Hizmetlerimiz" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-luxe-charcoal/70"></div>
-    </div>
-    <div class="relative z-10 text-center text-white px-6">
-        <p class="section-subtitle text-luxe-gold mb-4">Uzman Eller, Kusursuz Sonuçlar</p>
-        <h1 class="section-title text-white">Hizmetlerimiz</h1>
-        <p class="mt-6 text-white/70 max-w-2xl mx-auto font-light text-lg">
-            Her saç tipi ve her ihtiyaç için özel olarak tasarlanmış premium hizmetlerimizle tanışın.
-        </p>
+<section class="atelier-page-intro services-intro">
+    <div class="atelier-container">
+        <p class="eyebrow">@(en ? "Services / Bornova, İzmir" : "Hizmetler / Bornova, İzmir")</p>
+        <h1>@(en ? "Bornova hair" : "Bornova kuaför")<br /><em>@(en ? "services." : "hizmetleri.")</em></h1>
+        <p>@(en ? "Bornova hair salon services at Gediz Cd. 21 A: cut, colour, keratin and bridal hair." : "Bornova kadın kuaförü hizmetleri Kazımdirik Mah. Gediz Cd. 21 A adresindedir. Bornova kuaför randevusu bu salondan alınır.")</p>
+        <p class="local-salon-context">@(en ? "All services take place at our salon in Kazımdirik, Bornova, İzmir. Tell us which service you are considering so we can discuss its scope and a suitable appointment time." : "Hizmetlerimizi İzmir’in Bornova ilçesindeki Kazımdirik salonumuzda sunuyoruz. Düşündüğünüz işlemi bize iletin; hizmetin kapsamını ve uygun randevu zamanını birlikte konuşalım.")</p>
+        <div class="hero-actions">
+            <a href="@SitePaths.Appointment(culture)" class="atelier-button">@(en ? "Arrange a visit" : "Randevu al") <span aria-hidden="true">↗</span></a>
+            <a href="@WhatsAppLink.Chat(Model.Setting("Whatsapp_Number"), en ? "Hello, I'd like to ask about your salon services." : "Merhaba, hizmetleriniz hakkında bilgi almak istiyorum.")" class="atelier-button outline" target="_blank" rel="noopener">@(en ? "Ask about a service" : "Hizmet hakkında sor") <span aria-hidden="true">↗</span></a>
+        </div>
     </div>
 </section>
 
-@* Services Grid *@
-<section class="section-padding bg-luxe-ivory">
-    <div class="container mx-auto">
-        @if (!Model.Services.Any())
+<section class="atelier-section atelier-container" aria-labelledby="salon-services">
+    <div class="section-heading">
+        <div><p class="eyebrow">@(en ? "Bornova / 01" : "Bornova / 01")</p><h2 id="salon-services">@(en ? "Bornova hair services." : "Bornova kadın kuaförü işlemleri.")</h2></div>
+        <div class="section-aside"><p>@(en ? "Explore the service, ask your questions and request an appointment. We discuss your hair and pricing before your visit." : "İşlemi inceleyin, sorularınızı paylaşın ve randevu talep edin. Saçınıza uygun planı ve ücret bilgisini ziyaretinizden önce konuşalım.")</p></div>
+    </div>
+    <div class="editorial-services services-directory">
+        @foreach (var service in landings)
         {
-            <div class="text-center py-20">
-                <p class="text-4xl font-serif italic text-luxe-charcoal/30 mb-8">Hizmetlerimiz hazırlanıyor...</p>
-                <p class="text-lg text-luxe-charcoal/50">Çok yakında detaylı hizmet listemizle burada olacağız.</p>
-            </div>
+            var name = ServiceSearchCopy.VisibleName(service, culture);
+            <article class="directory-card">
+                <a class="editorial-service" href="@SitePaths.Service(culture, service.LocalizedSlug(culture))">
+                    <figure><img src="@service.ImageUrl" alt="@name" loading="lazy" sizes="(max-width: 767px) 100vw, 33vw" /><span class="image-label">@(en ? "Explore the service" : "İşlemi incele") ↗</span></figure>
+                    <div class="service-heading"><h3>@name</h3><span aria-hidden="true">↗</span></div>
+                </a>
+                <p>@service.LocalizedDescription(culture)</p>
+                <a class="editorial-link" href="@(SitePaths.Appointment(culture) + "?serviceId=" + service.Id)">@(en ? "Request an appointment" : "Bu işlem için randevu") <span aria-hidden="true">↗</span></a>
+            </article>
         }
-        else
+    </div>
+    <p class="image-note">@(en ? "The images illustrate the services. See our Instagram for salon work." : "Görseller hizmetleri anlatmak için kullanılan temsili fotoğraflardır. Salondaki uygulamaları Instagram hesabımızda görebilirsiniz.") <a href="@Model.Setting("Social_Instagram")" target="_blank" rel="noopener">Instagram ↗</a></p>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        ViewData["EditUrl"] = "/Admin/Services";
+        <partial name="_EditButton" />
+    }
+</section>
+
+@if (otherServices.Any())
+{
+<section class="other-services">
+    <div class="atelier-container">
+        <div class="section-heading"><div><p class="eyebrow">@(en ? "Also at the salon / 02" : "Salonda ayrıca / 02")</p><h2>@(en ? "More ways to care." : "Küçük dokunuşlar.")</h2></div><div class="section-aside"><p>@(en ? "Styling, maintenance and everyday appointments. Open a category to see the services." : "Şekillendirme, bakım ve günlük randevular. İşlemleri görmek için ilgili başlığı açın.")</p></div></div>
+        @foreach (var (category, subtitleKey, titleKey) in Model.CategoryOrder)
         {
-            @* Category: Kesim *@
-            @if (Model.Services.Any(s => s.Category == "Kesim"))
-            {
-                <div class="mb-20 reveal">
-                    <div class="text-center mb-12">
-                        <p class="section-subtitle">Precision Cut</p>
-                        <h2 class="section-title">Saç Kesimi</h2>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @foreach (var service in Model.Services.Where(s => s.Category == "Kesim"))
-                        {
-                            <div class="group bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-500">
-                                @if (!string.IsNullOrEmpty(service.ImageUrl))
-                                {
-                                    <div class="aspect-video mb-6 overflow-hidden">
-                                        <img src="@service.ImageUrl" alt="@service.Name" 
-                                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                    </div>
-                                }
-                                <h3 class="text-2xl font-serif mb-3 group-hover:text-luxe-gold transition-colors">@service.Name</h3>
-                                <p class="text-luxe-charcoal/60 font-light mb-4">@service.Description</p>
-                                <div class="flex items-center justify-between pt-4 border-t border-luxe-charcoal/10">
-                                    <span class="text-2xl font-serif text-luxe-gold">@service.Price.ToString("C0")</span>
-                                    <span class="text-sm text-luxe-charcoal/40">@service.DurationMinutes dk</span>
-                                </div>
-                            </div>
-                        }
-                    </div>
+            var group = otherServices.Where(s => s.Category == category).ToList();
+            if (!group.Any()) { continue; }
+            <details class="service-information">
+                <summary>@Model.GetContent(titleKey, category) <span aria-hidden="true">+</span></summary>
+                <div class="additional-service-list">
+                    @foreach (var service in group)
+                    {
+                        <div><h3>@service.LocalizedName(culture)</h3><p>@service.LocalizedDescription(culture)</p><a class="editorial-link" href="@(SitePaths.Appointment(culture) + "?serviceId=" + service.Id)">@(en ? "Arrange a visit" : "Randevu için sor") <span aria-hidden="true">↗</span></a></div>
+                    }
                 </div>
-            }
-
-            @* Category: Renk *@
-            @if (Model.Services.Any(s => s.Category == "Renk"))
-            {
-                <div class="mb-20 reveal">
-                    <div class="text-center mb-12">
-                        <p class="section-subtitle">Artisan Color</p>
-                        <h2 class="section-title">Renklendirme</h2>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @foreach (var service in Model.Services.Where(s => s.Category == "Renk"))
-                        {
-                            <div class="group bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-500">
-                                @if (!string.IsNullOrEmpty(service.ImageUrl))
-                                {
-                                    <div class="aspect-video mb-6 overflow-hidden">
-                                        <img src="@service.ImageUrl" alt="@service.Name" 
-                                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                    </div>
-                                }
-                                <h3 class="text-2xl font-serif mb-3 group-hover:text-luxe-gold transition-colors">@service.Name</h3>
-                                <p class="text-luxe-charcoal/60 font-light mb-4">@service.Description</p>
-                                <div class="flex items-center justify-between pt-4 border-t border-luxe-charcoal/10">
-                                    <span class="text-2xl font-serif text-luxe-gold">@service.Price.ToString("C0")</span>
-                                    <span class="text-sm text-luxe-charcoal/40">@service.DurationMinutes dk</span>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-
-            @* Category: Bakım *@
-            @if (Model.Services.Any(s => s.Category == "Bakım"))
-            {
-                <div class="mb-20 reveal">
-                    <div class="text-center mb-12">
-                        <p class="section-subtitle">Hair Rituals</p>
-                        <h2 class="section-title">Bakım & Onarım</h2>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @foreach (var service in Model.Services.Where(s => s.Category == "Bakım"))
-                        {
-                            <div class="group bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-500">
-                                @if (!string.IsNullOrEmpty(service.ImageUrl))
-                                {
-                                    <div class="aspect-video mb-6 overflow-hidden">
-                                        <img src="@service.ImageUrl" alt="@service.Name" 
-                                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                    </div>
-                                }
-                                <h3 class="text-2xl font-serif mb-3 group-hover:text-luxe-gold transition-colors">@service.Name</h3>
-                                <p class="text-luxe-charcoal/60 font-light mb-4">@service.Description</p>
-                                <div class="flex items-center justify-between pt-4 border-t border-luxe-charcoal/10">
-                                    <span class="text-2xl font-serif text-luxe-gold">@service.Price.ToString("C0")</span>
-                                    <span class="text-sm text-luxe-charcoal/40">@service.DurationMinutes dk</span>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-
-            @* Other Categories *@
-            var otherServices = Model.Services.Where(s => s.Category != "Kesim" && s.Category != "Renk" && s.Category != "Bakım");
-            if (otherServices.Any())
-            {
-                <div class="mb-20 reveal">
-                    <div class="text-center mb-12">
-                        <p class="section-subtitle">Special Services</p>
-                        <h2 class="section-title">Özel Hizmetler</h2>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @foreach (var service in otherServices)
-                        {
-                            <div class="group bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-500">
-                                @if (!string.IsNullOrEmpty(service.ImageUrl))
-                                {
-                                    <div class="aspect-video mb-6 overflow-hidden">
-                                        <img src="@service.ImageUrl" alt="@service.Name" 
-                                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                    </div>
-                                }
-                                <h3 class="text-2xl font-serif mb-3 group-hover:text-luxe-gold transition-colors">@service.Name</h3>
-                                <p class="text-luxe-charcoal/60 font-light mb-4">@service.Description</p>
-                                <div class="flex items-center justify-between pt-4 border-t border-luxe-charcoal/10">
-                                    <span class="text-2xl font-serif text-luxe-gold">@service.Price.ToString("C0")</span>
-                                    <span class="text-sm text-luxe-charcoal/40">@service.DurationMinutes dk</span>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
+            </details>
         }
     </div>
 </section>
-
-@* CTA Section *@
-<section class="bg-luxe-charcoal text-white py-32">
-    <div class="container mx-auto px-6 text-center">
-        <p class="section-subtitle text-luxe-gold">Randevu</p>
-        <h2 class="section-title text-white mb-6">Hizmetlerimizi Deneyimleyin</h2>
-        <p class="text-white/60 max-w-2xl mx-auto mb-12 font-light text-lg">
-            Uzman stilistlerimizle tanışın ve hayalinizdeki saça kavuşun.
-        </p>
-        <a href="/Randevu" class="btn-primary inline-block">
-            RANDEVU AL
-        </a>
-    </div>
-</section>
-
-@* Price Note *@
-<section class="bg-luxe-cream py-16">
-    <div class="container mx-auto px-6 text-center">
-        <p class="text-luxe-charcoal/60 font-light">
-            <span class="text-luxe-gold">*</span> Fiyatlar saç uzunluğu ve işlem karmaşıklığına göre değişiklik gösterebilir. 
-            Detaylı bilgi için lütfen bizimle iletişime geçin.
-        </p>
-    </div>
-</section>
-
-@section Scripts {
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    </script>
 }
+
+<section class="atelier-invitation">
+    <div class="atelier-container">
+        <p class="eyebrow">@(en ? "Let's choose together" : "Birlikte seçelim")</p>
+        <h2>@(en ? "Not sure where to start?" : "Nereden başlayacağınızı bilmiyor musunuz?")</h2>
+        <a href="@SitePaths.Appointment(culture)" class="atelier-button">@(en ? "Talk to the salon" : "Salona danışın") <span aria-hidden="true">↗</span></a>
+    </div>
+</section>

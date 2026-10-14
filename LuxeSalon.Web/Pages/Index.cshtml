@@ -1,786 +1,93 @@
-﻿@page
+@page
 @model IndexModel
+@using LuxeSalon.Web.Services
 @{
-    ViewData["Title"] = "Celil Kuaför | Premium Saç Tasarım Stüdyosu";
+    var culture = Model.CurrentCulture;
+    var en = Model.IsEnglish;
+    var appointmentPath = SitePaths.Appointment(culture);
+    var heroSrc = ContentImageCatalog.Resolve(Model.HeroImage?.ImageUrl ?? "/images/services/kadin-kesim.jpg");
+    var heroIllustrative = ContentImageCatalog.Alt(heroSrc, culture) != null;
+    var cards = new[] { (Slug: "kadin-sac-kesimi", Key: 1), (Slug: "balyaj-ombre-sombre", Key: 2), (Slug: "keratin-sac-botoksu", Key: 3) };
+    Model.SetSeo(
+        en ? LocalHeadTerms.HomeTitleEn : LocalHeadTerms.HomeTitleTr,
+        en ? LocalHeadTerms.HomeDescriptionEn : LocalHeadTerms.HomeDescriptionTr,
+        SitePaths.Home(culture), heroSrc, "website", null, "/", "/en");
 }
 
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 1: HERO - Full Screen with Video/Image Background
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="relative h-screen flex items-center justify-center overflow-hidden group">
-    @* Edit Button *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="/Admin/Content" 
-           class="admin-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-24 right-6 z-50 bg-luxe-gold text-white text-xs px-4 py-2 font-medium hover:bg-luxe-charcoal shadow-lg flex items-center gap-2">
-            <i class="fas fa-edit"></i> Hero Düzenle
-        </a>
-    }
-    
-    @* Background Image with Parallax *@
-    <div class="absolute inset-0 z-0 parallax-bg">
-        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1920&auto=format&fit=crop" 
-             alt="Salon Background" 
-             class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-luxe-charcoal/50"></div>
-    </div>
-
-    @* Hero Content *@
-    <div class="relative z-10 text-center text-white px-6">
-        <p class="text-sm md:text-base uppercase tracking-[0.4em] text-white font-medium mb-8 reveal">@Model.GetContent("hero_subtitle", "PREMIUM SAÇ TASARIM STÜDYOSU")</p>
-        <h1 class="text-6xl md:text-8xl lg:text-[10rem] font-serif leading-[0.85] mb-12 reveal">
-            Celil<br/><span class="italic font-light">Kuaför</span>
-        </h1>
-        <div class="flex flex-col md:flex-row items-center justify-center gap-6 reveal">
-            <a href="#randevu" class="btn-white">@Model.GetContent("hero_cta_appointment", "RANDEVU AL")</a>
-            <a href="#hizmetler" class="bg-transparent border-2 border-white text-white px-10 py-5 text-[11px] uppercase font-bold tracking-[0.3em] transition-all duration-500 hover:bg-white hover:text-luxe-charcoal">@Model.GetContent("hero_cta_services", "HİZMETLERİMİZ")</a>
+<section class="home-hero home-container" aria-labelledby="hero-heading">
+    <div class="home-hero-copy">
+        <p class="home-eyebrow">Bornova / İzmir</p>
+        <h1 id="hero-heading">@(en ? LocalHeadTerms.HomeFocusEn : LocalHeadTerms.HomeFocusTr)<span class="home-hero-focus">Celil &amp; Atilla</span></h1>
+        <p class="home-hero-description">@(en ? LocalHeadTerms.HomeSupportEn : LocalHeadTerms.HomeSupportTr) <a href="@SitePaths.Districts(culture)">@(en ? "İzmir districts" : "İzmir ilçeleri")</a></p>
+        <p class="home-hero-description">@Model.GetContent("hero_description")</p>
+        <div class="home-hero-actions">
+            <a href="@appointmentPath" class="home-button">@Model.GetContent("hero_cta_appointment", en ? "Book a visit" : "Randevu oluştur")</a>
+            <a href="#hizmetler" class="home-link home-explore">@(en ? "Explore the services" : "Hizmetleri keşfet") <span aria-hidden="true">→</span></a>
         </div>
+        <p class="home-location"><span aria-hidden="true">⌖</span>@Model.Setting("Contact_Address") · @(en ? "Bornova, İzmir" : "Bornova / İzmir")</p>
     </div>
-
-    @* Scroll Indicator *@
-    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 text-white text-center reveal hidden md:block">
-        <p class="text-sm uppercase tracking-[0.3em] mb-4 text-white/80">@Model.GetContent("hero_scroll", "Keşfet")</p>
-        <div class="w-[1px] h-16 bg-white/60 mx-auto animate-bounce"></div>
-    </div>
-
-    @* ═══════════════════════════════════════════════════════════════════════════════
-       QUICK APPOINTMENT BAR (Floating)
-    ═══════════════════════════════════════════════════════════════════════════════ *@
-    <div x-data="appointmentForm()" class="absolute bottom-0 w-full z-30 transform translate-y-1/2 md:translate-y-0 md:bottom-10 px-6">
-        <div class="container mx-auto">
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-6 shadow-2xl rounded-none md:rounded-lg">
-                <form x-on:submit.prevent="checkAvailability" class="flex flex-col md:flex-row items-center gap-4">
-                    @* Date *@
-                    <div class="w-full md:w-1/4 relative">
-                        <i class="fas fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-white/60"></i>
-                        <input x-model="form.date" type="date" required min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                               class="w-full bg-black/20 border border-white/10 text-white pl-12 pr-4 py-3 focus:outline-none focus:border-luxe-gold transition-colors placeholder-white/50" />
-                    </div>
-                    
-                    @* Time *@
-                    <div class="w-full md:w-1/4 relative">
-                        <i class="fas fa-clock absolute left-4 top-1/2 -translate-y-1/2 text-white/60"></i>
-                        <select x-model="form.time" required class="w-full bg-black/20 border border-white/10 text-white pl-12 pr-4 py-3 focus:outline-none focus:border-luxe-gold transition-colors appearance-none cursor-pointer">
-                            <option value="" class="text-black">Saat Seçin</option>
-                            @for(int i=9; i<20; i++)
-                            {
-                                <option value="@i:00" class="text-black">@i:00</option>
-                                <option value="@i:30" class="text-black">@i:30</option>
-                            }
-                        </select>
-                    </div>
-
-                    @* Email *@
-                    <div class="w-full md:w-1/3 relative">
-                        <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-white/60"></i>
-                        <input x-model="form.email" type="email" placeholder="E-posta Adresiniz" required
-                               class="w-full bg-black/20 border border-white/10 text-white pl-12 pr-4 py-3 focus:outline-none focus:border-luxe-gold transition-colors placeholder-white/50" />
-                    </div>
-
-                    @* Submit *@
-                    <button type="submit" :disabled="loading" class="w-full md:w-auto px-8 py-3 bg-luxe-gold hover:bg-white hover:text-luxe-charcoal text-white font-medium tracking-widest transition-all duration-300 disabled:opacity-50">
-                        <span x-show="!loading">DEVAM</span>
-                        <span x-show="loading"><i class="fas fa-spinner fa-spin"></i></span>
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        @* ════════════════════════════════════════════════════════════════════════
-           MODAL - Complete Appointment
-        ════════════════════════════════════════════════════════════════════════ *@
-        <div x-show="modalOpen" style="display: none;" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            
-            <div x-on:click.away="modalOpen = false" class="bg-white w-full max-w-md p-8 relative shadow-2xl border-t-4 border-luxe-gold">
-                <button x-on:click="modalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-red-500">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-                
-                <h3 class="font-serif text-2xl mb-2 text-luxe-charcoal">Randevuyu Tamamla</h3>
-                <p class="text-gray-500 text-sm mb-6">Lütfen iletişim bilgilerinizi doğrulayın.</p>
-                
-                <form x-on:submit.prevent="completeAppointment" class="space-y-4">
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Ad Soyad</label>
-                        <input x-model="form.name" type="text" required class="w-full border border-gray-300 p-3 focus:outline-none focus:border-luxe-gold" placeholder="Tam adınız" />
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Telefon</label>
-                        <input x-model="form.phone" type="tel" required class="w-full border border-gray-300 p-3 focus:outline-none focus:border-luxe-gold" placeholder="05XX XXX XX XX" />
-                    </div>
-                    
-                    <div x-show="errorMessage" class="p-3 bg-red-100 text-red-600 text-sm" x-text="errorMessage"></div>
-                    <div x-show="successMessage" class="p-3 bg-green-100 text-green-600 text-sm" x-text="successMessage"></div>
-
-                    <button type="submit" :disabled="submitting" class="w-full btn-primary py-3 mt-4">
-                        <span x-show="!submitting">RANDEVUYU ONAYLA</span>
-                        <span x-show="submitting">İŞLENİYOR...</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-<script>
-    function appointmentForm() {
-        return {
-            form: {
-                date: '',
-                time: '',
-                email: '',
-                name: '',
-                phone: ''
-            },
-            modalOpen: false,
-            loading: false,
-            submitting: false,
-            errorMessage: '',
-            successMessage: '',
-
-            async checkAvailability() {
-                this.loading = true;
-                this.errorMessage = '';
-                try {
-                    const response = await fetch('/api/appointments/check-availability', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            date: this.form.date,
-                            time: this.form.time
-                        })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (response.ok) {
-                        this.modalOpen = true;
-                    } else {
-                        alert(data.message || 'Bir hata oluştu.');
-                    }
-                } catch (e) {
-                    alert('Sistem hatası. Lütfen tekrar deneyin.');
-                } finally {
-                    this.loading = false;
-                }
-            },
-
-            async completeAppointment() {
-                this.submitting = true;
-                this.errorMessage = '';
-                this.successMessage = '';
-                
-                try {
-                    const response = await fetch('/api/appointments/create', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(this.form)
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (response.ok) {
-                        this.successMessage = data.message;
-                        setTimeout(() => {
-                            this.modalOpen = false;
-                            this.form.name = ''; 
-                            this.form.phone = '';
-                            this.form.email = '';
-                            this.successMessage = '';
-                        }, 2000);
-                    } else {
-                        this.errorMessage = data.message || 'Rezervasyon oluşturulamadı.';
-                    }
-                } catch (e) {
-                    this.errorMessage = 'Bağlantı hatası.';
-                } finally {
-                    this.submitting = false;
-                }
-            }
+    <figure class="home-hero-photo">
+        <img src="@heroSrc" alt="@(Model.HeroImage?.AltText ?? (en ? "Salon interior" : "Salon iç mekânı"))" fetchpriority="high" loading="eager" sizes="(max-width: 767px) calc(100vw - 40px), 314px" />
+        <figcaption><span>@(en ? "CUT · COLOUR · CARE" : "KESİM · RENK · BAKIM")</span><span>@(heroIllustrative ? (en ? "Illustrative image" : "Temsili görsel") : "Celil & Atilla")</span></figcaption>
+        @if (User.Identity?.IsAuthenticated == true && Model.HeroImage != null)
+        {
+            ViewData["EditUrl"] = $"/Admin/SiteImages/Edit/{Model.HeroImage.Id}";
+            <partial name="_EditButton" />
         }
-    }
-</script>
-
-@* ═══════════════════════════════════════════════════════════════════════════════
-   MARQUEE - Infinite Scrolling Text with Background
-═══════════════════════════════════════════════════════════════════════════════ *@
-<div class="marquee-section relative overflow-hidden mt-20 md:mt-32">
-    @* Background Image *@
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=1920&auto=format&fit=crop" 
-             alt="Salon" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-luxe-charcoal/85"></div>
-    </div>
-    
-    @* Marquee Content *@
-    <div class="relative z-10 py-16 md:py-24">
-        <div class="marquee-container">
-            <div class="marquee-content font-serif font-medium tracking-tighter uppercase text-4xl md:text-6xl" style="letter-spacing: -0.05em;">
-                <span class="text-white">Saç Tasarımı</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Renklendirme</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Bakım Ritüelleri</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Makyaj</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Saç Tasarımı</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Renklendirme</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Bakım Ritüelleri</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-                <span class="text-white">Makyaj</span>
-                <span class="text-luxe-gold mx-8">✦</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 2: ABOUT - Split Layout
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="section-padding bg-luxe-ivory relative group">
-    @* Edit Button *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="/Admin/Content" 
-           class="admin-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-6 right-6 z-50 bg-luxe-gold text-white text-xs px-4 py-2 font-medium hover:bg-luxe-charcoal shadow-lg flex items-center gap-2">
-            <i class="fas fa-edit"></i> Hakkımızda Düzenle
-        </a>
-    }
-    
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
-            @* Left: Image *@
-            <div class="relative reveal-left">
-                <div class="aspect-[4/5] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop" 
-                         alt="Salon Interior" 
-                         class="w-full h-full object-cover" />
-                </div>
-                @* Floating Stats Card *@
-                <div class="absolute -bottom-8 -right-8 bg-luxe-charcoal text-white p-8 md:p-12">
-                    <p class="text-5xl md:text-6xl font-serif mb-2">@Model.GetContent("about_experience_number", "15+")</p>
-                    <p class="text-[10px] uppercase tracking-[0.3em] opacity-60">@Model.GetContent("about_experience_text", "Yıllık Deneyim")</p>
-                </div>
-            </div>
-
-            @* Right: Content *@
-            <div class="reveal-right">
-                <p class="section-subtitle text-white">@Model.GetContent("about_subtitle", "HAKKIMIZDA")</p>
-                <h2 class="section-title mb-8">
-                    @Model.GetContent("about_title", "Saç Tasarımında Sanat")
-                </h2>
-                <p class="text-lg font-light text-luxe-charcoal/70 leading-relaxed mb-8">
-                    @Model.GetContent("about_description1", "Celil Kuaför olarak, her müşterimizi benzersiz bir sanat eseri olarak görüyoruz.")
-                </p>
-                <p class="text-lg font-light text-luxe-charcoal/70 leading-relaxed mb-12">
-                    @Model.GetContent("about_description2", "Ekibimiz, uluslararası deneyime sahip stilistlerden oluşmaktadır.")
-                </p>
-                <a href="#" class="btn-primary">@Model.GetContent("about_cta", "DAHA FAZLA")</a>
-            </div>
-        </div>
-    </div>
+    </figure>
 </section>
 
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 3: SERVICES - Interactive Grid
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="section-padding bg-luxe-cream relative group" id="hizmetler">
-    @* Edit Button *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="/Admin/Content" 
-           class="admin-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-6 right-6 z-50 bg-luxe-gold text-white text-xs px-4 py-2 font-medium hover:bg-luxe-charcoal shadow-lg flex items-center gap-2">
-            <i class="fas fa-edit"></i> Hizmetler Düzenle
-        </a>
-    }
-    
-    <div class="container mx-auto">
-        <div class="text-center mb-20 reveal">
-            <p class="section-subtitle">@Model.GetContent("services_subtitle", "HİZMETLERİMİZ")</p>
-            <h2 class="section-title">@Model.GetContent("services_title", "Ne Sunuyoruz")</h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
-            @* Service 1 *@
-            <div class="service-card aspect-[3/4] reveal">
-                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=600&auto=format&fit=crop" 
-                     alt="Saç Kesimi" class="w-full h-full object-cover" />
-                <div class="service-card-text">
-                    <span class="service-number">01</span>
-                    <h3 class="service-title">@Model.GetContent("service1_title", "Saç Kesimi")</h3>
-                    <p class="text-sm opacity-80 text-center">@Model.GetContent("service1_desc", "Yüz yapınıza özel kesim")</p>
-                    <div class="service-card-details">
-                        <span class="text-[11px] uppercase tracking-widest border-b border-white/40 pb-1">DETAYLAR</span>
-                    </div>
-                </div>
-            </div>
-
-            @* Service 2 *@
-            <div class="service-card aspect-[3/4] reveal">
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop" 
-                     alt="Renklendirme" class="w-full h-full object-cover" />
-                <div class="service-card-text">
-                    <span class="service-number">02</span>
-                    <h3 class="service-title">@Model.GetContent("service2_title", "Renklendirme")</h3>
-                    <p class="text-sm opacity-80 text-center">@Model.GetContent("service2_desc", "Balayage, ombre, özel renkler")</p>
-                    <div class="service-card-details">
-                        <span class="text-[11px] uppercase tracking-widest border-b border-white/40 pb-1">DETAYLAR</span>
-                    </div>
-                </div>
-            </div>
-
-            @* Service 3 *@
-            <div class="service-card aspect-[3/4] reveal">
-                <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=600&auto=format&fit=crop" 
-                     alt="Bakım" class="w-full h-full object-cover" />
-                <div class="service-card-text">
-                    <span class="service-number">03</span>
-                    <h3 class="service-title">@Model.GetContent("service3_title", "Saç Bakımı")</h3>
-                    <p class="text-sm opacity-80 text-center">@Model.GetContent("service3_desc", "Keratin, botox, onarım")</p>
-                    <div class="service-card-details">
-                        <span class="text-[11px] uppercase tracking-widest border-b border-white/40 pb-1">DETAYLAR</span>
-                    </div>
-                </div>
-            </div>
-
-            @* Service 4 *@
-            <div class="service-card aspect-[3/4] reveal">
-                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=600&auto=format&fit=crop" 
-                     alt="Makyaj" class="w-full h-full object-cover" />
-                <div class="service-card-text">
-                    <span class="service-number">04</span>
-                    <h3 class="service-title">@Model.GetContent("service4_title", "Makyaj")</h3>
-                    <p class="text-sm opacity-80 text-center">@Model.GetContent("service4_desc", "Gelin ve özel gün")</p>
-                    <div class="service-card-details">
-                        <span class="text-[11px] uppercase tracking-widest border-b border-white/40 pb-1">DETAYLAR</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 4: PRICING - Elegant Price List
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="section-padding bg-luxe-charcoal text-white">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32">
-            @* Left: Title & Image *@
-            <div class="reveal-left">
-                <p class="text-sm uppercase tracking-[0.3em] text-luxe-gold font-bold mb-4">Fiyat Listesi</p>
-                <h2 class="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-white mb-12">
-                    Şeffaf<br/><span class="italic font-light">Fiyatlar</span>
-                </h2>
-                <div class="aspect-[4/3] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=800&auto=format&fit=crop" 
-                         alt="Salon" class="w-full h-full object-cover opacity-80" />
-                </div>
-            </div>
-
-            @* Right: Price List *@
-            <div class="reveal-right">
-                @if (Model.PriceItems.Any())
-                {
-                    @foreach (var category in Model.PriceCategories)
-                    {
-                        <div class="mb-12">
-                            <h3 class="text-xl md:text-2xl font-serif font-semibold mb-8 text-luxe-gold">@category</h3>
-                            @foreach (var item in Model.PriceItems.Where(p => p.Category == category))
-                            {
-                                <div class="price-item border-white/10 hover:border-luxe-gold">
-                                    <span class="text-base md:text-lg font-medium">@item.ServiceName</span>
-                                    <span class="price-dots border-white/10"></span>
-                                    <span class="text-luxe-gold font-serif text-xl md:text-2xl font-semibold">₺@item.Price.ToString("N0")</span>
-                                </div>
-                            }
-                        </div>
-                    }
-                }
-                else
-                {
-                    @* Default prices when database is empty *@
-                    <div class="mb-12">
-                        <h3 class="text-xl md:text-2xl font-serif font-semibold mb-8 text-luxe-gold">Saç Hizmetleri</h3>
-                        <div class="price-item border-white/10 hover:border-luxe-gold">
-                            <span class="text-base md:text-lg font-medium">Kadın Saç Kesimi</span>
-                            <span class="price-dots border-white/10"></span>
-                            <span class="text-luxe-gold font-serif text-xl md:text-2xl font-semibold">₺800</span>
-                        </div>
-                        <div class="price-item border-white/10 hover:border-luxe-gold">
-                            <span class="text-base md:text-lg font-medium">Erkek Saç Kesimi</span>
-                            <span class="price-dots border-white/10"></span>
-                            <span class="text-luxe-gold font-serif text-xl md:text-2xl font-semibold">₺400</span>
-                        </div>
-                    </div>
-                    <div class="mb-12">
-                        <h3 class="text-xl md:text-2xl font-serif font-semibold mb-8 text-luxe-gold">Renk Hizmetleri</h3>
-                        <div class="price-item border-white/10 hover:border-luxe-gold">
-                            <span class="text-base md:text-lg font-medium">Balayage</span>
-                            <span class="price-dots border-white/10"></span>
-                            <span class="text-luxe-gold font-serif text-xl md:text-2xl font-semibold">₺3.500</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl md:text-2xl font-serif font-semibold mb-8 text-luxe-gold">Bakım</h3>
-                        <div class="price-item border-white/10 hover:border-luxe-gold">
-                            <span class="text-base md:text-lg font-medium">Keratin Bakım</span>
-                            <span class="price-dots border-white/10"></span>
-                            <span class="text-luxe-gold font-serif text-xl md:text-2xl font-semibold">₺2.500</span>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-</section>
-
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 5: TEAM - Our Stylists
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="section-padding bg-luxe-ivory relative group">
-    @* Edit Button *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="/Admin/Team" 
-           class="admin-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-6 right-6 z-50 bg-luxe-gold text-white text-xs px-4 py-2 font-medium hover:bg-luxe-charcoal shadow-lg flex items-center gap-2">
-            <i class="fas fa-edit"></i> Ekip Düzenle
-        </a>
-    }
-    
-    <div class="container mx-auto">
-        <div class="text-center mb-20 reveal">
-            <p class="section-subtitle">@Model.GetContent("team_subtitle", "EKİBİMİZ")</p>
-            <h2 class="section-title">@Model.GetContent("team_title", "Uzman Stilistler")</h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            @if (Model.TeamMembers.Any())
-            {
-                @foreach (var member in Model.TeamMembers)
-                {
-                    <div class="team-card aspect-[3/4] reveal">
-                        <img src="@(string.IsNullOrEmpty(member.ImageUrl) ? "https://images.unsplash.com/photo-1595959183082-7b570b7e1dfa?q=80&w=600&auto=format&fit=crop" : member.ImageUrl)" alt="@member.Name" />
-                        <div class="team-card-info">
-                            <h4 class="text-xl font-serif text-white mb-1">@member.Name</h4>
-                            <p class="text-[11px] uppercase tracking-widest text-luxe-gold">@member.Role</p>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                @* Default team members when database is empty *@
-                <div class="team-card aspect-[3/4] reveal">
-                    <img src="https://images.unsplash.com/photo-1595959183082-7b570b7e1dfa?q=80&w=600&auto=format&fit=crop" alt="Stylist" />
-                    <div class="team-card-info">
-                        <h4 class="text-xl font-serif text-white mb-1">Celil</h4>
-                        <p class="text-[11px] uppercase tracking-widest text-luxe-gold">Kurucu & Baş Stilist</p>
-                    </div>
-                </div>
-                <div class="team-card aspect-[3/4] reveal">
-                    <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=600&auto=format&fit=crop" alt="Stylist" />
-                    <div class="team-card-info">
-                        <h4 class="text-xl font-serif text-white mb-1">Stilist 2</h4>
-                        <p class="text-[11px] uppercase tracking-widest text-luxe-gold">Renk Uzmanı</p>
-                    </div>
-                </div>
-                <div class="team-card aspect-[3/4] reveal">
-                    <img src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?q=80&w=600&auto=format&fit=crop" alt="Stylist" />
-                    <div class="team-card-info">
-                        <h4 class="text-xl font-serif text-white mb-1">Stilist 3</h4>
-                        <p class="text-[11px] uppercase tracking-widest text-luxe-gold">Kesim Uzmanı</p>
-                    </div>
-                </div>
-                <div class="team-card aspect-[3/4] reveal">
-                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=600&auto=format&fit=crop" alt="Stylist" />
-                    <div class="team-card-info">
-                        <h4 class="text-xl font-serif text-white mb-1">Stilist 4</h4>
-                        <p class="text-[11px] uppercase tracking-widest text-luxe-gold">Makyaj Artisti</p>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</section>
-
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 6: TESTIMONIALS
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="section-padding bg-luxe-cream">
-    <div class="container mx-auto max-w-4xl text-center reveal">
-        <p class="section-subtitle">Müşteri Yorumları</p>
-        <blockquote class="testimonial-quote">
-            "Celil Kuaför'de her ziyaretim bir deneyime dönüşüyor. Sadece saçım değil, 
-            kendime olan güvenim de yenileniyor. Ekip gerçekten alanında uzman."
-        </blockquote>
-        <div class="flex items-center justify-center gap-4">
-            <div class="w-16 h-16 rounded-full overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" 
-                     alt="Customer" class="w-full h-full object-cover" />
-            </div>
-            <div class="text-left">
-                <p class="font-serif text-lg">Elif Yıldırım</p>
-                <p class="text-[11px] uppercase tracking-widest text-luxe-gold">Düzenli Müşteri</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 6.5: PORTFOLIO GALLERY - Horizontal Scroll
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="py-20 bg-luxe-charcoal overflow-hidden">
-    <div class="container mx-auto px-6 mb-12">
-        <div class="flex items-end justify-between">
-            <div class="reveal">
-                <p class="section-subtitle text-luxe-gold">Portfolyo</p>
-                <h2 class="text-4xl md:text-5xl font-serif text-white">Son Çalışmalarımız</h2>
-            </div>
-            <a href="/Hakkimizda" class="hidden md:block text-white/60 hover:text-luxe-gold transition-colors text-sm uppercase tracking-widest">
-                Tümünü Gör →
+<section class="home-services home-container" id="hizmetler" aria-labelledby="services-heading">
+    <div class="home-heading"><h2 id="services-heading">@(en ? "Bornova hair services." : "Bornova kuaför hizmetleri.")</h2><a href="@SitePaths.Services(culture)" class="home-link">@(en ? "All services" : "Tüm hizmetler") <span aria-hidden="true">↗</span></a></div>
+    <div class="home-service-grid">
+        @foreach (var card in cards)
+        {
+            var service = Model.FeaturedServices.FirstOrDefault(s => s.Slug == card.Slug);
+            if (service == null) { continue; }
+            <a class="home-service" href="@SitePaths.Service(culture, service.LocalizedSlug(culture))">
+                <img src="@service.ImageUrl" alt="@(service.LocalizedName(culture) + (en ? " — illustrative image" : " — temsili görsel"))" loading="lazy" sizes="(max-width: 767px) 88px, (max-width: 1199px) 33vw, 400px" />
+                <div><h3>@ServiceSearchCopy.VisibleName(service, culture) <span aria-hidden="true">↗</span></h3><p>@service.LocalizedDescription(culture)</p><span class="home-image-note">@(en ? "Illustrative image" : "Temsili görsel")</span></div>
             </a>
-        </div>
+        }
     </div>
-    
-    @* Horizontal Scrolling Gallery *@
-    <div class="portfolio-slider">
-        <div class="portfolio-track">
-            @* Portfolio Item 1 *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Ombre</p>
-                    <p class="font-serif text-lg">Karamel Geçişler</p>
-                </div>
-            </div>
-            @* Portfolio Item 2 *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Kesim</p>
-                    <p class="font-serif text-lg">Modern Bob</p>
-                </div>
-            </div>
-            @* Portfolio Item 3 *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Renklendirme</p>
-                    <p class="font-serif text-lg">Ash Blonde</p>
-                </div>
-            </div>
-            @* Portfolio Item 4 *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1559599101-f09722fb4948?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Gelin</p>
-                    <p class="font-serif text-lg">Romantik Dalgalar</p>
-                </div>
-            </div>
-            @* Portfolio Item 5 *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Balyaj</p>
-                    <p class="font-serif text-lg">Sun-Kissed</p>
-                </div>
-            </div>
-            @* Portfolio Item 6 *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Bakım</p>
-                    <p class="font-serif text-lg">Keratin Parlaklık</p>
-                </div>
-            </div>
-            @* Duplicate for infinite scroll effect *@
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Ombre</p>
-                    <p class="font-serif text-lg">Karamel Geçişler</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=500&auto=format&fit=crop" alt="Saç Tasarımı" />
-                <div class="portfolio-overlay">
-                    <p class="text-xs uppercase tracking-widest text-luxe-gold mb-2">Kesim</p>
-                    <p class="font-serif text-lg">Modern Bob</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <nav class="home-service-index" aria-label="@(en ? "All Bornova services" : "Bornova’daki tüm işlemler")">
+        @foreach (var service in Model.LandingServices)
+        {
+            <a href="@SitePaths.Service(culture, service.LocalizedSlug(culture))">@ServiceSearchCopy.VisibleName(service, culture)</a>
+        }
+    </nav>
 </section>
 
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 7: INSTAGRAM FEED
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="bg-luxe-ivory">
-    <div class="text-center py-16 reveal">
-        <p class="section-subtitle">Instagram</p>
-        <h2 class="text-4xl font-serif">@@celillkuafor</h2>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
-        <div class="insta-item">
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400&auto=format&fit=crop" alt="Instagram" class="w-full h-full object-cover" />
+<section class="home-faq home-container" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">@(en ? "Bornova hair salon, before you book." : "Bornova kadın kuaförü randevusu.")</h2>
+    <dl>
+        <div>
+            <dt>@(en ? "Where is the Bornova salon?" : "Bornova kadın kuaförü nerede?")</dt>
+            <dd>@(en ? "Kazımdirik Mah. Gediz Cd. 21 A, 35100 Bornova / İzmir. Phone 0534 794 43 93." : "Kazımdirik Mah. Gediz Cd. 21 A, 35100 Bornova / İzmir. Telefon 0534 794 43 93.")</dd>
         </div>
-        <div class="insta-item">
-            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=400&auto=format&fit=crop" alt="Instagram" class="w-full h-full object-cover" />
+        <div>
+            <dt>@(en ? "Which services are booked here?" : "Hangi işlemler bu adreste?")</dt>
+            <dd>@(en ? "Women’s haircut, balayage, ombre, sombre, keratin, hair botox, highlights, root touch-up, bridal hair, extensions, men’s fade and kids’ cuts." : "Kadın saç kesimi, balyaj, ombre, sombre, keratin, saç botoksu, röfle, kök rötuşu, gelin saçı, saç kaynağı, erkek fade ve çocuk kesimi.")</dd>
         </div>
-        <div class="insta-item">
-            <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=400&auto=format&fit=crop" alt="Instagram" class="w-full h-full object-cover" />
+        <div>
+            <dt>@(en ? "Is there a branch in another district?" : "Başka ilçede şube var mı?")</dt>
+            <dd>@(en ? "No. Guests from the other İzmir districts book this Bornova salon." : "Yok. İzmir’in diğer ilçelerinden gelenler aynı Bornova salonuna randevu alır.") <a href="@SitePaths.Districts(culture)">@(en ? "İzmir districts" : "İzmir ilçeleri")</a></dd>
         </div>
-        <div class="insta-item">
-            <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=400&auto=format&fit=crop" alt="Instagram" class="w-full h-full object-cover" />
+        <div>
+            <dt>@(en ? "What are the hours?" : "Çalışma saatleri nedir?")</dt>
+            <dd>@Model.Setting("Contact_Hours")</dd>
         </div>
-        <div class="insta-item">
-            <img src="https://images.unsplash.com/photo-1595959183082-7b570b7e1dfa?q=80&w=400&auto=format&fit=crop" alt="Instagram" class="w-full h-full object-cover" />
-        </div>
-        <div class="insta-item">
-            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=400&auto=format&fit=crop" alt="Instagram" class="w-full h-full object-cover" />
-        </div>
-    </div>
+    </dl>
 </section>
 
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 8: BOOKING CTA
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="relative py-40 overflow-hidden group" id="randevu">
-    @* Edit Button *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="/Admin/Content" 
-           class="admin-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-6 right-6 z-50 bg-luxe-gold text-white text-xs px-4 py-2 font-medium hover:bg-luxe-charcoal shadow-lg flex items-center gap-2">
-            <i class="fas fa-edit"></i> Randevu Düzenle
-        </a>
-    }
-    
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?q=80&w=1920&auto=format&fit=crop" 
-             alt="Booking Background" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-luxe-charcoal/70"></div>
-    </div>
-    <div class="relative z-10 container mx-auto px-6 text-center text-white reveal">
-        <p class="section-subtitle text-luxe-gold">@Model.GetContent("cta_subtitle", "RANDEVU")</p>
-        <h2 class="section-title text-white mb-8">
-            @Model.GetContent("cta_title", "Değişime Hazır Mısın?")
-        </h2>
-        <p class="text-xl font-light opacity-80 mb-12 max-w-2xl mx-auto">
-            @Model.GetContent("cta_description", "Stilistlerimizle tanışın ve size özel bir deneyim için randevunuzu oluşturun.")
-        </p>
-        <a href="tel:@Model.GetContent("contact_phone", "+902120000000")" class="btn-white">@Model.GetContent("contact_phone", "+90 212 000 00 00")</a>
-    </div>
+<section class="home-story" aria-labelledby="story-heading">
+    <div class="home-container"><div><h2 id="story-heading">@(en ? "In Bornova since 2000." : "2000’den beri Bornova’da.")</h2><p>@(en ? "At our only salon in Kazımdirik, Bornova, İzmir, we plan women's haircuts, balayage, ombre and hair care around your hair. We also welcome men and children." : "İzmir’in Bornova ilçesindeki Kazımdirik salonumuzda kadın saç kesimi, balyaj, ombre ve saç bakımını saçınızın yapısına göre planlıyoruz. Erkek ve çocuk randevuları da alıyoruz.")</p></div><a href="@SitePaths.About(culture)" class="home-link">@(en ? "Meet the salon & team" : "Salonu ve ekibi tanıyın") <span aria-hidden="true">↗</span></a></div>
 </section>
 
-@* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 9: CONTACT & MAP
-═══════════════════════════════════════════════════════════════════════════════ *@
-<section class="grid grid-cols-1 lg:grid-cols-2 relative group">
-    @* Edit Button *@
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a href="/Admin/Content" 
-           class="admin-edit-btn opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-6 right-6 z-50 bg-luxe-gold text-white text-xs px-4 py-2 font-medium hover:bg-luxe-charcoal shadow-lg flex items-center gap-2">
-            <i class="fas fa-edit"></i> İletişim Düzenle
-        </a>
-    }
-    
-    @* Left: Contact Form *@
-    <div class="section-padding bg-luxe-ivory reveal-left">
-        <div class="max-w-lg mx-auto lg:mx-0 lg:ml-auto lg:mr-16">
-            <p class="text-sm uppercase tracking-[0.3em] text-luxe-gold font-bold mb-4">@Model.GetContent("contact_subtitle", "İLETİŞİM")</p>
-            <h2 class="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold mb-12">@Model.GetContent("contact_title", "Bize Ulaşın")</h2>
-            
-            <form class="space-y-8">
-                <input type="text" placeholder="Adınız Soyadınız" class="contact-input" />
-                <input type="email" placeholder="E-posta Adresiniz" class="contact-input" />
-                <input type="tel" placeholder="Telefon Numaranız" class="contact-input" />
-                <textarea rows="4" placeholder="Mesajınız" class="contact-input resize-none"></textarea>
-                <button type="submit" class="btn-primary w-full md:w-auto">@Model.GetContent("contact_button", "GÖNDER")</button>
-            </form>
-
-            <div class="mt-16 pt-16 border-t border-luxe-charcoal/10">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <p class="text-sm uppercase tracking-widest text-luxe-gold font-bold mb-3">@Model.GetContent("contact_address_label", "Adres")</p>
-                        <p class="text-base md:text-lg font-medium leading-relaxed">@Model.GetContent("contact_address", "Alsancak Mah. Kıbrıs Şehitleri Cad. No: 45<br/>Konak, İzmir")</p>
-                    </div>
-                    <div>
-                        <p class="text-sm uppercase tracking-widest text-luxe-gold font-bold mb-3">@Model.GetContent("contact_hours_label", "Çalışma Saatleri")</p>
-                        <p class="text-base md:text-lg font-medium leading-relaxed">@Model.GetContent("contact_hours", "Pzt - Cmt: 09:00 - 20:00<br/>Pazar: Kapalı")</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @* Right: Map *@
-    <div class="h-[60vh] lg:h-auto reveal-right">
-        <div id="map" class="w-full h-full"></div>
-    </div>
+<section class="home-booking" id="iletisim" aria-labelledby="visit-heading">
+    <div class="home-container"><div><h2 id="visit-heading">@(en ? "Book the Bornova salon." : "Bornova kuaför randevusu.")</h2><p>@(en ? "Let's agree on the service and a suitable time." : "İşlemi ve uygun zamanı birlikte netleştirelim.")</p></div><div class="home-booking-actions"><a href="@appointmentPath" class="home-button home-button-light">@(en ? "Book a visit" : "Randevu al") <span aria-hidden="true">↗</span></a><a href="@WhatsAppLink.Chat(Model.Setting("Whatsapp_Number"), en ? "Hello, I would like to arrange a visit." : "Merhaba, randevu için bilgi almak istiyorum.")" class="home-link" target="_blank" rel="noopener">WhatsApp <span aria-hidden="true">↗</span></a>    </div></div>
 </section>
 
 @section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // ═══════════════════════════════════════════════════════════════
-            // LEAFLET MAP
-            // ═══════════════════════════════════════════════════════════════
-            var map = L.map('map', {
-                scrollWheelZoom: false,
-                dragging: !L.Browser.mobile
-            }).setView([41.0503, 28.9914], 15);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; CartoDB'
-            }).addTo(map);
-
-            var customIcon = L.divIcon({
-                className: 'custom-marker',
-                html: '<div style="background:#B8860B; width:20px; height:20px; border-radius:50%; border:3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            });
-
-            L.marker([41.0503, 28.9914], { icon: customIcon }).addTo(map)
-                .bindPopup('<strong style="font-family: Playfair Display, serif;">Celil Kuaför</strong><br>Nişantaşı');
-
-            // ═══════════════════════════════════════════════════════════════
-            // SCROLL REVEAL
-            // ═══════════════════════════════════════════════════════════════
-            const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-                observer.observe(el);
-            });
-
-            // ═══════════════════════════════════════════════════════════════
-            // PARALLAX EFFECT
-            // ═══════════════════════════════════════════════════════════════
-            window.addEventListener('scroll', () => {
-                const scrollY = window.pageYOffset;
-                document.querySelectorAll('.parallax-bg').forEach(el => {
-                    el.style.transform = `translateY(${scrollY * 0.3}px)`;
-                });
-            });
-        });
-    </script>
+    <script type="application/ld+json">@Html.Raw(JsonLdService.ServiceIndex(Model.LandingServices, culture, Model.SiteSettings))</script>
 }

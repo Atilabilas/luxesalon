@@ -19,6 +19,9 @@ public class IndexModel : PageModel
     public int AppointmentCount { get; set; }
     public int BlogPostCount { get; set; }
     public int ProductCount { get; set; }
+    public int ServiceCount { get; set; }
+    public int TestimonialCount { get; set; }
+    public int GalleryCount { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -28,5 +31,8 @@ public class IndexModel : PageModel
         AppointmentCount = await _context.Appointments.CountAsync();
         BlogPostCount = await _context.BlogPosts.CountAsync();
         ProductCount = await _context.Products.CountAsync();
+        ServiceCount = await _context.Services.CountAsync();
+        TestimonialCount = await _context.Testimonials.CountAsync();
+        GalleryCount = await _context.GalleryItems.CountAsync();
     }
 }
