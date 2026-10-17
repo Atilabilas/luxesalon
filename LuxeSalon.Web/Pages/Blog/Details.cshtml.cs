@@ -12,11 +12,19 @@ public class DetailsModel : PageContentModel
         : base(context, content, settings) { }
 
     public BlogPost BlogPost { get; set; } = default!;
+    public BlogEditorialContent.Article? EditorialArticle { get; private set; }
     public List<BlogPost> RelatedPosts { get; set; } = new();
     public List<Service> RelatedServices { get; set; } = new();
     public string DisplayTitle => BlogPost.LocalizedTitle(CurrentCulture);
     public string DisplaySummary => BlogPost.LocalizedSummary(CurrentCulture);
     public string DisplayContent => BlogPost.LocalizedContent(CurrentCulture);
+    public bool SuppressTitleSuffix => CurrentCulture == "tr" && BlogPost.Slug == BlogEditorialContent.FringeSlug;
+    public string DisplaySeoTitle => EditorialArticle?.SeoTitle ?? (SuppressTitleSuffix
+        ? BlogEditorialContent.FringeSeoTitle
+        : DisplayTitle + Setting("Blog_Title_Suffix", " | Celil & Atilla"));
+    public string DisplayMetaDescription => EditorialArticle?.MetaDescription ?? (SuppressTitleSuffix
+        ? BlogEditorialContent.FringeMetaDescription : DisplaySummary);
+    public string DisplayImageAlt => EditorialArticle?.ImageAlt ?? DisplayTitle + " — Celil & Atilla";
     public DateTime DisplayUpdatedAt => new[] { BlogPost.UpdatedAt, BlogPost.PublishedAt, LocalSalonCopy.UpdatedAt }.Max();
 
     public async Task<IActionResult> OnGetAsync(string slug)
@@ -56,6 +64,7 @@ public class DetailsModel : PageContentModel
         }
 
         BlogPost = post;
+        EditorialArticle = culture == "tr" ? BlogEditorialContent.Find(post.Slug) : null;
 
         // Canonicalize casing
         var canonicalSlug = post.LocalizedSlug(culture);

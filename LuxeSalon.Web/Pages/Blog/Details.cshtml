@@ -11,9 +11,10 @@
     var enPath = Model.BlogPost.HasEnglish
         ? LuxeSalon.Web.Services.SitePaths.BlogPost("en", Model.BlogPost.SlugEn!)
         : null;
+    ViewData["SuppressTitleSuffix"] = Model.SuppressTitleSuffix;
     Model.SetSeo(
-        title + Model.Setting("Blog_Title_Suffix", " | Celil & Atilla"),
-        summary,
+        Model.DisplaySeoTitle,
+        Model.DisplayMetaDescription,
         path,
         Model.BlogPost.HeaderImageUrl,
         "article",
@@ -25,7 +26,7 @@
 @section Scripts {
     <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.BlogPosting(
         title,
-        summary,
+        Model.DisplayMetaDescription,
         path,
         Model.BlogPost.HeaderImageUrl,
         Model.BlogPost.PublishedAt,
@@ -35,6 +36,10 @@
     <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.Breadcrumb(
         new[] { ("Blog", LuxeSalon.Web.Services.SitePaths.Blog(culture)), (title, path) },
         Model.SiteSettings))</script>
+    @if (Model.EditorialArticle is { } editorial)
+    {
+        <script type="application/ld+json">@Html.Raw(LuxeSalon.Web.Services.JsonLdService.FaqPage(editorial.Faq))</script>
+    }
 }
 
 <article class="pt-36 md:pt-40 pb-20 md:pb-28">
@@ -68,7 +73,7 @@
         @if (!string.IsNullOrEmpty(Model.BlogPost.HeaderImageUrl))
         {
             <div class="aspect-[16/9] mb-10 overflow-hidden bg-luxe-cream">
-                <img src="@Model.BlogPost.HeaderImageUrl" alt="@title — Celil & Atilla" class="w-full h-full object-cover" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="1200" height="675" />
+                <img src="@Model.BlogPost.HeaderImageUrl" alt="@Model.DisplayImageAlt" class="w-full h-full object-cover" itemprop="image" loading="eager" fetchpriority="high" decoding="async" width="1200" height="675" />
             </div>
         }
 
@@ -80,7 +85,10 @@
                 </p>
             }
             @Html.Raw(content)
-            <p class="local-salon-context">@LuxeSalon.Web.Services.LocalSalonCopy.BlogContext(Model.BlogPost.Slug, culture)</p>
+            @if (Model.EditorialArticle == null)
+            {
+                <p class="local-salon-context">@LuxeSalon.Web.Services.LocalSalonCopy.BlogContext(Model.BlogPost.Slug, culture)</p>
+            }
         </div>
 
         <aside class="article-publisher" aria-label="@(culture == "en" ? "About the publisher" : "Yayıncı hakkında")">
