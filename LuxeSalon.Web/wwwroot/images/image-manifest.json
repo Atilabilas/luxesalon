@@ -322,5 +322,77 @@
     "srcset": "/images/services/tek-renk.480.webp 480w, /images/services/tek-renk.800.webp 800w, /images/services/tek-renk.webp 1200w",
     "width": 1200,
     "height": 801
+  },
+  "/images/blog/artisan-balayage.jpg": {
+    "src": "/images/blog/artisan-balayage.webp",
+    "srcset": "/images/blog/artisan-balayage.480.webp 480w, /images/blog/artisan-balayage.800.webp 800w, /images/blog/artisan-balayage.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/artisan-balayage.webp": {
+    "src": "/images/blog/artisan-balayage.webp",
+    "srcset": "/images/blog/artisan-balayage.480.webp 480w, /images/blog/artisan-balayage.800.webp 800w, /images/blog/artisan-balayage.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/duz-kahkul.jpg": {
+    "src": "/images/blog/duz-kahkul.webp",
+    "srcset": "/images/blog/duz-kahkul.480.webp 480w, /images/blog/duz-kahkul.800.webp 800w, /images/blog/duz-kahkul.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/duz-kahkul.webp": {
+    "src": "/images/blog/duz-kahkul.webp",
+    "srcset": "/images/blog/duz-kahkul.480.webp 480w, /images/blog/duz-kahkul.800.webp 800w, /images/blog/duz-kahkul.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/kas-laminasyonu.jpg": {
+    "src": "/images/blog/kas-laminasyonu.webp",
+    "srcset": "/images/blog/kas-laminasyonu.480.webp 480w, /images/blog/kas-laminasyonu.800.webp 800w, /images/blog/kas-laminasyonu.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/kas-laminasyonu.webp": {
+    "src": "/images/blog/kas-laminasyonu.webp",
+    "srcset": "/images/blog/kas-laminasyonu.480.webp 480w, /images/blog/kas-laminasyonu.800.webp 800w, /images/blog/kas-laminasyonu.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/protein-nem-bakimi.jpg": {
+    "src": "/images/blog/protein-nem-bakimi.webp",
+    "srcset": "/images/blog/protein-nem-bakimi.480.webp 480w, /images/blog/protein-nem-bakimi.800.webp 800w, /images/blog/protein-nem-bakimi.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/protein-nem-bakimi.webp": {
+    "src": "/images/blog/protein-nem-bakimi.webp",
+    "srcset": "/images/blog/protein-nem-bakimi.480.webp 480w, /images/blog/protein-nem-bakimi.800.webp 800w, /images/blog/protein-nem-bakimi.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/sac-rengi-duzeltme.jpg": {
+    "src": "/images/blog/sac-rengi-duzeltme.webp",
+    "srcset": "/images/blog/sac-rengi-duzeltme.480.webp 480w, /images/blog/sac-rengi-duzeltme.800.webp 800w, /images/blog/sac-rengi-duzeltme.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/sac-rengi-duzeltme.webp": {
+    "src": "/images/blog/sac-rengi-duzeltme.webp",
+    "srcset": "/images/blog/sac-rengi-duzeltme.480.webp 480w, /images/blog/sac-rengi-duzeltme.800.webp 800w, /images/blog/sac-rengi-duzeltme.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/yan-kahkul.jpg": {
+    "src": "/images/blog/yan-kahkul.webp",
+    "srcset": "/images/blog/yan-kahkul.480.webp 480w, /images/blog/yan-kahkul.800.webp 800w, /images/blog/yan-kahkul.webp 1280w",
+    "width": 1280,
+    "height": 720
+  },
+  "/images/blog/yan-kahkul.webp": {
+    "src": "/images/blog/yan-kahkul.webp",
+    "srcset": "/images/blog/yan-kahkul.480.webp 480w, /images/blog/yan-kahkul.800.webp 800w, /images/blog/yan-kahkul.webp 1280w",
+    "width": 1280,
+    "height": 720
   }
 }

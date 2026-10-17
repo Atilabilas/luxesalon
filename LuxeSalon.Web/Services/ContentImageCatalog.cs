@@ -5,8 +5,13 @@ public static class ContentImageCatalog
 {
     private static readonly Dictionary<string, string> Replacements = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["keratin"] = "fon", ["kaynak"] = "fon", ["pastel"] = "balyaj",
-        ["kirpik"] = "makyaj", ["protein"] = "fon", ["kas"] = "agda", ["form"] = "fon"
+        ["keratin"] = "fon",
+        ["kaynak"] = "fon",
+        ["pastel"] = "balyaj",
+        ["kirpik"] = "makyaj",
+        ["protein"] = "fon",
+        ["kas"] = "agda",
+        ["form"] = "fon"
     };
 
     private static readonly Dictionary<string, (string Tr, string En)> Descriptions = new()
@@ -46,6 +51,12 @@ public static class ContentImageCatalog
     public static string? Alt(string source, string culture)
     {
         var en = culture == "en";
+        if (!en && source.StartsWith("/images/blog/", StringComparison.OrdinalIgnoreCase))
+        {
+            var original = Path.ChangeExtension(source.Split('?')[0], ".jpg");
+            var article = LuxeSalon.Infrastructure.Data.BlogEditorialContent.ImageAlt(original);
+            if (article != null) return article;
+        }
         if (source.StartsWith("/images/services/", StringComparison.OrdinalIgnoreCase) &&
             Descriptions.TryGetValue(Path.GetFileNameWithoutExtension(source.Split('?')[0]), out var description))
             return en ? description.En : description.Tr;

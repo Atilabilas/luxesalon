@@ -164,6 +164,7 @@ using (var scope = app.Services.CreateScope())
     // Seed only a new database. CMS edits and publication dates must survive restarts.
     if (!context.SiteSettings.Any())
         DataSeeder.Seed(context);
+    BlogEditorialContent.Apply(context);
 }
 
 app.Run();

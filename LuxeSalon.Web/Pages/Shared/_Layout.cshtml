@@ -12,7 +12,7 @@
     var pageTitle = ViewData["Title"] as string;
     var fullTitle = string.IsNullOrWhiteSpace(pageTitle)
         ? settings.GetValueOrDefault("Site_Title", siteName)
-        : pageTitle.Contains(siteName, StringComparison.OrdinalIgnoreCase) || pageTitle.Contains('|')
+        : ViewData["SuppressTitleSuffix"] is true || pageTitle.Contains(siteName, StringComparison.OrdinalIgnoreCase) || pageTitle.Contains('|')
             ? pageTitle : $"{pageTitle} | {siteName}";
     var metaDescription = ViewData["MetaDescription"] as string ?? settings.GetValueOrDefault("SEO_Description", "");
     var canonical = ViewData["Canonical"] as string ?? siteUrl + Context.Request.Path;

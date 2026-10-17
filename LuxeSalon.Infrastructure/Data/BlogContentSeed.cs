@@ -5,7 +5,7 @@ namespace LuxeSalon.Infrastructure.Data;
 
 internal static class BlogContentSeed
 {
-    internal static List<BlogPost> Posts() => new()
+    internal static List<BlogPost> Posts() => new List<BlogPost>()
     {
         Post(
             "Balyaj, Ombre ve Sombre Arasındaki Farklar",
@@ -410,7 +410,8 @@ internal static class BlogContentSeed
 <h2>Let's talk about your goal</h2>
 <p>At Celil &amp; Atilla on Gediz Caddesi 21 A, Kazımdirik, we review current shape and history before recommending a path. <a href=""/en/appointment"">Book a smoothing or perm consultation</a> or call 0534 794 43 93.</p>",
             "perma,form,bakim")
-    };
+    }.Select(BlogEditorialContent.UpdateFringe)
+        .Concat(BlogEditorialContent.Articles().Select(a => a.Post)).ToList();
 
     static BlogPost Post(
         string title,
