@@ -22,7 +22,7 @@ public class BlogEditorialTests
     };
 
     [Fact]
-    public async Task Seed_AddsFourTurkishArticlesToSitemapWithEditorialDates()
+    public async Task Seed_PublishesThreeBackdatedTurkishArticlesAndKeepsBrowsDraft()
     {
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -31,10 +31,12 @@ public class BlogEditorialTests
 
         var posts = db.BlogPosts.Where(p => Slugs.Contains(p.Slug)).OrderBy(p => p.PublishedAt).ToList();
         Assert.Equal(4, posts.Count);
-        Assert.Equal(new[] { "2026-10-21", "2026-10-28", "2026-11-04", "2026-11-11" },
+        Assert.Equal(new[] { "2026-09-30", "2026-10-07", "2026-10-14", "2026-10-18" },
             posts.Select(p => p.PublishedAt.ToString("yyyy-MM-dd")));
         Assert.Equal(new[] { "Celil", "Celil", "Celil", "Celil & Atilla" }, posts.Select(p => p.Author));
-        Assert.All(posts, p => { Assert.True(p.IsPublished); Assert.False(p.HasEnglish); });
+        Assert.All(posts.Take(3), p => Assert.True(p.IsPublished));
+        Assert.False(posts[3].IsPublished);
+        Assert.All(posts, p => Assert.False(p.HasEnglish));
 
         using var cache = new MemoryCache(new MemoryCacheOptions());
         var page = new SitemapModel(db, new SiteSettingsService(db, cache))
@@ -47,6 +49,11 @@ public class BlogEditorialTests
         var urls = XDocument.Parse(page.Xml).Descendants(ns + "url").ToList();
         foreach (var slug in Slugs)
         {
+            if (slug == Slugs[3])
+            {
+                Assert.DoesNotContain(urls, u => u.Element(ns + "loc")!.Value == "https://celilatilla.com/blog/" + slug);
+                continue;
+            }
             var url = Assert.Single(urls, u => u.Element(ns + "loc")!.Value == "https://celilatilla.com/blog/" + slug);
             Assert.DoesNotContain(url.Elements(xhtml + "link"), link => link.Attribute("hreflang")?.Value == "en");
             Assert.DoesNotContain(urls, u => u.Element(ns + "loc")!.Value == "https://celilatilla.com/en/blog/" + slug);

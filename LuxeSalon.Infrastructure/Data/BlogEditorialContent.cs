@@ -52,8 +52,8 @@ public static class BlogEditorialContent
                 <p>Celil &amp; Atilla’nın Kazımdirik Mahallesi, Gediz Caddesi 21 A’daki salonunda Artisan Balayage, saçınızın mevcut rengi, geçmişi ve kesimine bakılarak planlanır. <a href="/randevu?serviceId=4">Artisan Balayage için randevu talebi</a> oluşturabilir ya da güncel saç fotoğrafınızı ve beğendiğiniz örnekleri 0534 794 43 93 üzerinden WhatsApp’tan paylaşabilirsiniz. Diğer balyaj seçeneklerini <a href="/hizmetler/balyaj-ombre-sombre">balyaj, ombre ve sombre sayfamızda</a> bulabilirsiniz. <a href="/izmir-ilceleri">İzmir’in başka bir ilçesinden</a> geliyorsanız ararken belirtin; saati yol sürenize göre ayarlayalım.</p>
                 """,
                 HeaderImageUrl = "/images/blog/artisan-balayage.jpg",
-                PublishedAt = new DateTime(2026, 10, 21),
-                UpdatedAt = new DateTime(2026, 10, 21),
+                PublishedAt = new DateTime(2026, 9, 30),
+                UpdatedAt = new DateTime(2026, 10, 18),
                 Author = "Celil",
                 Tags = "balyaj,ombre,sombre",
                 IsPublished = true
@@ -99,8 +99,8 @@ public static class BlogEditorialContent
                 <p>Kazımdirik Mahallesi, Gediz Caddesi 21 A’daki salonumuzda renk düzeltme, saçın mevcut durumu ve geçmişi değerlendirildikten sonra planlanır. <a href="/randevu?serviceId=17">Pastel ve renk düzeltme için randevu talebi</a> oluşturabilir veya saçınızın gün ışığında çekilmiş fotoğrafını 0534 794 43 93 üzerinden paylaşabilirsiniz. Dip dengesi ve ışıltı ihtiyaçlarınız için <a href="/hizmetler/rofle-kok-rotusu">röfle ve kök rötuşu sayfamıza</a> da bakabilirsiniz. <a href="/izmir-ilceleri">İzmir’in farklı ilçelerinden</a> geliyorsanız ararken söyleyin, saati yol sürenize göre ayarlayalım.</p>
                 """,
                 HeaderImageUrl = "/images/blog/sac-rengi-duzeltme.jpg",
-                PublishedAt = new DateTime(2026, 10, 28),
-                UpdatedAt = new DateTime(2026, 10, 28),
+                PublishedAt = new DateTime(2026, 10, 7),
+                UpdatedAt = new DateTime(2026, 10, 18),
                 Author = "Celil",
                 Tags = "rofle,kok-rotusu,renklendirme",
                 IsPublished = true
@@ -144,8 +144,8 @@ public static class BlogEditorialContent
                 <p>Kazımdirik Mahallesi, Gediz Caddesi 21 A’daki salonumuzda bakım seçimi, saçınızın esnekliği, boya geçmişi ve dipteki ihtiyaç birlikte değerlendirilerek yapılır. <a href="/randevu?serviceId=20">Protein, nem ve saç derisi bakımı için randevu talebi</a> oluşturabilir ya da sorularınızı 0534 794 43 93 üzerinden iletebilirsiniz. Kabarma ve parlaklık için seçenekleri <a href="/hizmetler/keratin-sac-botoksu">keratin bakımı ve saç botoksu sayfamızda</a> bulabilirsiniz. <a href="/izmir-ilceleri">İzmir’in başka bir ilçesinden</a> geliyorsanız ararken belirtin, saati yol sürenize göre ayarlayalım.</p>
                 """,
                 HeaderImageUrl = "/images/blog/protein-nem-bakimi.jpg",
-                PublishedAt = new DateTime(2026, 11, 4),
-                UpdatedAt = new DateTime(2026, 11, 4),
+                PublishedAt = new DateTime(2026, 10, 14),
+                UpdatedAt = new DateTime(2026, 10, 18),
                 Author = "Celil",
                 Tags = "bakim,keratin,sac-botoks",
                 IsPublished = true
@@ -190,11 +190,11 @@ public static class BlogEditorialContent
                 <p>Kazımdirik Mahallesi, Gediz Caddesi 21 A’daki salonumuzda kaş şekillendirme ve laminasyon, kaşınızın mevcut yoğunluğu ve yüz hatlarınız birlikte değerlendirilerek planlanır. <a href="/randevu?serviceId=25">Kaş şekillendirme ve laminasyon için randevu talebi</a> oluşturabilir ya da kaşlarınızın gün ışığında çekilmiş yakın bir fotoğrafını 0534 794 43 93 üzerinden paylaşabilirsiniz. Randevu formunu gönderdiğinizde WhatsApp açılır; mesajı iletmeden randevu kesinleşmez. Randevu notuna neleri yazmanın işe yaradığını <a href="/blog/kuafor-randevusundan-once-neleri-belirtmelisiniz">kuaför randevusu öncesi yazımızda</a> bulabilir, diğer bakım seçenekleri için <a href="/hizmetler">hizmetler sayfamıza</a> bakabilirsiniz. <a href="/izmir-ilceleri">İzmir’in başka bir ilçesinden</a> geliyorsanız ararken söyleyin, saati yol sürenize göre ayarlayalım.</p>
                 """,
                 HeaderImageUrl = "/images/blog/kas-laminasyonu.jpg",
-                PublishedAt = new DateTime(2026, 11, 11),
-                UpdatedAt = new DateTime(2026, 11, 11),
+                PublishedAt = new DateTime(2026, 10, 18),
+                UpdatedAt = new DateTime(2026, 10, 18),
                 Author = "Celil & Atilla",
                 Tags = "kas,bakim",
-                IsPublished = true
+                IsPublished = false
             },
             "Kaş Laminasyonu Nedir, Kimlere Uygun? | Celil & Atilla",
             "Kaş laminasyonu kılları yukarı ve düzenli bir hatta yatırır ama kıl eklemez. Kimlere uygun, ne kadar sürer, sonrasında nelere dikkat edilir?",
