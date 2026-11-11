@@ -51,9 +51,29 @@
         }
     </div>
     <nav class="home-service-index" aria-label="@(en ? "All Bornova services" : "Bornova’daki tüm işlemler")">
-        @foreach (var service in Model.LandingServices)
+        @if (en)
         {
-            <a href="@SitePaths.Service(culture, service.LocalizedSlug(culture))">@ServiceSearchCopy.VisibleName(service, culture)</a>
+            @foreach (var service in Model.LandingServices)
+            {
+                <a href="@SitePaths.Service(culture, service.LocalizedSlug(culture))">@ServiceSearchCopy.VisibleName(service, culture)</a>
+            }
+        }
+        else
+        {
+            <a href="@SitePaths.Service(culture, "kadin-sac-kesimi")">Bornova kuaför</a>
+            <a href="@SitePaths.Service(culture, "balyaj-ombre-sombre")">Ombre saç</a>
+            <a href="@SitePaths.Service(culture, "balyaj-ombre-sombre")">Balyaj</a>
+            <a href="@SitePaths.Service(culture, "keratin-sac-botoksu")">Keratin bakımı ve saç botoksu</a>
+            <a href="@SitePaths.Service(culture, "rofle-kok-rotusu")">Röfle</a>
+            <a href="@SitePaths.Service(culture, "gelin-saci")">Gelin saçı ve makyajı</a>
+            <a href="@SitePaths.Service(culture, "sac-kaynagi")">Kaynak saç</a>
+            <a href="@SitePaths.Service(culture, "erkek-kesim-fade")">Fade kesim</a>
+            <a href="@SitePaths.Service(culture, "cocuk-kesimi")">Çocuk saç kesimi</a>
+            <a href="@SitePaths.Service(culture, "manikur-pedikur")">Manikür ve pedikür</a>
+            <a href="@SitePaths.Services(culture)">Kirpik lifting</a>
+            <a href="@SitePaths.BlogPost(culture, "perma-nanoplasti-ve-brezilya-fonu-arasindaki-farklar")">Brezilya fönü</a>
+            <a href="@SitePaths.Services(culture)">Kaş laminasyonu</a>
+            <a href="@SitePaths.Service(culture, "rofle-kok-rotusu")">Saça ışıltı</a>
         }
     </nav>
 </section>
